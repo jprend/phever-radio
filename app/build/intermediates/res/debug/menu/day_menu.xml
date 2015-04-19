@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/monday"
+        android:title="monday"/>
+
+    <item
+        android:id="@+id/tuesday"
+        android:title="tuesday"/>
+
+    <item
+        android:id="@+id/wednesday"
+        android:title="wednesday"/>
+
+
+    <item
+        android:id="@+id/thursday"
+        android:title="thursday"/>
+    
+    <item
+        android:id="@+id/friday"
+        android:title="friday"/>
+
+    <item
+        android:id="@+id/saturday"
+        android:title="saturday"/>
+
+    <item
+        android:id="@+id/sunday"
+        android:title="sunday"/>
+
+
+
+</menu><!-- From: file:/home/john/android/AndroidStudioProjects/phever/app/src/main/res/menu/day_menu.xml -->

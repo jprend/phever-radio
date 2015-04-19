@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="50dp" >
+
+        <Button
+            android:id="@+id/startButton"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/play" />
+
+        <Button
+            android:id="@+id/stopButton"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/stop" />
+    </LinearLayout>
+
+
+    
+    <ImageView
+        android:id="@+id/img_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/home_phever1"       
+        />
+    
+     <ImageView
+        android:id="@+id/img_mask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:src="@drawable/mask_phever1"       
+        />
+
+     <ImageView
+         android:id="@+id/imageAnimation"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignBottom="@+id/img_home"
+         android:layout_centerHorizontal="true"
+         android:layout_marginBottom="86dp"
+         android:adjustViewBounds="true"
+         />
+
+</RelativeLayout>
+<!-- From: file:/home/john/android/AndroidStudioProjects/phever/app/src/main/res/layout/activity_home.xml -->
