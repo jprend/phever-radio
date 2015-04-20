@@ -1408,9 +1408,9 @@ containing a value of this type.
         public static final int thursday=0x7f080055;
         public static final int title=0x7f080027;
         public static final int tuesday=0x7f080053;
-        public static final int tvDj=0x7f080050;
-        public static final int tvDjDesc=0x7f080051;
-        public static final int tvShowName=0x7f08004f;
+        public static final int tvDjName=0x7f080050;
+        public static final int tvGenre=0x7f08004f;
+        public static final int tvShowTitle=0x7f080051;
         public static final int tvTime=0x7f08004e;
         public static final int up=0x7f080008;
         public static final int useLogo=0x7f080012;

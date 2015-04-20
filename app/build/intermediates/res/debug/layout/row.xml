@@ -30,21 +30,21 @@
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/tvShowName"
+                android:id="@+id/tvGenre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall" 
                 android:textColor="#D64530"/>
 
             <TextView
-                android:id="@+id/tvDj"
+                android:id="@+id/tvDjName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#D64530"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/tvDjDesc"
+                android:id="@+id/tvShowTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#D64530" />
@@ -56,4 +56,4 @@
 
 
 </LinearLayout>
-<!-- From: file:/home/john/android/AndroidStudioProjects/phever/app/src/main/res/layout/row.xml -->
+<!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/src/main/res/layout/row.xml -->

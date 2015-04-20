@@ -440,9 +440,9 @@ int id tabMode 0x7f08000b
 int id thursday 0x7f080055
 int id title 0x7f080027
 int id tuesday 0x7f080053
-int id tvDj 0x7f080050
-int id tvDjDesc 0x7f080051
-int id tvShowName 0x7f08004f
+int id tvDjName 0x7f080050
+int id tvGenre 0x7f08004f
+int id tvShowTitle 0x7f080051
 int id tvTime 0x7f08004e
 int id up 0x7f080008
 int id useLogo 0x7f080012

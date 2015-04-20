@@ -41,19 +41,19 @@ public class SlotAdapter extends ArrayAdapter<Slot> {
 			v = vi.inflate(Resource, null);
 			holder.imageview = (ImageView) v.findViewById(R.id.ivImage);
 			holder.time = (TextView) v.findViewById(R.id.tvTime);
-			holder.showName = (TextView) v.findViewById(R.id.tvShowName);
-			holder.dj = (TextView) v.findViewById(R.id.tvDj);
-			holder.djDesc = (TextView) v.findViewById(R.id.tvDjDesc);
+			holder.genre = (TextView) v.findViewById(R.id.tvGenre);
+			holder.djName = (TextView) v.findViewById(R.id.tvDjName);
+			holder.showTitle = (TextView) v.findViewById(R.id.tvShowTitle);
 			v.setTag(holder);
 		} else {
 			holder = (ViewHolder) v.getTag();
 		}
 		//holder.imageview.setImageResource(R.drawable.ic_launcher);
-		new DownloadImageTask(holder.imageview).execute(Schedule.get(position).getImageName());
-		holder.time.setText(Schedule.get(position).getTime());
-		holder.showName.setText(Schedule.get(position).getShowName());
-		holder.dj.setText(Schedule.get(position).getDj());
-		holder.djDesc.setText(Schedule.get(position).getDjDesc());
+		new DownloadImageTask(holder.imageview).execute(Schedule.get(position).getDjImage());
+		holder.time.setText(Schedule.get(position).getStime());
+		holder.genre.setText(Schedule.get(position).getGenre());
+		holder.djName.setText(Schedule.get(position).getDjName());
+		holder.showTitle.setText(Schedule.get(position).getShowTitle());
 
 
 		return v;
@@ -63,9 +63,9 @@ public class SlotAdapter extends ArrayAdapter<Slot> {
 	static class ViewHolder {
 		public ImageView imageview;
 		public TextView time;
-		public TextView showName;
-		public TextView dj;
-		public TextView djDesc;
+		public TextView genre;
+		public TextView djName;
+		public TextView showTitle;
 
 
 	}
