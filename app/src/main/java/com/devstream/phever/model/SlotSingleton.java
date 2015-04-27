@@ -9,7 +9,6 @@ public class SlotSingleton {
 	private boolean updated;
 
 	private ArrayList<ArrayList<Slot>> weekRoster = new ArrayList<ArrayList<Slot>>();
-    private ArrayList<Slot> dayRoster = new ArrayList<Slot>(); 
     
 	private static SlotSingleton instance = null;
  
@@ -31,20 +30,13 @@ public class SlotSingleton {
 	public void updateLocal(Context context){
 		updated = true;
 	}
+
     public ArrayList<ArrayList<Slot>> getWeekRoster() {
 		return weekRoster;
 	}
 
 	public void setWeekRoster(ArrayList<ArrayList<Slot>> weekRoster) {
 		this.weekRoster = weekRoster;
-	}
-
-	public ArrayList<Slot> getDayRoster() {
-		return dayRoster;
-	}
-
-	public void setDayRoster(ArrayList<Slot> dayRoster) {
-		this.dayRoster = dayRoster;
 	}
 
 }
