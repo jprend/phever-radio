@@ -36,13 +36,9 @@ public class DjScheduleActivity extends Activity {
 	final int NUMDAYS = 7;
 	final int NUMSLOTS = 12;
 	String[] dayNames = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-
-
-
-   ArrayList<ArrayList<Slot>> weekRoster = new ArrayList<ArrayList<Slot>>();
-
-  
+	ArrayList<ArrayList<Slot>> weekRoster = new ArrayList<ArrayList<Slot>>();
 	SlotAdapter adapter;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,30 +103,31 @@ public class DjScheduleActivity extends Activity {
 					show_title	:	House Hatcher's Grooves
 					dj_image	:	null
 					modified	:	2015-04-20 14:29:47 */
-
+					int dayIndex;
 					for (int i = 0; i < jarray.length(); i++) {
 						JSONObject object = jarray.getJSONObject(i);
 						Slot anySlot = new Slot();
 						anySlot.setShowNumber(Integer.valueOf(object.optString("number")));
-						anySlot.setSday( object.optString("sday") );
+						anySlot.setSday(object.optString("sday"));
 						anySlot.setStime(object.optString("stime"));
 						anySlot.setGenre(object.optString("genre"));
-						anySlot.setDjName(object.optString("dj_name") );
-						anySlot.setShowTitle(object.optString("show_title") );
-						anySlot.setDjImage(object.optString("dj_image") );
+						anySlot.setDjName(object.optString("dj_name"));
+						anySlot.setShowTitle(object.optString("show_title"));
+						anySlot.setDjImage(object.optString("dj_image"));
 
-						int dayIndex=getDayIndex(anySlot.getSday());
+						dayIndex=getDayIndex(anySlot.getSday());
 						weekRoster.get(dayIndex).add(anySlot);
-						//Sorting
-						Collections.sort(weekRoster.get(dayIndex), new Comparator<Slot>() {
+
+					}
+					//Sort each day using the show number
+					for (int i = 0; i < NUMDAYS; i++)
+						Collections.sort(weekRoster.get(i), new Comparator<Slot>() {
 							@Override
-							public int compare(Slot  Slot1, Slot  Slot2)
-							{
-								return  Slot1.getShowNumber() - Slot2.getShowNumber(); // Ascending
+							public int compare(Slot Slot1, Slot Slot2) {
+								return Slot1.getShowNumber() - Slot2.getShowNumber(); // Ascending
 							}
 						});
-					}
-					//Log.d("jp01", "week roster=" + weekRoster );
+
 					return true;
 				}
 
@@ -148,9 +145,8 @@ public class DjScheduleActivity extends Activity {
 			//dialog.cancel();
 		    dialog.dismiss();
 			adapter.notifyDataSetChanged();
-			if(result == false)
+			if(!result)
 				Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
-
 		}
 		private int getDayIndex(String sday) {
 			int j = 0;

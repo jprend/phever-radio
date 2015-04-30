@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import com.devstream.phever.activities.R;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,123 +17,121 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import static android.view.LayoutInflater.from;
-
 
 public class SlotAdapter extends ArrayAdapter<Slot> {
-	Context context;
-	int layoutResourceId;
-	ArrayList<Slot> Schedule;
-	final String IMAGE = "logo_small.jpg";
-	final String IMAGEPATH = "http://phever.ie/images/";
-	@Override
-	public Context getContext() {
-		return context;
-	}
+    Context context;
+    int layoutResourceId;
+    ArrayList<Slot> Schedule;
+    final String IMAGE = "logo_small.jpg";
+    final String IMAGEPATH = "http://phever.ie/images/";
 
-	private static class ViewHolder {
-		 ImageView imageview;
-		 TextView time;
-		 TextView genre;
-		 TextView djName;
-		 TextView showTitle;
-	}
-	public SlotAdapter(Context context, int layoutResourceId ,  ArrayList<Slot> slots) {
-		super(context, layoutResourceId, slots);
-		//this.context = context;
-		//inflater = LayoutInflater.from(context);
-		//inflater = (LayoutInflater) context
-		//		.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this.context = context;
-		this.layoutResourceId = layoutResourceId;
-		this.Schedule = slots;
+    @Override
+    public Context getContext() {
+        return context;
+    }
 
-	}
- 
-	
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		Slot item;
-		item = getItem(position);
+    private static class ViewHolder {
+        ImageView imageview;
+        TextView time;
+        TextView genre;
+        TextView djName;
+        TextView showTitle;
+    }
 
-		// Test to see if there is already a view, if not create one, else use what
-		// already exists in convertView
-		ViewHolder holder = null;
-		String TAG =  "Adapter";
-		Log.d(TAG, "position= <" + position + ">" + item.getDjImage());
+    public SlotAdapter(Context context, int layoutResourceId, ArrayList<Slot> slots) {
+        super(context, layoutResourceId, slots);
+        //this.context = context;
+        //inflater = LayoutInflater.from(context);
+        //inflater = (LayoutInflater) context
+        //		.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.context = context;
+        this.layoutResourceId = layoutResourceId;
+        this.Schedule = slots;
 
-		View v = convertView;
-		if (v == null) {
-			// if there is no existing view
-			// use an Inflater to build the row layout and store in view
-			LayoutInflater inflater =LayoutInflater.from(getContext());
-			v = inflater.inflate(layoutResourceId, parent, false);
-			holder = new ViewHolder();
-			holder.imageview = (ImageView) v.findViewById(R.id.ivImage);
-			holder.time = (TextView) v.findViewById(R.id.tvTime);
-			holder.genre = (TextView) v.findViewById(R.id.tvGenre);
-			holder.djName = (TextView) v.findViewById(R.id.tvDjName);
-			holder.showTitle = (TextView) v.findViewById(R.id.tvShowTitle);
-			v.setTag(holder);
-		}
-		else {
-			holder = (ViewHolder) v.getTag();
-		}
-
-		//holder.imageview.setImageResource(R.drawable.ic_launcher);
-		String djLogo = Schedule.get(position).getDjImage();
-		if (djLogo.equals(null) || djLogo.isEmpty() || djLogo.equals("null" )) {
-			djLogo = IMAGE;
-		}
+    }
 
 
-		Log.d(TAG, "djLogo = <" + djLogo + ">");
-		new DownloadImageTask(holder.imageview).execute(djLogo);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Slot item;
+        item = getItem(position);
 
-		holder.time.setText(Schedule.get(position).getStime());
-		holder.genre.setText(Schedule.get(position).getGenre());
-		holder.djName.setText(Schedule.get(position).getDjName());
-		holder.showTitle.setText(Schedule.get(position).getShowTitle());
+        // Test to see if there is already a view, if not create one, else use what
+        // already exists in convertView
+        ViewHolder holder;
+        String TAG = "Adapter";
+        Log.d(TAG, "position= <" + position + ">" + item.getDjImage());
 
-		return v;
-	}
+        View v = convertView;
+        if (v == null) {
+            // if there is no existing view
+            // use an Inflater to build the row layout and store in view
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            v = inflater.inflate(layoutResourceId, parent, false);
+            holder = new ViewHolder();
+            holder.imageview = (ImageView) v.findViewById(R.id.ivImage);
+            holder.time = (TextView) v.findViewById(R.id.tvTime);
+            holder.genre = (TextView) v.findViewById(R.id.tvGenre);
+            holder.djName = (TextView) v.findViewById(R.id.tvDjName);
+            holder.showTitle = (TextView) v.findViewById(R.id.tvShowTitle);
+            v.setTag(holder);
+        } else {
+            holder = (ViewHolder) v.getTag();
+        }
 
-
-
-	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-		ImageView bmImage;
-
-		public DownloadImageTask(ImageView bmImage) {
-			this.bmImage = bmImage;
-
-		}
-
-		protected Bitmap doInBackground(String... urls) {
-
-			String urldisplay = IMAGEPATH + urls[0];
-			//String urldisplay = "http://phever.ie/images/ken_logo.jpg";
-			Bitmap mIcon11 = null;
-			try {
-				InputStream in = new java.net.URL(urldisplay).openStream();
-				mIcon11 = BitmapFactory.decodeStream(in);
-			} catch (Exception e) {
-				Log.e("Error", e.getMessage());
-				e.printStackTrace();
-			}
-			return mIcon11;
-		}
-
-		protected void onPostExecute(Bitmap result) {
+        //holder.imageview.setImageResource(R.drawable.ic_launcher);
+        String djLogo = Schedule.get(position).getDjImage();
+        if (djLogo.equals(null) || djLogo.isEmpty() || djLogo.equals("null")) {
+            djLogo = IMAGE;
+        }
 
 
-			bmImage.setAdjustViewBounds(true);
-			bmImage.setMaxHeight(bmImage.getHeight());
-			bmImage.setMaxWidth(bmImage.getWidth());
-			bmImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        Log.d(TAG, "djLogo = <" + djLogo + ">");
+        new DownloadImageTask(holder.imageview).execute(djLogo);
 
-			
-			bmImage.setImageBitmap(result);
-		}
+        holder.time.setText(Schedule.get(position).getStime());
+        holder.genre.setText(Schedule.get(position).getGenre());
+        holder.djName.setText(Schedule.get(position).getDjName());
+        holder.showTitle.setText(Schedule.get(position).getShowTitle());
 
-	}
+        return v;
+    }
+
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+
+            String urldisplay = IMAGEPATH + urls[0];
+            //String urldisplay = "http://phever.ie/images/ken_logo.jpg";
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+
+
+            bmImage.setAdjustViewBounds(true);
+            bmImage.setMaxHeight(bmImage.getHeight());
+            bmImage.setMaxWidth(bmImage.getWidth());
+            bmImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+
+            bmImage.setImageBitmap(result);
+        }
+
+    }
 }

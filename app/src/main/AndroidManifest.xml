@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22" />
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="21" />
 
     <application
         android:allowBackup="true"
@@ -57,11 +57,7 @@
             android:name=".EventsActivity"
             android:label="@string/title_activity_events">
         </activity>
-        <receiver android:name=".RemoteControlReceiver">
-    		<intent-filter>
-        		<action android:name="android.intent.action.MEDIA_BUTTON" />
-    		</intent-filter>
-		</receiver>
+
     </application>
 
 </manifest>

@@ -1,14 +1,17 @@
 package com.devstream.phever.activities;
 
 import java.io.IOException;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.Date;
 
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -19,7 +22,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
+
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,40 +36,41 @@ import com.devstream.phever.model.EventSingleton;
 
 public class EventsActivity extends Activity {
     final String eventsUrl = "http://phever.ie/db/events.php";
-
-
-
-    ArrayList<Event> eventsList = new ArrayList<Event>();
-
-
+    ArrayList<Event> eventList;
     EventAdapter adapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.event_row);
-        Intent intent = getIntent();
-
+        setContentView(R.layout.activity_events);
+        eventList = new ArrayList<>();
 
 
         EventSingleton instance = EventSingleton.getInstance();
         if (instance.getUpdated()) {
-            eventsList = instance.getEvents();
+            eventList = instance.getEvents();
         } else {
             new getEvents().execute(eventsUrl);
             instance.updateLocal(this);
-            instance.setEvents(eventsList);
+            instance.setEvents(eventList);
         }
 
-        ListView listview = (ListView) findViewById(R.id.list);
+        //new getEvents().execute(eventsUrl);
 
-        adapter = new EventAdapter(getApplicationContext(), R.layout.row, eventsList);
+        //Log.d("jp01", "eventList size 1 =" + eventList.size());
+
+        ListView listview = (ListView) findViewById(R.id.list);
+        adapter = new EventAdapter(getApplicationContext(), R.layout.row_event, eventList);
+        //adapter = new EventAdapter(this, R.layout.row_event, eventList);
+        Log.d("jp01", "eventList size 2 =" + eventList.size());
+
         listview.setAdapter(adapter);
     }
 
     class getEvents extends AsyncTask<String, Void, Boolean> {
         ProgressDialog dialog;
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -83,13 +87,14 @@ public class EventsActivity extends Activity {
                 HttpGet httppost = new HttpGet(urls[0]);
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response = httpclient.execute(httppost);
-                // StatusLine stat = response.getStatusLine();
-                int status = response.getStatusLine().getStatusCode();
+                StatusLine stat = response.getStatusLine();
+                int status = stat.getStatusCode();
+                Log.d("jp01", "status =" + status);
 
                 if (status == 200) {
                     HttpEntity entity = response.getEntity();
                     String data = EntityUtils.toString(entity);
-                    //Log.d("jp01", "data =" + data);
+                    Log.d("jp01", "data =" + data);
 
                     JSONArray jarray = new JSONArray(data);
                     /*
@@ -102,54 +107,69 @@ public class EventsActivity extends Activity {
                         private String  price;
                         private String  purchase;
                         private Text supportActs;
-                        private Text terms;
-[{"id":"1","edate":"2015-07-01","etime":"20:00:00","name":"ganstagrass","location":"the pond",
-"headline":"dave alvin","headline_desc":"bla bla bla","price":"too dear","purchase":"purchase ",
-"support_acts":"a\r\nb\r\nc\r\nd\r\ne\r\nf\r\ng\r\nh\r\ni\r\nj\r\nk",
-"terms":"t\r\ne\r\nr\r\nm\r\ns\r\n&\r\nc\r\no\r\nn\r\nd\r\ns","modified":"2015-04-26 22:35:33"}]					 */
+                        private Text terms; */
                     for (int i = 0; i < jarray.length(); i++) {
                         JSONObject object = jarray.getJSONObject(i);
                         Event anyEvent = new Event();
-                        anyEvent.setEdate(object.optString("edate"));
+                        String edate = object.optString("edate");
+                        //SimpleDateFormat sdf = new SimpleDateFormat("d'%s' MMM, yyyy");
+                        //String myDate = String.format(sdf.format(date), Util.dateSuffix(date));
+                        anyEvent.setEdate(dateConvert(edate));
                         anyEvent.setName(object.optString("name"));
                         anyEvent.setLocation(object.optString("location"));
                         anyEvent.setHeadline(object.optString("headline"));
                         anyEvent.setHeadlineDesc(object.optString("headline_desc"));
-
+                        eventList.add(anyEvent);
+                        Log.d("jp01", i + "event name ="  + anyEvent.getName());
                         //Sorting
-                        /*
-                        Collections.sort(events.get(dayIndex), new Comparator<Event>() {
-
+                        Collections.sort(eventList, new Comparator<Event>() {
                             @Override
                             public int compare(Event Event1, Event Event2) {
-                                return Event1.getShowNumber() - Event2.getShowNumber(); // Ascending
+                                //Ascending
+                                return Event1.getEdate().compareTo(Event2.getEdate());
                             }
                         });
-                        */
                     }
-                    //Log.d("jp01", "week roster=" + events );
                     return true;
                 }
-
             } catch (ParseException e1) {
                 e1.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return false;
         }
-
+        @Override
         protected void onPostExecute(Boolean result) {
             //dialog.cancel();
+            Log.d("jp01", "eventList size 4 =" + eventList.size());
             dialog.dismiss();
             adapter.notifyDataSetChanged();
-            if (result == false)
+            if (!result)
                 Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
-
         }
 
     }
 
+
+
+    public String dateConvert(String D){
+
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yyyy");
+        Date date = null;
+        try {
+            date = format1.parse(D);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        String dateString = format2.format(date);
+        dateString = dateString.replace("-", " ");
+        System.out.println(dateString);
+        return ((dateString));
+    }
 }
