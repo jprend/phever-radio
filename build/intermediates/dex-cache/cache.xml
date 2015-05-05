@@ -9,6 +9,13 @@
         <dex dex="/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/pre-dexed/debug/classes-ab706ae9d2abcd93f2b64ca0b0ea9d7b6c0f62b5.jar" />
     </item>
     <item
+        jar="/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6aa1fc36c1732ad848de1b1dbdab4f7eab4784b3">
+        <dex dex="/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/pre-dexed/debug/classes-f6599b57a9a218ebe305f25fa4a95d614c9381d6.jar" />
+    </item>
+    <item
         jar="/home/john/android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"

@@ -24,6 +24,7 @@ public class SlotAdapter extends ArrayAdapter<Slot> {
     ArrayList<Slot> Schedule;
     final String IMAGE = "logo_small.jpg";
     final String IMAGEPATH = "http://phever.ie/images/";
+    ViewHolder holder;
 
     @Override
     public Context getContext() {
@@ -36,18 +37,14 @@ public class SlotAdapter extends ArrayAdapter<Slot> {
         TextView genre;
         TextView djName;
         TextView showTitle;
+        Bitmap djBmp;
     }
 
     public SlotAdapter(Context context, int layoutResourceId, ArrayList<Slot> slots) {
         super(context, layoutResourceId, slots);
-        //this.context = context;
-        //inflater = LayoutInflater.from(context);
-        //inflater = (LayoutInflater) context
-        //		.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
         this.Schedule = slots;
-
     }
 
 
@@ -58,7 +55,7 @@ public class SlotAdapter extends ArrayAdapter<Slot> {
 
         // Test to see if there is already a view, if not create one, else use what
         // already exists in convertView
-        ViewHolder holder;
+        //ViewHolder holder;
         String TAG = "Adapter";
         Log.d(TAG, "position= <" + position + ">" + item.getDjImage());
 
@@ -110,26 +107,23 @@ public class SlotAdapter extends ArrayAdapter<Slot> {
 
             String urldisplay = IMAGEPATH + urls[0];
             //String urldisplay = "http://phever.ie/images/ken_logo.jpg";
-            Bitmap mIcon11 = null;
+            Bitmap bmp = null;
             try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
+                bmp = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
-            return mIcon11;
+            return bmp;
         }
 
         protected void onPostExecute(Bitmap result) {
-
-
+            holder.djBmp = result;
             bmImage.setAdjustViewBounds(true);
             bmImage.setMaxHeight(bmImage.getHeight());
             bmImage.setMaxWidth(bmImage.getWidth());
             bmImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-
-
             bmImage.setImageBitmap(result);
         }
 

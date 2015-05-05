@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.devstream.phever.activities"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 21
     }
 
     buildTypes {
@@ -21,4 +21,5 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.shamanland:facebook-like-button:0.1.8'
 }

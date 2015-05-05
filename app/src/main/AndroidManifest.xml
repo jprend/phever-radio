@@ -57,6 +57,11 @@
             android:name=".EventsActivity"
             android:label="@string/title_activity_events">
         </activity>
+        <activity
+            android:name="com.shamanland.facebook.likebutton.FacebookLikeActivity"
+            android:label="facebook"
+            android:theme="@style/AppBaseTheme"
+            />
 
     </application>
 

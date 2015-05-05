@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
     
     	<TextView 
     	    android:layout_width="wrap_content"
@@ -10,7 +11,24 @@
     	    android:layout_centerInParent="true"
     	    android:text="CONTACTS"
     	    />
-    
+	<!-- FacebookLikePlugin extends LinearLayout -->
+	<com.shamanland.facebook.likebutton.FacebookLikePlugin
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		>
+		<com.shamanland.facebook.likebutton.FacebookLikeButton
+			style="@style/Widget.FacebookLikeButton"
+			app:pageUrl="http://phever.ie/"
+			app:pageTitle="Phever Radio Station"
+			app:pageText="This is Phever"
+			app:pagePicture="@drawable/ic_launcher"
+			/>
+		<com.shamanland.facebook.likebutton.FacebookLikeBox
+			style="@style/Widget.FacebookLikeBox"
+			app:calloutMarker="left"
+			/>
+	</com.shamanland.facebook.likebutton.FacebookLikePlugin>
 
-</RelativeLayout>
+</LinearLayout>
 <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/src/main/res/layout/activity_contacts.xml -->
