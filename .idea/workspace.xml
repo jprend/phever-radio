@@ -2102,7 +2102,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="31" width="1440" height="820" extended-state="0" />
+    <frame x="0" y="31" width="1440" height="820" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32913166" sideWeight="0.50858366" order="7" side_tool="false" content_ui="tabs" />
