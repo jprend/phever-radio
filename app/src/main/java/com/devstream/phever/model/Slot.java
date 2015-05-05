@@ -1,5 +1,6 @@
 package com.devstream.phever.model;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 public class Slot {
@@ -10,6 +11,7 @@ public class Slot {
 	private String  djName;
 	private String  showTitle;
 	private String  djImage;
+	private Bitmap  djBmp;
 
 
 	public String getSday() {
@@ -68,9 +70,9 @@ public class Slot {
 		this.djImage = djImage;
 	}
 
-	public Slot ()
-	{}
-	
+	public Bitmap getDjBmp() {return djBmp;}
+
+	public void setDjBmp(Bitmap djBmp) {this.djBmp = djBmp;	}
 
 
 }

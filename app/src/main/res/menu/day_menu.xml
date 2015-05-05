@@ -3,32 +3,32 @@
 
     <item
         android:id="@+id/monday"
-        android:title="monday"/>
+        android:title="Monday"/>
 
     <item
         android:id="@+id/tuesday"
-        android:title="tuesday"/>
+        android:title="Tuesday"/>
 
     <item
         android:id="@+id/wednesday"
-        android:title="wednesday"/>
+        android:title="Wednesday"/>
 
 
     <item
         android:id="@+id/thursday"
-        android:title="thursday"/>
+        android:title="Thursday"/>
     
     <item
         android:id="@+id/friday"
-        android:title="friday"/>
+        android:title="Friday"/>
 
     <item
         android:id="@+id/saturday"
-        android:title="saturday"/>
+        android:title="Saturday"/>
 
     <item
         android:id="@+id/sunday"
-        android:title="sunday"/>
+        android:title="Sunday"/>
 
 
 

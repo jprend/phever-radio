@@ -17,92 +17,115 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 public class SlotAdapter extends ArrayAdapter<Slot> {
-	ArrayList<Slot> Schedule;
-	LayoutInflater vi;
-	int Resource;
-	ViewHolder holder;
+    Context context;
+    int layoutResourceId;
+    ArrayList<Slot> Schedule;
+    final String IMAGE = "logo_small.jpg";
+    final String IMAGEPATH = "http://phever.ie/images/";
+    ViewHolder holder;
 
-	public SlotAdapter(Context context, int resource, ArrayList<Slot> objects) {
-		super(context, resource, objects);
-		vi = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		Resource = resource;
-		Schedule = objects;
-	}
- 
-	
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		// convert view = design
-		View v = convertView;
-		if (v == null) {
-			holder = new ViewHolder();
-			v = vi.inflate(Resource, null);
-			holder.imageview = (ImageView) v.findViewById(R.id.ivImage);
-			holder.time = (TextView) v.findViewById(R.id.tvTime);
-			holder.genre = (TextView) v.findViewById(R.id.tvGenre);
-			holder.djName = (TextView) v.findViewById(R.id.tvDjName);
-			holder.showTitle = (TextView) v.findViewById(R.id.tvShowTitle);
-			v.setTag(holder);
-		} else {
-			holder = (ViewHolder) v.getTag();
-		}
-		//holder.imageview.setImageResource(R.drawable.ic_launcher);
-		new DownloadImageTask(holder.imageview).execute(Schedule.get(position).getDjImage());
-		holder.time.setText(Schedule.get(position).getStime());
-		holder.genre.setText(Schedule.get(position).getGenre());
-		holder.djName.setText(Schedule.get(position).getDjName());
-		holder.showTitle.setText(Schedule.get(position).getShowTitle());
+    @Override
+    public Context getContext() {
+        return context;
+    }
+
+    private static class ViewHolder {
+        ImageView imageview;
+        TextView time;
+        TextView genre;
+        TextView djName;
+        TextView showTitle;
+        Bitmap djBmp;
+    }
+
+    public SlotAdapter(Context context, int layoutResourceId, ArrayList<Slot> slots) {
+        super(context, layoutResourceId, slots);
+        this.context = context;
+        this.layoutResourceId = layoutResourceId;
+        this.Schedule = slots;
+    }
 
 
-		return v;
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Slot item;
+        item = getItem(position);
 
-	}
+        // Test to see if there is already a view, if not create one, else use what
+        // already exists in convertView
+        //ViewHolder holder;
+        String TAG = "Adapter";
+        Log.d(TAG, "position= <" + position + ">" + item.getDjImage());
 
-	static class ViewHolder {
-		public ImageView imageview;
-		public TextView time;
-		public TextView genre;
-		public TextView djName;
-		public TextView showTitle;
+        View v = convertView;
+        if (v == null) {
+            // if there is no existing view
+            // use an Inflater to build the row layout and store in view
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            v = inflater.inflate(layoutResourceId, parent, false);
+            holder = new ViewHolder();
+            holder.imageview = (ImageView) v.findViewById(R.id.ivImage);
+            holder.time = (TextView) v.findViewById(R.id.tvTime);
+            holder.genre = (TextView) v.findViewById(R.id.tvGenre);
+            holder.djName = (TextView) v.findViewById(R.id.tvDjName);
+            holder.showTitle = (TextView) v.findViewById(R.id.tvShowTitle);
+            v.setTag(holder);
+        } else {
+            holder = (ViewHolder) v.getTag();
+        }
+
+        //holder.imageview.setImageResource(R.drawable.ic_launcher);
+        String djLogo = Schedule.get(position).getDjImage();
+        if (djLogo.equals(null) || djLogo.isEmpty() || djLogo.equals("null")) {
+            djLogo = IMAGE;
+        }
 
 
-	}
+        Log.d(TAG, "djLogo = <" + djLogo + ">");
+        new DownloadImageTask(holder.imageview).execute(djLogo);
 
-	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-		ImageView bmImage;
+        holder.time.setText(Schedule.get(position).getStime());
+        holder.genre.setText(Schedule.get(position).getGenre());
+        holder.djName.setText(Schedule.get(position).getDjName());
+        holder.showTitle.setText(Schedule.get(position).getShowTitle());
 
-		public DownloadImageTask(ImageView bmImage) {
-			this.bmImage = bmImage;
+        return v;
+    }
 
-		}
 
-		protected Bitmap doInBackground(String... urls) {
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
 
-			String urldisplay = "http://phever.ie/images/" + urls[0];
-			//String urldisplay = "http://phever.ie/images/ken_logo.jpg";
-			Bitmap mIcon11 = null;
-			try {
-				InputStream in = new java.net.URL(urldisplay).openStream();
-				mIcon11 = BitmapFactory.decodeStream(in);
-			} catch (Exception e) {
-				Log.e("Error", e.getMessage());
-				e.printStackTrace();
-			}
-			return mIcon11;
-		}
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
 
-		protected void onPostExecute(Bitmap result) {
-			//------------------------------------------------- 		
-			bmImage.setAdjustViewBounds(true);
-			bmImage.setMaxHeight(bmImage.getHeight());
-			bmImage.setMaxWidth(bmImage.getWidth());
-			//bmImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-			//-------------------------------------------------
-			
-			bmImage.setImageBitmap(result);
-		}
+        }
 
-	}
+        protected Bitmap doInBackground(String... urls) {
+
+            String urldisplay = IMAGEPATH + urls[0];
+            //String urldisplay = "http://phever.ie/images/ken_logo.jpg";
+            Bitmap bmp = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                bmp = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return bmp;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            holder.djBmp = result;
+            bmImage.setAdjustViewBounds(true);
+            bmImage.setMaxHeight(bmImage.getHeight());
+            bmImage.setMaxWidth(bmImage.getWidth());
+            bmImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            bmImage.setImageBitmap(result);
+        }
+
+    }
 }
