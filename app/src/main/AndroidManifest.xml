@@ -7,11 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-<<<<<<< HEAD
-    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="22" />
-=======
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="21" />
->>>>>>> b0a909131f21bfd291bb37bf0615bc3da11c58f5
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="21" />
 
     <application
         android:allowBackup="true"
@@ -61,22 +57,15 @@
             android:name=".EventsActivity"
             android:label="@string/title_activity_events">
         </activity>
-<<<<<<< HEAD
-        <!--
-        <receiver android:name=".RemoteControlReceiver">
-    		<intent-filter>
-        		<action android:name="android.intent.action.MEDIA_BUTTON" />
-    		</intent-filter>
-		</receiver>
-		-->
-=======
-        <activity
+
+
+       <activity
             android:name="com.shamanland.facebook.likebutton.FacebookLikeActivity"
             android:label="facebook"
             android:theme="@style/AppBaseTheme"
             />
 
->>>>>>> b0a909131f21bfd291bb37bf0615bc3da11c58f5
+
     </application>
 
 </manifest>

@@ -35,10 +35,7 @@
     <color name="color_black">#000000</color>
     <color name="color_green">#00ff00</color>
     <color name="color_white">#ffffff</color>
-<<<<<<< HEAD
-    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
-=======
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
     <eat-comment/>
     <color name="com_shamanland_facebook_button_blue_focused_end">#6982b7</color>
     <color name="com_shamanland_facebook_button_blue_focused_start">#7a90bf</color>
@@ -51,8 +48,7 @@
     <color name="com_shamanland_facebook_like_box_background_color">#8fff</color>
     <color name="com_shamanland_facebook_like_box_text_color">#898f9c</color>
     <color name="com_shamanland_facebook_like_text_color">#fff</color>
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
->>>>>>> b0a909131f21bfd291bb37bf0615bc3da11c58f5
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
@@ -153,14 +149,11 @@
     <dimen name="abc_text_size_subtitle_material_toolbar">16dp</dimen>
     <dimen name="abc_text_size_title_material">20sp</dimen>
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
-<<<<<<< HEAD
     <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
-=======
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
     <eat-comment/>
     <dimen name="com_shamanland_facebook_like_activity_progress_size">40dp</dimen>
     <dimen name="com_shamanland_facebook_like_box_padding_bottom">3sp</dimen>
@@ -176,8 +169,7 @@
     <dimen name="com_shamanland_facebook_like_padding_right">4sp</dimen>
     <dimen name="com_shamanland_facebook_like_padding_top">0sp</dimen>
     <dimen name="com_shamanland_facebook_like_text_size">14sp</dimen>
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
->>>>>>> b0a909131f21bfd291bb37bf0615bc3da11c58f5
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <item name="dialog_fixed_height_major" type="dimen">80%</item>
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
@@ -196,14 +188,14 @@
     <item name="action_bar_spinner" type="id"/>
     <item name="action_menu_divider" type="id"/>
     <item name="action_menu_presenter" type="id"/>
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
     <eat-comment/>
     <item name="com_shamanland_facebook_like" type="id"/>
     <item name="com_shamanland_facebook_like_box" type="id"/>
     <item name="com_shamanland_facebook_like_container" type="id"/>
     <item name="com_shamanland_facebook_like_recommend" type="id"/>
     <item name="com_shamanland_facebook_like_share" type="id"/>
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <item name="home" type="id"/>
     <item name="progress_circular" type="id"/>
@@ -232,7 +224,7 @@
     <string name="action_settings">Settings</string>
     <string name="app_name">Phever</string>
     <string name="buffering">Buffering…</string>
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
     <eat-comment/>
     <string name="com_shamanland_facebook">Facebook</string>
     <string name="com_shamanland_facebook_like_activity_error">Action \'like\' could not be done</string>
@@ -240,7 +232,7 @@
     <string name="com_shamanland_like">Like</string>
     <string name="com_shamanland_recommend">Recommend</string>
     <string name="com_shamanland_share">Share</string>
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="fetching_song">Retrieving song</string>
     <string name="footer_text"><u>www.phever.ie</u></string>
@@ -1250,12 +1242,12 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
     <eat-comment/>
     <style name="Theme.Facebook.Like" parent="@android:style/Theme.Dialog">
         <item name="android:minHeight">320dp</item>
     </style>
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <style name="ThemeOverlay.AppCompat" parent="Base.ThemeOverlay.AppCompat"/>
     <style name="ThemeOverlay.AppCompat.ActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar"/>
@@ -1315,7 +1307,7 @@
     <style name="Widget.AppCompat.Spinner.DropDown.ActionBar" parent="Base.Widget.AppCompat.Spinner.DropDown.ActionBar"/>
     <style name="Widget.AppCompat.Toolbar" parent="Base.Widget.AppCompat.Toolbar"/>
     <style name="Widget.AppCompat.Toolbar.Button.Navigation" parent="Base.Widget.AppCompat.Toolbar.Button.Navigation"/>
-    <!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
+    <!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/res/values/values.xml -->
     <eat-comment/>
     <style name="Widget.FacebookLikeBox" parent="@android:style/Widget.Button">
         <item name="android:id">@id/com_shamanland_facebook_like_box</item>

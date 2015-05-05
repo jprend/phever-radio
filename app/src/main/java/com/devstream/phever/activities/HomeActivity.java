@@ -28,8 +28,7 @@ import android.widget.Toast;
 import com.devstream.phever.utilities.ColorTool;
 import com.devstream.phever.utilities.SoundwaveAnimateThread;
 
-
-public class HomeActivity extends Activity implements View.OnClickListener, MenuItem.OnMenuItemClickListener, View.OnTouchListener, AudioManager.OnAudioFocusChangeListener {
+public class HomeActivity extends Activity implements View.OnClickListener,  View.OnTouchListener, AudioManager.OnAudioFocusChangeListener {
     private PopupMenu popupMenuColorSettings;
     private final static int ONE = 1;
     private final static int TWO = 2;
@@ -133,7 +132,7 @@ public class HomeActivity extends Activity implements View.OnClickListener, Menu
     }// close onclick method
 
 
-
+/*
 	@SuppressLint("SetJavaScriptEnabled")
 	public boolean onMenuItemClick(MenuItem item) {
 		// Handle item selection on the dj days popup
@@ -169,7 +168,7 @@ public class HomeActivity extends Activity implements View.OnClickListener, Menu
         startActivity(intent);
         return true;
 	}//close onMenuItemClick (for popups)
-
+*/
 	// Respond to the user touching the screen
 	@Override
 	public boolean onTouch(View v, MotionEvent ev) {
@@ -266,15 +265,52 @@ public class HomeActivity extends Activity implements View.OnClickListener, Menu
 
 		return true;
 	}// close method onTouch
-	
-	public void showPopup(View v) {
-	    PopupMenu popup = new PopupMenu(this, v);
-	    MenuInflater inflater = popup.getMenuInflater();
-	    inflater.inflate(R.menu.day_menu, popup.getMenu());
-		popup.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) this); //note major prob with 'this' since added extra popup menus
-	    popup.show();
-	}
-	/* api level 14            Inflating the Popup using xml file
+
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.day_menu, popup.getMenu());
+        //popup.setOnMenuItemClickListener(this); //note major prob with 'this' since added extra popup menus
+        // Handle item selection on the dj days popup
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int day = 0;
+                switch (item.getItemId()) {
+                    case R.id.monday:
+                        day = 0;
+                        break;
+                    case R.id.tuesday:
+                        day = 1;
+                        break;
+                    case R.id.wednesday:
+                        day = 2;
+                        break;
+                    case R.id.thursday:
+                        day = 3;
+                        break;
+                    case R.id.friday:
+                        day = 4;
+                        break;
+                    case R.id.saturday:
+                        day = 5;
+                        break;
+                    case R.id.sunday:
+                        day = 6;
+                        break;
+                }//close switch
+
+                Intent intent = new Intent(HomeActivity.this, DjScheduleActivity.class);
+                intent.putExtra("day", day);
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        popup.show();
+    }
+    /* api level 14            Inflating the Popup using xml file
 		popup.getMenuInflater().inflate(R.menu.day_menu,popup.getMenu());            */
 	
 	

@@ -52,12 +52,4 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
         </LinearLayout>
     </LinearLayout>
-<<<<<<< HEAD
-
-
-
-</LinearLayout>
-<!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/src/main/res/layout/row.xml -->
-=======
-</LinearLayout><!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/src/main/res/layout/row.xml -->
->>>>>>> b0a909131f21bfd291bb37bf0615bc3da11c58f5
+</LinearLayout><!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/src/main/res/layout/row.xml -->

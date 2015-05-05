@@ -9,18 +9,7 @@
         <dex dex="C:\Users\admin\AndroidStudioProjects\phever-radio\app\build\intermediates\pre-dexed\debug\classes-bfa573a7927757d95ba1023c5f725085d1dcbe1c.jar" />
     </item>
     <item
-<<<<<<< HEAD
         jar="C:\Users\admin\AndroidStudioProjects\phever-radio\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
-=======
-        jar="/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/exploded-aar/com.shamanland/facebook-like-button/0.1.8/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="6aa1fc36c1732ad848de1b1dbdab4f7eab4784b3">
-        <dex dex="/home/john/android/AndroidStudioProjects/phever-radio/app/build/intermediates/pre-dexed/debug/classes-f6599b57a9a218ebe305f25fa4a95d614c9381d6.jar" />
-    </item>
-    <item
-        jar="/home/john/android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
->>>>>>> b0a909131f21bfd291bb37bf0615bc3da11c58f5
         jumboMode="false"
         revision="21.1.2"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
@@ -32,6 +21,13 @@
         revision="21.1.2"
         sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
         <dex dex="C:\Users\admin\AndroidStudioProjects\phever-radio\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-ec6b31e72735cbfb4c9c77a49fb18a6f4c13d03b.jar" />
+    </item>
+    <item
+        jar="C:\Users\admin\AndroidStudioProjects\phever-radio\app\build\intermediates\exploded-aar\com.shamanland\facebook-like-button\0.1.8\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="6aa1fc36c1732ad848de1b1dbdab4f7eab4784b3">
+        <dex dex="C:\Users\admin\AndroidStudioProjects\phever-radio\app\build\intermediates\pre-dexed\debug\classes-45d02eb17efedcd1d919deb3163525a1bae20316.jar" />
     </item>
     <item
         jar="C:\Users\admin\AndroidStudioProjects\phever-radio\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
