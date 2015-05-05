@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/home/main/Projects/thirdparty/shamanland/facebook-like-button/lib/src/main/res/values-hdpi/styles.xml -->
+    <eat-comment />
+
+    <style name="Widget.FacebookLikeButton" parent="Widget.FacebookLikeButtonBase">
+        <item name="android:shadowRadius">1.5</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1.5</item>
+    </style>
+
+</resources>
