@@ -30,8 +30,9 @@ import android.widget.Toast;
 import com.devstream.phever.model.Slot;
 import com.devstream.phever.model.SlotAdapter;
 import com.devstream.phever.model.SlotSingleton;
-
+//NOTE WHOLE CLASS INNARDS COMMENTED OUT TILL LOST CODE RECOVERED - gets around constant errors - john will work on this
 public class DjScheduleActivity extends Activity {
+    /*
 	final String rosterUrl = "http://members.upc.ie/john.prendergast4/schedule.json";
 	int size = 7;
 	
@@ -41,6 +42,7 @@ public class DjScheduleActivity extends Activity {
 
   
 	SlotAdapter adapter;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,16 +77,7 @@ public class DjScheduleActivity extends Activity {
 		adapter = new SlotAdapter(getApplicationContext(), R.layout.row, weekRoster.get(index));
 		
 		listview.setAdapter(adapter);
-		/*
-		listview.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long id) {
-				// TODO Auto-generated method stub	
-				//jp   Toast.makeText(getApplicationContext(), dayRoster.get(position).getShowName(), Toast.LENGTH_LONG).show();				
-			}
-		});
-		*/
+
 	}
 
 	class getSlots extends AsyncTask<String, Void, Boolean > {
@@ -133,8 +126,10 @@ public class DjScheduleActivity extends Activity {
 						while(keys.hasNext()) {
 							String timeSlot = (String)keys.next();
 							String show = object.getString(timeSlot);						
-							Slot anySlot = new Slot(timeSlot, show);
-							//Log.d("jp01", anySlot.toString());
+							//Slot anySlot = new Slot(timeSlot, show);
+                            Slot anySlot = new Slot(show);
+
+   							//Log.d("jp01", anySlot.toString());
 							//dayRoster.add(anySlot);
 							//dayRoster = weekRoster.get(i);
 						    weekRoster.get(i).add(anySlot); 			    
@@ -181,5 +176,16 @@ public class DjScheduleActivity extends Activity {
 
 
 	}
-
+    */
 }
+
+		/*
+		listview.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long id) {
+				// TODO Auto-generated method stub
+				//jp   Toast.makeText(getApplicationContext(), dayRoster.get(position).getShowName(), Toast.LENGTH_LONG).show();
+			}
+		});
+		*/

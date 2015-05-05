@@ -7,11 +7,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22" />
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="22" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/phever_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -26,13 +26,13 @@
         </activity>
         <activity
             android:name=".RadioActivity"
-            android:icon="@drawable/headphones_launcher"
+            android:icon="@drawable/phever_launcher"
             android:label="@string/title_activity_radio" >
         </activity>
 
         <service
             android:name=".StreamService"
-            android:icon="@drawable/headphones_launcher"
+            android:icon="@drawable/phever_launcher"
             android:label="@string/service_stream"
             android:process=":PHever_stream" >
         </service>
@@ -50,18 +50,20 @@
             android:label="@string/title_activity_tv" >
         </activity>
         <activity 
-            android:name=".ContactsActivity"
+            android:name=".ConnectActivity"
             android:label="@string/title_activity_contacts" >
         </activity>
         <activity 
             android:name=".EventsActivity"
             android:label="@string/title_activity_events">
         </activity>
+        <!--
         <receiver android:name=".RemoteControlReceiver">
     		<intent-filter>
         		<action android:name="android.intent.action.MEDIA_BUTTON" />
     		</intent-filter>
 		</receiver>
+		-->
     </application>
 
 </manifest>
