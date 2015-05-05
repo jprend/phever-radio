@@ -16,4 +16,4 @@
         <item android:drawable="@drawable/frame14_soundwave" android:duration="50" />
         <item android:drawable="@drawable/frame15_soundwave" android:duration="50" />
 </animation-list>
-<!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/src/main/res/drawable/frame_animation_soundwave.xml -->
+<!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/src/main/res/drawable/frame_animation_soundwave.xml -->

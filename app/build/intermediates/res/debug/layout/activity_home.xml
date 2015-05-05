@@ -3,20 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
+    android:id="@+id/main_layout"
     >
 
+    <!-- header layout -->
+    <include
+        android:id="@+id/header"
+        layout="@layout/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        />
+
+    <!--  original start / stop buttons
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="50dp" >
+        android:layout_below="@+id/header_layout"
+        >
 
         <Button
             android:id="@+id/startButton"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -24,41 +34,113 @@
 
         <Button
             android:id="@+id/stopButton"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/stop" />
     </LinearLayout>
 
+    -->
 
-    
+    <!-- radio related image buttons -->
+
+    <ImageView
+        android:id="@+id/img_radio_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/play_icon"
+        android:layout_above="@+id/img_home"
+        android:layout_alignLeft="@+id/img_home"
+        android:layout_alignStart="@+id/img_home"
+        />
+
+    <ImageView
+        android:id="@+id/img_radio_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/pause_icon"
+        android:layout_above="@+id/img_home"
+        android:layout_alignRight="@+id/img_home"
+        android:layout_alignEnd="@+id/img_home"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:textColor="@color/color_black"
+        android:textSize="30sp"
+        android:text="+"
+        android:layout_alignTop="@+id/img_home"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:id="@+id/textView" />
+
+    <!-- visible  home image -->
     <ImageView
         android:id="@+id/img_home"
+        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/home_phever1"       
+        android:src="@drawable/home_img"
         />
-    
+
+    <!-- invisible mask image -->
      <ImageView
         android:id="@+id/img_mask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:visibility="invisible"
-        android:src="@drawable/mask_phever1"       
+        android:layout_centerInParent="true"
+        android:src="@drawable/mask_phever1"
         />
 
-     <ImageView
-         android:id="@+id/imageAnimation"
+     <TextView
+         android:id="@+id/volplus"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_alignBottom="@+id/img_home"
+         android:background="@color/color_white"
+         android:textSize="20dp"
+         android:text="+"
+         android:layout_above="@+id/soundwave_img_animate"
          android:layout_centerHorizontal="true"
-         android:layout_marginBottom="86dp"
-         android:adjustViewBounds="true"
+         android:layout_marginBottom="55dp"
          />
 
+    <!--  soundwave animation image -->
+
+    <ImageView
+        android:visibility="visible"
+        android:id="@+id/soundwave_img_animate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/frame15_soundwave"
+        android:layout_marginBottom="85dp"
+        android:layout_alignBottom="@+id/img_home"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/volminus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:textSize="20dp"
+        android:text="--"
+        android:layout_below="@+id/volplus"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+         />
+
+    <!-- footer layout -->
+    <include
+        layout="@layout/footer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
+
 </RelativeLayout>
-<!-- From: file:/home/john/android/AndroidStudioProjects/phever-radio/app/src/main/res/layout/activity_home.xml -->
+<!-- From: file:/C:/Users/admin/AndroidStudioProjects/phever-radio/app/src/main/res/layout/activity_home.xml -->
