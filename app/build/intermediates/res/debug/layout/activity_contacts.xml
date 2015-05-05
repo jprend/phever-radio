@@ -19,7 +19,7 @@
 		>
 		<com.shamanland.facebook.likebutton.FacebookLikeButton
 			style="@style/Widget.FacebookLikeButton"
-			app:pageUrl="http://phever.ie/"
+			app:pageUrl="https://www.facebook.com/phevermusic"
 			app:pageTitle="Phever Radio Station"
 			app:pageText="This is Phever"
 			app:pagePicture="@drawable/ic_launcher"
