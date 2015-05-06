@@ -8,29 +8,33 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.AudioManager;
-import android.media.AudioManager.OnAudioFocusChangeListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.devstream.phever.utilities.ColorTool;
-import com.devstream.phever.utilities.SoundwaveFrameAnimationThread;
+import com.devstream.phever.utilities.SoundwaveAnimateThread;
 
-
-public class HomeActivity extends Activity implements View.OnTouchListener,
-													  android.widget.PopupMenu.OnMenuItemClickListener {
-	private ImageView soundwaveAnimate; //frame animate
+public class HomeActivity extends Activity implements View.OnClickListener,  View.OnTouchListener, AudioManager.OnAudioFocusChangeListener {
+    private PopupMenu popupMenuColorSettings;
+    private final static int ONE = 1;
+    private final static int TWO = 2;
+    private final static int THREE = 3;
+	private ImageView soundwaveAnimate, playRadio, pauseRadio, soundwaveRotate; //frame animate
+    private SoundwaveAnimateThread swAnim;
 
 	private Intent intent;
 	
@@ -48,28 +52,90 @@ public class HomeActivity extends Activity implements View.OnTouchListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		context = this;
-		ImageView iv = (ImageView) findViewById(R.id.img_home);
 
+        //set ontouch listener to the visible home image
+		ImageView iv = (ImageView) findViewById(R.id.img_home);
 		if (iv != null) {
-			iv.setOnTouchListener(this);
+			iv.setOnTouchListener((View.OnTouchListener) this);
 		}
+
+        //set up the sound wave animation
+        soundwaveRotate  = (ImageView) findViewById(R.id.soundwave_img_animate); // soundwave image
+        swAnim = new SoundwaveAnimateThread(soundwaveRotate);  //soundwave thread class
+
+        //footer change home view background color
+        findViewById(R.id.change_background_color).setOnClickListener(this);
+
+        //footer phever link
+        TextView phever_link = (TextView)findViewById(R.id.phever_weblink);
+        SpannableString content = new SpannableString(getResources().getString(R.string.footer_text));
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        phever_link.setText(content);
+        phever_link.setOnClickListener(this);
+
+        //footer database link
+        ImageView subscribe = (ImageView)findViewById(R.id.mail_list_link);
+        subscribe.setOnClickListener(this);
 		
 		/*
 		//frame animate 
 		soundwaveAnimate = (ImageView)findViewById(R.id.imageAnimation);
 		// Setting animation_list.xml as the background of the image view
 		soundwaveAnimate.setBackgroundResource(R.drawable.frame_animation_soundwave);
-		SoundwaveFrameAnimationThread frameAnim = new SoundwaveFrameAnimationThread(soundwaveAnimate);
+		SoundwaveAnimateThread frameAnim = new SoundwaveAnimateThread(soundwaveAnimate);
 		frameAnim.run();
 		*/
 		
-	}
+	}//close method onCreate
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.change_background_color:
+                popupMenuColorSettings = new PopupMenu(HomeActivity.this, findViewById(R.id.change_background_color));
+                popupMenuColorSettings.getMenu().add(Menu.NONE, ONE, Menu.NONE, "Black");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, TWO, Menu.NONE, "White");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, THREE, Menu.NONE, "Green");
+                popupMenuColorSettings.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+                      @Override
+                      public boolean onMenuItemClick(MenuItem item) {
+                          switch (item.getItemId()) {
+                              case ONE:
+                                  findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_black));
+                                  break;
+                              case TWO:
+                                  findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_white));
+                                  break;
+                              case THREE:
+                                  findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_green));
+                                  break;
+                          }//close switch
+                        return false;
+                      }
+                });
+                popupMenuColorSettings.show();
+                break;
+            case R.id.phever_weblink:
+                String url1 =  "http://phever.ie";
+                Intent intent1 = new Intent(Intent.ACTION_VIEW);
+                intent1.setData(Uri.parse(url1));
+                startActivity(intent1);
+                break;
+            case R.id.mail_list_link:
+                String url2 = "https://docs.google.com/forms/d/1op3yEBANTh7_QDTMDW-bygsiLwH1uQgsSAJiffznssU/viewform";
+                Intent intent2 = new Intent(Intent.ACTION_VIEW);
+                intent2.setData(Uri.parse(url2));
+                startActivity(intent2);
+                break;
+        }//close switch
+
+    }// close onclick method
+
+
+/*
 	@SuppressLint("SetJavaScriptEnabled")
 	public boolean onMenuItemClick(MenuItem item) {
-		// Toast.makeText( HomeActivity.this,"You Clicked : " +
-		// item.getTitle(),Toast.LENGTH_SHORT).show();
-		// Handle item selection
+		// Handle item selection on the dj days popup
 		int day = 0;
 		switch (item.getItemId()) {
 		case R.id.monday:
@@ -93,18 +159,17 @@ public class HomeActivity extends Activity implements View.OnTouchListener,
 		case R.id.sunday:
 			day = 6;
 			break;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
+        default:
+                return super.onOptionsItemSelected(item);
+        }//close switch
 
-		Intent intent = new Intent(this, DjScheduleActivity.class);
-		intent.putExtra("day", day);
-		startActivity(intent);
-		return true;
-	}
-
+        Intent intent = new Intent(this, DjScheduleActivity.class);
+        intent.putExtra("day", day);
+        startActivity(intent);
+        return true;
+	}//close onMenuItemClick (for popups)
+*/
 	// Respond to the user touching the screen
-	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouch(View v, MotionEvent ev) {
 		final int action = ev.getAction();
@@ -146,12 +211,13 @@ public class HomeActivity extends Activity implements View.OnTouchListener,
 			if (ct.closeMatch(Color.rgb(255, 238, 56), touchColor, tolerance)) {
 				// RADIO toast("Radio (yellow)");
 				listenToRadio();
+                //start sound wave animation when radio initially turned on
 				//intent = new Intent(this, RadioActivity.class);
 				//startActivity(intent);
 			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor,
 					tolerance)) {
-				// CONTACTS toast("Contacts (Green)");
-				intent = new Intent(this, ContactsActivity.class);
+				// CONNNECT toast("Contacts (Green)");
+				intent = new Intent(this, ConnectActivity.class);
 				startActivity(intent);
 			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor,
 					tolerance)) {
@@ -199,15 +265,52 @@ public class HomeActivity extends Activity implements View.OnTouchListener,
 
 		return true;
 	}// close method onTouch
-	
-	public void showPopup(View v) {
-	    PopupMenu popup = new PopupMenu(this, v);
-	    MenuInflater inflater = popup.getMenuInflater();
-	    inflater.inflate(R.menu.day_menu, popup.getMenu());
-		popup.setOnMenuItemClickListener(this);
-	    popup.show();
-	}
-	/* api level 14            Inflating the Popup using xml file
+
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.day_menu, popup.getMenu());
+        //popup.setOnMenuItemClickListener(this); //note major prob with 'this' since added extra popup menus
+        // Handle item selection on the dj days popup
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int day = 0;
+                switch (item.getItemId()) {
+                    case R.id.monday:
+                        day = 0;
+                        break;
+                    case R.id.tuesday:
+                        day = 1;
+                        break;
+                    case R.id.wednesday:
+                        day = 2;
+                        break;
+                    case R.id.thursday:
+                        day = 3;
+                        break;
+                    case R.id.friday:
+                        day = 4;
+                        break;
+                    case R.id.saturday:
+                        day = 5;
+                        break;
+                    case R.id.sunday:
+                        day = 6;
+                        break;
+                }//close switch
+
+                Intent intent = new Intent(HomeActivity.this, DjScheduleActivity.class);
+                intent.putExtra("day", day);
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        popup.show();
+    }
+    /* api level 14            Inflating the Popup using xml file
 		popup.getMenuInflater().inflate(R.menu.day_menu,popup.getMenu());            */
 	
 	
@@ -238,12 +341,15 @@ public class HomeActivity extends Activity implements View.OnTouchListener,
 	public void listenToRadio() {
 		radio = true;
 		isPlaying = false;
-		startButton = (Button) findViewById(R.id.startButton);
-		startButton.setVisibility(View.VISIBLE);
-		stopButton = (Button) findViewById(R.id.stopButton);
-		stopButton.setVisibility(View.VISIBLE);
-		
-	
+        swAnim.run(); //start soundwave animation
+		//startButton = (Button) findViewById(R.id.startButton);
+		//startButton.setVisibility(View.VISIBLE);
+		//stopButton = (Button) findViewById(R.id.stopButton);
+		//stopButton.setVisibility(View.VISIBLE);
+
+        playRadio = (ImageView)findViewById(R.id.img_radio_play);
+        pauseRadio = (ImageView)findViewById(R.id.img_radio_pause);
+
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		getPrefs();
 		// control media volume
@@ -252,34 +358,41 @@ public class HomeActivity extends Activity implements View.OnTouchListener,
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		// start the radio - thats why we are here
 		startService(streamService);
-		startButton.setEnabled(false);
+		playRadio.setEnabled(false);   //startButton.setEnabled(false);
 		
-		startButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startService(streamService);
-				startButton.setEnabled(false);
-			}
-		});
+		playRadio.setOnClickListener(new View.OnClickListener() { //to return to buttons just replace with startButton
+            @Override
+            public void onClick(View v) {
+                startService(streamService);
+                playRadio.setEnabled(false); //startButton.setEnabled(false);
+                //swAnim.run();  //not working
+            }
+        });
 		
-		stopButton.setOnClickListener(new View.OnClickListener() {			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				// Abandon audio focus when playback complete    
-				//audioManager.abandonAudioFocus(afChangeListener);
-				stopService(streamService);
-				startButton.setEnabled(true);
-				setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);				
-			}
-		});
+		pauseRadio.setOnClickListener(new View.OnClickListener() { //to return to buttons just replace with stopButton
+            @Override
+            public void onClick(View v) {
+                // Abandon audio focus when playback complete
+                //audioManager.abandonAudioFocus(HomeActivity.this);
+                stopService(streamService);
+                playRadio.setEnabled(true); //startButton.setEnabled(true);
+                setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
+
+                //swAnim. //would be nice to stop animate when radio stopped not known yet how to do this
+
+            }
+        });
 	}
 
 	public void getPrefs() {
 		isPlaying = prefs.getBoolean("isPlaying", false);
 		if (isPlaying)
-			startButton.setEnabled(false);	
+			playRadio.setEnabled(false);	 //startButton.setEnabled(false);
 	}
 
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+
+    }
 }// close class homeactivity
 

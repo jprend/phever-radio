@@ -5,12 +5,12 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 //private class to rotate the image on a separate thread
-	public class RotateThread implements Runnable {
+	public class SplashAnimateThread implements Runnable {
 		private ImageView image;
 		private static final float ROTATE_FROM = 0.0f;
 	    private static final float ROTATE_TO = -10.0f * 180.0f;
 		
-		public RotateThread(ImageView image) {
+		public SplashAnimateThread(ImageView image) {
 			this.image = image;
 		}
 

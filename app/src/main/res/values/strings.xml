@@ -29,5 +29,5 @@
 
    	<string name="main_heading">PHEVER</string>
    	<string name="sub_heading">the sound of the Irish underground</string>
-   	<string name="footer_heading">www.phever.ie</string>
+    <string name="footer_text"><u>www.phever.ie</u></string>
 </resources>

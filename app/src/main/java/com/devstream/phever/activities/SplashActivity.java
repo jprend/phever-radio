@@ -1,6 +1,6 @@
 package com.devstream.phever.activities;
 
-//import com.devstream.phever.utilities.RotateThread;
+//import com.devstream.phever.utilities.SplashAnimateThread;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,8 +23,8 @@ public class SplashActivity extends Activity {
 		splashRotate = (ImageView)findViewById(R.id.splash_img_rotate);
 		r = new RotateAnimation(0.0f, 5400.0f, Animation.RELATIVE_TO_SELF, 0.5f,Animation.RELATIVE_TO_SELF, 0.5f);
 		r.setInterpolator(new LinearInterpolator());
-		//r.setDuration(2000);
-		r.setDuration(0);
+		r.setDuration(1500);  //comment this line out to bypass splash screen for development purposes
+		//r.setDuration(0);   //and uncomment this line in to avoid splash screen
 		r.setRepeatCount(0);
 		splashRotate.startAnimation(r);
 		r.setAnimationListener(new AnimationListener() {
@@ -47,9 +47,9 @@ public class SplashActivity extends Activity {
 			}
 		});
 
-		/*
-		 * imgSplash = (ImageView) findViewById(R.id.img_splash); RotateThread
-		 * rotator = new RotateThread(imgSplash); rotator.run();
+		/*  //if using a thread but as not clashing with any ohter activity no need
+		 * imgSplash = (ImageView) findViewById(R.id.img_splash); SplashAnimateThread
+		 * rotator = new SplashAnimateThread(imgSplash); rotator.run();
 		 */
 
 	}
