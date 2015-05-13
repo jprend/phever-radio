@@ -83,4 +83,13 @@ public class EventAdapter extends ArrayAdapter<Event> {
         TextView headline;
         TextView headlineDesc;
     }
+    @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
+    }
 }

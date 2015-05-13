@@ -128,4 +128,13 @@ public class SlotAdapter extends ArrayAdapter<Slot> {
         }
 
     }
+    @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
+    }
 }
