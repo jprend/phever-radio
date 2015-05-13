@@ -53,6 +53,7 @@
         android:layout_above="@+id/img_home"
         android:layout_alignLeft="@+id/img_home"
         android:layout_alignStart="@+id/img_home"
+        android:visibility="invisible"
         />
 
     <ImageView
@@ -63,6 +64,7 @@
         android:layout_above="@+id/img_home"
         android:layout_alignRight="@+id/img_home"
         android:layout_alignEnd="@+id/img_home"
+        android:visibility="invisible"
         />
 
     <TextView

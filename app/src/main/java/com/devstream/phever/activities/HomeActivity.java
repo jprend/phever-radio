@@ -349,6 +349,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 
         playRadio = (ImageView)findViewById(R.id.img_radio_play);
         pauseRadio = (ImageView)findViewById(R.id.img_radio_pause);
+		playRadio.setVisibility(View.VISIBLE);
+		pauseRadio.setVisibility(View.VISIBLE);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		getPrefs();
@@ -378,7 +380,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                 playRadio.setEnabled(true); //startButton.setEnabled(true);
                 setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
 
-                //swAnim. //would be nice to stop animate when radio stopped not known yet how to do this
+                //swAnim.
+                //would be nice to stop animate when radio stopped not known yet how to do this
 
             }
         });

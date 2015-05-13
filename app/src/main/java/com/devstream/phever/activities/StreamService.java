@@ -46,7 +46,7 @@ public class StreamService extends Service {
 				.getSystemService(NOTIFICATION_SERVICE);
 		Context context = getApplicationContext();
 		
-		String notifTitle = context.getResources().getString(R.string.app_name);
+		String notifTitle = context.getResources().getString(R.string.service_stream);
 		String notifMessage = context.getResources().getString(R.string.buffering);
 	
 		n = new Notification();
@@ -59,7 +59,9 @@ public class StreamService extends Service {
 		
 		n.setLatestEventInfo(context, notifTitle, notifMessage, pIntent);
 		
-		notificationManager.notify(notifId, n);
+		//.notify(notifId, n);
+		// http://developer.android.com/guide/topics/media/mediaplayer.html
+		startForeground(notifId, n);
 		
 		// It's very important that you put the IP/URL of your ShoutCast stream here
 		// Otherwise you'll get Webcom Radio
@@ -95,7 +97,7 @@ public class StreamService extends Service {
 		editor.commit();
 		
 		Context context = getApplicationContext();
-		String notifTitle = context.getResources().getString(R.string.app_name);
+		String notifTitle = context.getResources().getString(R.string.service_stream);
 		String notifMessage = context.getResources().getString(R.string.now_playing);
 		
 		n.icon = R.drawable.ic_launcher;
@@ -108,9 +110,10 @@ public class StreamService extends Service {
 		
 		n.setLatestEventInfo(context, notifTitle, notifMessage, pIntent);
 		// Change 5315 to some nother number
-		notificationManager.notify(notifId, n);
+		//notificationManager.notify(notifId, n);
+		startForeground(notifId, n);
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		Log.d(TAG, "onDestroy");
@@ -120,6 +123,7 @@ public class StreamService extends Service {
 		editor.putBoolean("isPlaying", false);
 		editor.commit();
 		notificationManager.cancel(notifId);
+		stopForeground(true);
 	}
 
 }
