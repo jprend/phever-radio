@@ -24,11 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".RadioActivity"
-            android:icon="@drawable/phever_launcher"
-            android:label="@string/title_activity_radio" >
-        </activity>
 
         <service
             android:name=".StreamService"
@@ -67,5 +62,9 @@
 
 
     </application>
-
+    <receiver android:name=".RemoteControlReceiver">
+        <intent-filter>
+            <action android:name="android.intent.action.MEDIA_BUTTON" />
+        </intent-filter>
+    </receiver>
 </manifest>
