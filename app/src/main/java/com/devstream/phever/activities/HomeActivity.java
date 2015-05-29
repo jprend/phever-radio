@@ -2,6 +2,7 @@ package com.devstream.phever.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,10 +26,14 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import com.devstream.phever.utilities.ColorTool;
 import com.devstream.phever.utilities.SoundwaveAnimateThread;
 
-public class HomeActivity extends Activity implements View.OnClickListener,  View.OnTouchListener, AudioManager.OnAudioFocusChangeListener {
+import static android.media.AudioManager.*;
+
+public class HomeActivity extends Activity implements View.OnClickListener,  View.OnTouchListener, OnAudioFocusChangeListener {
     private PopupMenu popupMenuColorSettings;
     private final static int ONE = 1;
     private final static int TWO = 2;
@@ -37,15 +42,16 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
     private SoundwaveAnimateThread swAnim;
 
 	private Intent intent;
-	
-	Button startButton, stopButton;
-	Button btnPlayPause;
+
+	ToggleButton playPauseButton;
+
 	static Context context;
 	boolean isPlaying;
 	boolean radio = false;
 	Intent streamService;
 	SharedPreferences prefs;
 	AudioManager audioManager;
+	ComponentName RemoteControlReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +62,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
         //set ontouch listener to the visible home image
 		ImageView iv = (ImageView) findViewById(R.id.img_home);
 		if (iv != null) {
-			iv.setOnTouchListener((View.OnTouchListener) this);
+			iv.setOnTouchListener(this);
 		}
 
         //set up the sound wave animation
@@ -132,43 +138,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
     }// close onclick method
 
 
-/*
-	@SuppressLint("SetJavaScriptEnabled")
-	public boolean onMenuItemClick(MenuItem item) {
-		// Handle item selection on the dj days popup
-		int day = 0;
-		switch (item.getItemId()) {
-		case R.id.monday:
-			day = 0;
-			break;
-		case R.id.tuesday:
-			day = 1;
-			break;
-		case R.id.wednesday:
-			day = 2;
-			break;
-		case R.id.thursday:
-			day = 3;
-			break;
-		case R.id.friday:
-			day = 4;
-			break;
-		case R.id.saturday:
-			day = 5;
-			break;
-		case R.id.sunday:
-			day = 6;
-			break;
-        default:
-                return super.onOptionsItemSelected(item);
-        }//close switch
 
-        Intent intent = new Intent(this, DjScheduleActivity.class);
-        intent.putExtra("day", day);
-        startActivity(intent);
-        return true;
-	}//close onMenuItemClick (for popups)
-*/
 	// Respond to the user touching the screen
 	@Override
 	public boolean onTouch(View v, MotionEvent ev) {
@@ -211,9 +181,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 			if (ct.closeMatch(Color.rgb(255, 238, 56), touchColor, tolerance)) {
 				// RADIO toast("Radio (yellow)");
 				listenToRadio();
-                //start sound wave animation when radio initially turned on
-				//intent = new Intent(this, RadioActivity.class);
-				//startActivity(intent);
 			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor,
 					tolerance)) {
 				// CONNNECT toast("Contacts (Green)");
@@ -239,8 +206,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 				//toast("V- (White)");
 				if (radio) {
 				    // Its visible
-					audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-							AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);							
+					audioManager.adjustStreamVolume(STREAM_MUSIC,
+							ADJUST_LOWER, FLAG_SHOW_UI);
 				} else {
 				    // Either gone or invisible
 				}
@@ -252,8 +219,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 
 				if (radio) {
 				    // Its visible
-					audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-							AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);							
+					audioManager.adjustStreamVolume(STREAM_MUSIC,
+							ADJUST_RAISE, FLAG_SHOW_UI);
 				} else {
 				    // Either gone or invisible
 				}
@@ -335,62 +302,88 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 	}// close method gethotspotcolour
 
 	public void toast(String msg) {
+		//jp this.getApplicationContext()  ???
 		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
 	} // end toast
 
 	public void listenToRadio() {
 		radio = true;
 		isPlaying = false;
-        swAnim.run(); //start soundwave animation
-		//startButton = (Button) findViewById(R.id.startButton);
-		//startButton.setVisibility(View.VISIBLE);
-		//stopButton = (Button) findViewById(R.id.stopButton);
-		//stopButton.setVisibility(View.VISIBLE);
+        swAnim.run(); 			//start soundwave animation
 
-        playRadio = (ImageView)findViewById(R.id.img_radio_play);
-        pauseRadio = (ImageView)findViewById(R.id.img_radio_pause);
-		playRadio.setVisibility(View.VISIBLE);
-		pauseRadio.setVisibility(View.VISIBLE);
+		playPauseButton = (ToggleButton) findViewById(R.id.playPauseButton);
+        playPauseButton.setVisibility(View.VISIBLE);
+
+
+		playPauseButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Perform action on clicks
+				if (playPauseButton.isChecked()) { // Checked - Pause icon visible
+                    //pause();
+                    stopService(streamService);
+                    setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
+				} else { // Unchecked - Play icon visible
+                    ///start();
+                    startService(streamService);
+                }
+			}
+		});
+
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		getPrefs();
 		// control media volume
-		this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		this.setVolumeControlStream(STREAM_MUSIC);
 		streamService = new Intent(HomeActivity.this, StreamService.class);
-		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+		audioManager =  (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		// start the radio - thats why we are here
-		startService(streamService);
-		playRadio.setEnabled(false);   //startButton.setEnabled(false);
-		
-		playRadio.setOnClickListener(new View.OnClickListener() { //to return to buttons just replace with startButton
-            @Override
-            public void onClick(View v) {
-                startService(streamService);
-                playRadio.setEnabled(false); //startButton.setEnabled(false);
-                //swAnim.run();  //not working
-            }
-        });
-		
-		pauseRadio.setOnClickListener(new View.OnClickListener() { //to return to buttons just replace with stopButton
-            @Override
-            public void onClick(View v) {
-                // Abandon audio focus when playback complete
-                //audioManager.abandonAudioFocus(HomeActivity.this);
-                stopService(streamService);
-                playRadio.setEnabled(true); //startButton.setEnabled(true);
-                setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
 
-                //swAnim.
-                //would be nice to stop animate when radio stopped not known yet how to do this
+		//******************************************************************
+		final OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
+			public void onAudioFocusChange(int focusChange) {
+				if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {
+					// Pause playback
+				} else if (focusChange == AUDIOFOCUS_GAIN) {
+					// Resume playback
+				} else if (focusChange == AUDIOFOCUS_LOSS) {
+					//AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
+					//AudioManager.abandonAudioFocus(afChangeListener);
+					// Stop playback
 
-            }
-        });
+				} else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+					// Lower the volume
+				} else if (focusChange == AUDIOFOCUS_GAIN) {
+					// Raise it back to normal
+				}
+			}
+		};
+		// Request audio focus for playback
+		int result = audioManager.requestAudioFocus(afChangeListener,
+				// Use the music stream.
+				STREAM_MUSIC,
+				// Request permanent focus.
+				AUDIOFOCUS_GAIN);
+
+		if (result == AUDIOFOCUS_REQUEST_GRANTED) {
+			// Start listening for button presses
+			//AudioManager.registerMediaButtonEventReceiver(RemoteControlReceiver);
+			//AudioManager.setMediaButtonReceiver(RemoteControlReceiver);
+			startService(streamService);
+			// Start playback.
+		}
+
+		//******************************************************************
+		//startService(streamService);
+
 	}
 
 	public void getPrefs() {
 		isPlaying = prefs.getBoolean("isPlaying", false);
-		if (isPlaying)
-			playRadio.setEnabled(false);	 //startButton.setEnabled(false);
+		// if (isPlaying)
+            // playRadio.setEnabled(false);
+			//startButton.setEnabled(false);
 	}
 
     @Override

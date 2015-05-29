@@ -24,45 +24,45 @@ public class StreamService extends Service {
 	NotificationManager notificationManager;
 	// Change this int to some number specifically for this app
 	int notifId = 5315;
-	
+
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Log.d(TAG, "onCreate");
-		
+
 		// Init the SharedPreferences and Editor
 		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		editor = prefs.edit();
-		
+
 		// Set up the buffering notification
 		notificationManager = (NotificationManager) getApplicationContext()
 				.getSystemService(NOTIFICATION_SERVICE);
 		Context context = getApplicationContext();
-		
+
 		String notifTitle = context.getResources().getString(R.string.service_stream);
 		String notifMessage = context.getResources().getString(R.string.buffering);
-	
+
 		n = new Notification();
 		n.icon = R.drawable.ic_launcher;
 		n.tickerText = "Buffering";
 		n.when = System.currentTimeMillis();
-		
+
 		Intent nIntent = new Intent(context, HomeActivity.class);
 		PendingIntent pIntent = PendingIntent.getActivity(context, 0, nIntent, 0);
-		
+
 		n.setLatestEventInfo(context, notifTitle, notifMessage, pIntent);
-		
-		//.notify(notifId, n);
+
+		// notificationManager.notify(notifId, n);
 		// http://developer.android.com/guide/topics/media/mediaplayer.html
 		startForeground(notifId, n);
-		
+
 		// It's very important that you put the IP/URL of your ShoutCast stream here
 		// Otherwise you'll get Webcom Radio
 		//String url = "http://176.31.115.196:8214/";
@@ -73,20 +73,16 @@ public class StreamService extends Service {
 			mp.setDataSource(url);
 			mp.prepare();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			Log.e(TAG, "SecurityException");
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
 			Log.e(TAG, "IllegalStateException");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			Log.e(TAG, "IOException");
-		}	
+		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onStart(Intent intent, int startId) {
@@ -95,19 +91,19 @@ public class StreamService extends Service {
 		// Set the isPlaying preference to true
 		editor.putBoolean("isPlaying", true);
 		editor.commit();
-		
+
 		Context context = getApplicationContext();
 		String notifTitle = context.getResources().getString(R.string.service_stream);
 		String notifMessage = context.getResources().getString(R.string.now_playing);
-		
+
 		n.icon = R.drawable.ic_launcher;
 		n.tickerText = notifMessage;
 		n.flags = Notification.FLAG_NO_CLEAR;
 		n.when = System.currentTimeMillis();
-		
+
 		Intent nIntent = new Intent(context, HomeActivity.class);
 		PendingIntent pIntent = PendingIntent.getActivity(context, 0, nIntent, 0);
-		
+
 		n.setLatestEventInfo(context, notifTitle, notifMessage, pIntent);
 		// Change 5315 to some nother number
 		//notificationManager.notify(notifId, n);

@@ -120,10 +120,10 @@ public class SlotAdapter extends ArrayAdapter<Slot> {
 
         protected void onPostExecute(Bitmap result) {
             holder.djBmp = result;
-            bmImage.setAdjustViewBounds(true);
+           /* bmImage.setAdjustViewBounds(true);
             bmImage.setMaxHeight(bmImage.getHeight());
             bmImage.setMaxWidth(bmImage.getWidth());
-            bmImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            bmImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE); */
             bmImage.setImageBitmap(result);
         }
 
