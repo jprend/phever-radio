@@ -87,7 +87,12 @@ public class StreamService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		Log.d(TAG, "onStart");
-		mp.start();
+		//mp.start();
+        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            public void onPrepared(MediaPlayer player){
+                mp.start();  //or mp.stop();
+            }
+        });
 		// Set the isPlaying preference to true
 		editor.putBoolean("isPlaying", true);
 		editor.commit();
@@ -113,7 +118,12 @@ public class StreamService extends Service {
 	@Override
 	public void onDestroy() {
 		Log.d(TAG, "onDestroy");
-		mp.stop();
+		//mp.stop();
+        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            public void onPrepared(MediaPlayer player){
+                mp.stop();
+            }
+        });
 		mp.release();
 		mp = null;
 		editor.putBoolean("isPlaying", false);
@@ -123,3 +133,17 @@ public class StreamService extends Service {
 	}
 
 }
+
+/*
+might need this to solve the error media player start called in state 0
+and
+media player stop called in state 0
+from http://stackoverflow.com/questions/23197807/error-mediaplayer-start-called-in-state-0-error-38-0
+
+  mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+    public void onPrepared(MediaPlayer player){
+         mp.start();  //or mp.stop();
+    }
+ });
+
+ */

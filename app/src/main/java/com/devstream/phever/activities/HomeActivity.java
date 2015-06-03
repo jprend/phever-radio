@@ -2,6 +2,7 @@ package com.devstream.phever.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +39,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
     private final static int ONE = 1;
     private final static int TWO = 2;
     private final static int THREE = 3;
+    private final static int FOUR = 4;
+    private final static int FIVE = 5;
+    private final static int SIX = 6;
+    private final static int SEVEN = 7;
+    private final static int EIGHT = 8;
 	private ImageView soundwaveAnimate, playRadio, pauseRadio, soundwaveRotate; //frame animate
     private SoundwaveAnimateThread swAnim;
 
@@ -102,6 +108,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                 popupMenuColorSettings.getMenu().add(Menu.NONE, ONE, Menu.NONE, "Black");
                 popupMenuColorSettings.getMenu().add(Menu.NONE, TWO, Menu.NONE, "White");
                 popupMenuColorSettings.getMenu().add(Menu.NONE, THREE, Menu.NONE, "Green");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, FOUR , Menu.NONE, "Blue");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, FIVE, Menu.NONE, "Red");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, SIX, Menu.NONE, "Pink");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, SEVEN, Menu.NONE, "Purple");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, EIGHT, Menu.NONE, "Yellow");
                 popupMenuColorSettings.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
                       @Override
                       public boolean onMenuItemClick(MenuItem item) {
@@ -114,6 +125,21 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                                   break;
                               case THREE:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_green));
+                                  break;
+                              case FOUR:
+                                  findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_blue));
+                                  break;
+                              case FIVE:
+                                  findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_red));
+                                  break;
+                              case SIX:
+                                  findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_pink));
+                                  break;
+                              case SEVEN:
+                                  findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_purple));
+                                  break;
+                              case EIGHT:
+                                  findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_yellow));
                                   break;
                           }//close switch
                         return false;
@@ -184,6 +210,19 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor,
 					tolerance)) {
 				// CONNNECT toast("Contacts (Green)");
+                /*
+                //check if streamService is running ie. returns true if is and false if not
+                //Boolean radioPlaying = isServiceRunning(StreamService.class);
+                //if service running then radio is running so turn it off
+               // if(radioPlaying){
+                    //Toast.makeText(HomeActivity.this, "service status is " + radioPlaying, Toast.LENGTH_SHORT).show();
+                    //listenToRadio();
+                    //stopService(streamService);//stop the service which in turn stops the radio which runs in the service
+                    //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
+                    //playPauseButton = (ToggleButton) findViewById(R.id.playPauseButton);
+                   // playPauseButton.setVisibility(View.INVISIBLE);
+               // }
+                */
 				intent = new Intent(this, ConnectActivity.class);
 				startActivity(intent);
 			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor,
@@ -198,8 +237,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 			} else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor,
 					tolerance)) {
 				// TV toast("TV (indigo)");
-				intent = new Intent(this, TvActivity.class);
-				startActivity(intent);
+                Uri uri  = Uri.parse("http://livestream.com/accounts/10782842/TV");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+				//intent = new Intent(this, TvActivity.class);
+				//startActivity(intent);
 			} else if (ct.closeMatch(Color.rgb(255, 255, 255), touchColor,
 					tolerance)) {
 				//Radio
@@ -379,16 +421,34 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 
 	}
 
+    //note the boolean isPlaying get set to true in the service start method and set to false in the service destroy method
 	public void getPrefs() {
-		isPlaying = prefs.getBoolean("isPlaying", false);
-		// if (isPlaying)
-            // playRadio.setEnabled(false);
-			//startButton.setEnabled(false);
+		isPlaying = prefs.getBoolean("isPlaying", false); // get status of radio on or off
+		if (isPlaying){ //if on
+           //stopService(streamService);//stop the service which in turn stops the radio which runs in the service
+           //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
+           // Toast.makeText(HomeActivity.this, "isPlaying = " + isPlaying, Toast.LENGTH_LONG).show();
+		}
 	}
 
     @Override
     public void onAudioFocusChange(int focusChange) {
 
     }
+
+    //used to check if a service class is running an instance returns true if yes and false if not
+    //note is more accurate than using preferences since onDestroy does not get called in every situation eg. suddenly turn off phone
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //isServiceRunning(myService.class); // this is how you would call on the check service class running method -note you pass the class name not the instance
+
 }// close class homeactivity
 
