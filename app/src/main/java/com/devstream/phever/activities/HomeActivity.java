@@ -35,6 +35,8 @@ import com.devstream.phever.utilities.SoundwaveAnimateThread;
 import static android.media.AudioManager.*;
 
 public class HomeActivity extends Activity implements View.OnClickListener,  View.OnTouchListener, OnAudioFocusChangeListener {
+    private final static String HOME_BACKGROUND_COLOR = "com.devstream.phever.activities.homeBackgroundColor"; //shared prefs file for home layount background color
+    private final static String BACKGROUND_COLOR = "com.devstream.phever.activities.homeBackgroundColor.backgroundColor"; //key for background color
     private PopupMenu popupMenuColorSettings;
     private final static int ONE = 1;
     private final static int TWO = 2;
@@ -55,7 +57,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 	boolean isPlaying;
 	boolean radio = false;
 	Intent streamService;
-	SharedPreferences prefs;
+	SharedPreferences prefs;  //create instance of shared preferences so as to get and set any preferences
+    SharedPreferences.Editor edit; //set up instance of shared preferences so as to set preferences key/value pairs
 	AudioManager audioManager;
 	ComponentName RemoteControlReceiver;
 
@@ -64,6 +67,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		context = this;
+
+        int defaultColor = getResources().getColor(R.color.color_white);
+        prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+        int backgroundCol = prefs.getInt(BACKGROUND_COLOR, defaultColor);
+        findViewById(R.id.main_layout).setBackgroundColor(backgroundCol);
 
         //set ontouch listener to the visible home image
 		ImageView iv = (ImageView) findViewById(R.id.img_home);
@@ -119,27 +127,59 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                           switch (item.getItemId()) {
                               case ONE:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_black));
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_black));
+                                  edit.commit();
                                   break;
                               case TWO:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_white));
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_white));
+                                  edit.commit();
                                   break;
                               case THREE:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_green));
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_green));
+                                  edit.commit();
                                   break;
                               case FOUR:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_blue));
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_blue));
+                                  edit.commit();
                                   break;
                               case FIVE:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_red));
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_red));
+                                  edit.commit();
                                   break;
                               case SIX:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_pink));
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_pink));
+                                  edit.commit();
                                   break;
                               case SEVEN:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_purple));
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_purple));
+                                  edit.commit();
                                   break;
                               case EIGHT:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_yellow));
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_yellow));
+                                  edit.commit();
                                   break;
                           }//close switch
                         return false;
