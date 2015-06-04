@@ -68,7 +68,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 		setContentView(R.layout.activity_home);
 		context = this;
 
-        int defaultColor = getResources().getColor(R.color.color_white);
+        //sets the  user chosen home layout background color in shared preferences
+        int defaultColor = getResources().getColor(R.color.color_white);//very first time default is white
         prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
         int backgroundCol = prefs.getInt(BACKGROUND_COLOR, defaultColor);
         findViewById(R.id.main_layout).setBackgroundColor(backgroundCol);
@@ -127,6 +128,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                           switch (item.getItemId()) {
                               case ONE:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_black));
+                                  //store chosen color in shared prefs
                                   prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
                                   edit = prefs.edit();
                                   edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_black));
@@ -134,6 +136,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                                   break;
                               case TWO:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_white));
+                                  //store chosen color in shared prefs
                                   prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
                                   edit = prefs.edit();
                                   edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_white));
@@ -141,6 +144,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                                   break;
                               case THREE:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_green));
+                                  //store chosen color in shared prefs
                                   prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
                                   edit = prefs.edit();
                                   edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_green));
@@ -148,6 +152,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                                   break;
                               case FOUR:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_blue));
+                                  //store chosen color in shared prefs
                                   prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
                                   edit = prefs.edit();
                                   edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_blue));
@@ -155,6 +160,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                                   break;
                               case FIVE:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_red));
+                                  //store chosen color in shared prefs
                                   prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
                                   edit = prefs.edit();
                                   edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_red));
@@ -162,6 +168,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                                   break;
                               case SIX:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_pink));
+                                  //store chosen color in shared prefs
                                   prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
                                   edit = prefs.edit();
                                   edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_pink));
@@ -169,6 +176,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                                   break;
                               case SEVEN:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_purple));
+                                  //store chosen color in shared prefs
                                   prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
                                   edit = prefs.edit();
                                   edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_purple));
@@ -176,6 +184,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                                   break;
                               case EIGHT:
                                   findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.color_yellow));
+                                  //store chosen color in shared prefs
                                   prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
                                   edit = prefs.edit();
                                   edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_yellow));
