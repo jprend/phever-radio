@@ -46,6 +46,16 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
     private final static int SIX = 6;
     private final static int SEVEN = 7;
     private final static int EIGHT = 8;
+    private final static int NINE = 9;
+    private final static int TEN = 10;
+    private final static int ELEVEN = 11;
+    private final static int TWELVE = 12;
+    private final static int THIRTEEN = 13;
+    private final static int FOURTEEN = 14;
+    private final static int FIFTEEN = 15;
+    private final static int SIXTEEN = 16;
+    private final static int SEVENTEEN = 17;
+
 	private ImageView soundwaveAnimate, playRadio, pauseRadio, soundwaveRotate; //frame animate
     private SoundwaveAnimateThread swAnim;
 
@@ -70,9 +80,18 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 
         //sets the  user chosen home layout background color in shared preferences
         int defaultColor = getResources().getColor(R.color.color_white);//very first time default is white
-        prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
-        int backgroundCol = prefs.getInt(BACKGROUND_COLOR, defaultColor);
-        findViewById(R.id.main_layout).setBackgroundColor(backgroundCol);
+        prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE ); // get the required shared prefs file
+        int background = prefs.getInt(BACKGROUND_COLOR, defaultColor); // if nothing in prefs then set to default
+        //check if background is a color or an image and set the chosen color or image
+        if((background == getResources().getColor(R.color.color_white)) || (background == getResources().getColor(R.color.color_black)) ||
+                (background == getResources().getColor(R.color.color_green)) || (background == getResources().getColor(R.color.color_blue)) ||
+                (background == getResources().getColor(R.color.color_blue)) ||(background == getResources().getColor(R.color.color_red)) ||
+                (background == getResources().getColor(R.color.color_pink)) || (background == getResources().getColor(R.color.color_purple)) ||
+                (background == getResources().getColor(R.color.color_yellow))) {
+            findViewById(R.id.main_layout).setBackgroundColor(background); // set color
+        } else {
+            findViewById(R.id.main_layout).setBackgroundResource(background); //set image
+        }
 
         //set ontouch listener to the visible home image
 		ImageView iv = (ImageView) findViewById(R.id.img_home);
@@ -122,6 +141,15 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                 popupMenuColorSettings.getMenu().add(Menu.NONE, SIX, Menu.NONE, "Pink");
                 popupMenuColorSettings.getMenu().add(Menu.NONE, SEVEN, Menu.NONE, "Purple");
                 popupMenuColorSettings.getMenu().add(Menu.NONE, EIGHT, Menu.NONE, "Yellow");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, NINE, Menu.NONE, "Image 1");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, TEN, Menu.NONE, "Image 2");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, ELEVEN, Menu.NONE, "Image 3");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, TWELVE, Menu.NONE, "Image 4");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, THIRTEEN, Menu.NONE, "Image 5");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, FOURTEEN, Menu.NONE, "Image 6");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, FIFTEEN, Menu.NONE, "Image 7");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, SIXTEEN, Menu.NONE, "Image 8");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, SEVENTEEN, Menu.NONE, "Image 9");
                 popupMenuColorSettings.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
                       @Override
                       public boolean onMenuItemClick(MenuItem item) {
@@ -188,6 +216,78 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                                   prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
                                   edit = prefs.edit();
                                   edit.putInt(BACKGROUND_COLOR,getResources().getColor(R.color.color_yellow));
+                                  edit.commit();
+                                  break;
+                              case NINE:
+                                  findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_pattern1);
+                                  //store chosen image in shared prefs
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,R.drawable.bg_pattern1);
+                                  edit.commit();
+                                  break;
+                              case TEN:
+                                  findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_pattern2);
+                                  //store chosen image in shared prefs
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,R.drawable.bg_pattern2);
+                                  edit.commit();
+                                  break;
+                              case ELEVEN:
+                                  findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_pattern3);
+                                  //store chosen image in shared prefs
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,R.drawable.bg_pattern3);
+                                  edit.commit();
+                                  break;
+                              case TWELVE :
+                                  findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_pattern4);
+                                  //store chosen image in shared prefs
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,R.drawable.bg_pattern4);
+                                  edit.commit();
+                                  break;
+                              case THIRTEEN :
+                                  findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_pattern5);
+                                  //store chosen image in shared prefs
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,R.drawable.bg_pattern5);
+                                  edit.commit();
+                                  break;
+                              case FOURTEEN:
+                                  findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_pattern6);
+                                  //store chosen image in shared prefs
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,R.drawable.bg_pattern6);
+                                  edit.commit();
+                                  break;
+                              case FIFTEEN:
+                                  findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_pattern7);
+                                  //store chosen image in shared prefs
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,R.drawable.bg_pattern7);
+                                  edit.commit();
+                                  break;
+                              case SIXTEEN:
+                                  findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_pattern8);
+                                  //store chosen image in shared prefs
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,R.drawable.bg_pattern8);
+                                  edit.commit();
+                                  break;
+                              case SEVENTEEN:
+                                  findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_pattern9);
+                                  //store chosen image in shared prefs
+                                  prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE );
+                                  edit = prefs.edit();
+                                  edit.putInt(BACKGROUND_COLOR,R.drawable.bg_pattern9);
                                   edit.commit();
                                   break;
                           }//close switch

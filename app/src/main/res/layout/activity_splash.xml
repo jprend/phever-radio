@@ -11,9 +11,9 @@
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:layout_centerInParent="true"
-        	android:src="@drawable/splash_rotate_img"
+        	android:src="@drawable/splash_animation"
         	/>
-    
+        <!--
     	<ImageView
         	android:id="@+id/splash_img_still"
         	android:layout_width="wrap_content"
@@ -21,5 +21,6 @@
         	android:layout_centerInParent="true"
         	android:src="@drawable/splash_static_img"
         	/>
+        -->
 
 </RelativeLayout>

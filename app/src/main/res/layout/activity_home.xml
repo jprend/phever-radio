@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/color_white"
     android:id="@+id/main_layout"
     >
 
@@ -15,19 +15,6 @@
         android:layout_alignParentTop="true"
         />
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/color_white"
-        android:textColor="@color/color_black"
-        android:textSize="30sp"
-        android:text="+"
-        android:layout_alignTop="@+id/img_home"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:id="@+id/textView" />
-
     <!-- visible  home image -->
     <ImageView
         android:id="@+id/img_home"
@@ -35,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/home_img"
+        android:src="@drawable/img_home"
         />
 
     <!-- invisible mask image -->
@@ -45,52 +32,27 @@
         android:layout_height="wrap_content"
         android:visibility="invisible"
         android:layout_centerInParent="true"
-        android:src="@drawable/mask_phever1"
+        android:src="@drawable/color_mask_home"
         />
-
-     <TextView
-         android:id="@+id/volplus"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:background="@color/color_white"
-         android:textSize="20dp"
-         android:text="+"
-         android:layout_above="@+id/soundwave_img_animate"
-         android:layout_centerHorizontal="true"
-         android:layout_marginBottom="55dp"
-         />
-
-    <!--  soundwave animation image -->
 
     <ImageView
         android:visibility="visible"
         android:id="@+id/soundwave_img_animate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/frame15_soundwave"
+        android:src="@drawable/soundwave_animate"
         android:layout_marginBottom="85dp"
         android:layout_alignBottom="@+id/img_home"
         android:layout_centerHorizontal="true"
         />
 
-    <TextView
-        android:id="@+id/volminus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/color_white"
-        android:textSize="20dp"
-        android:text="--"
-        android:layout_below="@+id/volplus"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-         />
-    <!-- radio related image buttons -->
+    <!-- radio related image buttons note uses a selector see drawable ic_play_pause -->
     <ToggleButton
         android:id="@+id/playPauseButton"
-        android:layout_width="40px"
-        android:layout_height="40px"
-        android:layout_marginLeft="5px"
-        android:layout_marginTop="5px"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/ic_play_pause"
         android:textOn=""
         android:textOff=""
