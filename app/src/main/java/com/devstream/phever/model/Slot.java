@@ -11,8 +11,6 @@ public class Slot {
 	private String  djName;
 	private String  showTitle;
 	private String  djImage;
-	private Bitmap  djBmp;
-
 
 	public String getSday() {
 		return sday;
@@ -69,11 +67,6 @@ public class Slot {
 	public void setDjImage(String djImage) {
 		this.djImage = djImage;
 	}
-
-	public Bitmap getDjBmp() {return djBmp;}
-
-	public void setDjBmp(Bitmap djBmp) {this.djBmp = djBmp;	}
-
 
 }
 
