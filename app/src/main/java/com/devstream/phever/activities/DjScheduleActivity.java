@@ -62,7 +62,7 @@ public class DjScheduleActivity extends Activity {
 
         ListView listview = (ListView)findViewById(R.id.list);
         ArrayList<Slot> dayRoster = weekRoster.get(index);
-        //adapter = new SlotAdapter(getApplicationContext(),R.layout.row,dayRoster);
+        //adapter = new SlotAdapter(getApplicationContext(),R.layout.row_slot,dayRoster);
         adapter = new SlotAdapter(getApplicationContext(),dayRoster);
         listview.setAdapter(adapter);
     }

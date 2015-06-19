@@ -12,10 +12,11 @@ public class Event {
     private String  location;
     private String  headline;
     private String  headlineDesc;
+    private String imageUrl;
     private String  price;
     private String  purchase;
-    private Text supportActs;
-    private Text terms;
+    private String supportActs;
+    private String terms;
 
     public String getEdate() {
         return edate;
@@ -81,20 +82,28 @@ public class Event {
         this.purchase = purchase;
     }
 
-    public Text getSupportActs() {
+    public String getSupportActs() {
         return supportActs;
     }
 
-    public void setSupportActs(Text supportActs) {
+    public void setSupportActs(String supportActs) {
         this.supportActs = supportActs;
     }
 
-    public Text getTerms() {
+    public String getTerms() {
         return terms;
     }
 
-    public void setTerms(Text terms) {
+    public void setTerms(String terms) {
         this.terms = terms;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 

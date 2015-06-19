@@ -3,8 +3,6 @@ package com.devstream.phever.model;
 
 import java.util.ArrayList;
 
-import java.util.List;
-
 
 import android.content.Context;
 import android.util.Log;
@@ -21,7 +19,7 @@ import com.devstream.phever.utilities.ImageLoader;
 public class SlotAdapter extends BaseAdapter {
 
     private  Context context;
-    private ArrayList<Slot> Schedule;
+    private ArrayList<Slot> schedule;
 
 
     final String defaultIMAGE = "logo_small.jpg";
@@ -31,26 +29,26 @@ public class SlotAdapter extends BaseAdapter {
 
 
     // the context is needed to inflate views in getView()
-    public SlotAdapter(Context context, ArrayList<Slot> schedule) {
+    public SlotAdapter(Context context, ArrayList<Slot> inSchedule) {
         this.context = context;
-        this.Schedule = schedule;
+        this.schedule = inSchedule;
         this.imageLoader = new ImageLoader(context);
     }
 
-    public void updateSchedule(ArrayList<Slot> schedule) {
-        this.Schedule = schedule;
+    public void updateSchedule(ArrayList<Slot> inSchedule) {
+        this.schedule = inSchedule;
         notifyDataSetChanged();
     }
     @Override
     public int getCount() {
-        return Schedule.size();
+        return schedule.size();
     }
 
     // getItem(int) in Adapter returns Object but we can override
     // it to Slot thanks to Java return type covariance
     @Override
     public Slot getItem(int position) {
-        return Schedule.get(position);
+        return schedule.get(position);
     }
 
     // getItemId() is often useless, I think this should be the default
@@ -93,7 +91,7 @@ public class SlotAdapter extends BaseAdapter {
         TextView showTitle;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.row, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.row_slot, parent, false);
 
             djImageView = (ImageView) convertView.findViewById(R.id.ivImage);
             time = (TextView) convertView.findViewById(R.id.tvTime);

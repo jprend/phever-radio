@@ -61,7 +61,7 @@ public class ImageLoader {
         
         if(bitmap!=null){
         	// if image is stored in MemoryCache Map then
-        	// Show image in listview row
+            // Show image in listview row_slot
             imageView.setImageBitmap(bitmap);
         }
         else
