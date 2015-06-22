@@ -62,7 +62,7 @@ public class EventsActivity extends Activity {
         //Log.d("jp01", "eventList size 1 =" + eventList.size());
 
         ListView listview = (ListView) findViewById(R.id.list);
-        adapter = new EventAdapter(getApplicationContext(), R.layout.row_event, eventList);
+        adapter = new EventAdapter(getApplicationContext(), eventList);
         //adapter = new EventAdapter(this, R.layout.row_event, eventList);
         Log.d("jp01", "eventList size 2 =" + eventList.size());
 
@@ -119,6 +119,11 @@ public class EventsActivity extends Activity {
                         anyEvent.setLocation(object.optString("location"));
                         anyEvent.setHeadline(object.optString("headline"));
                         anyEvent.setHeadlineDesc(object.optString("headline_desc"));
+                        anyEvent.setPrice(object.optString("price"));
+                        anyEvent.setPurchase(object.optString("purchase"));
+                        anyEvent.setSupportActs(object.optString("support_acts"));
+                        anyEvent.setTerms(object.optString("terms"));
+                        anyEvent.setHeadlineDesc(object.optString("image_url"));
                         eventList.add(anyEvent);
                         Log.d("jp01", i + "event name ="  + anyEvent.getName());
                         //Sorting
