@@ -27,7 +27,15 @@
     <string name="title_activity_contacts">Contacts</string>
     <string name="title_activity_events">Events</string>
 
+    <!-- header layout -->
    	<string name="main_heading">PHEVER</string>
    	<string name="sub_heading">the sound of the Irish underground</string>
+
+    <!-- footer layout -->
     <string name="footer_text"><u>www.phever.ie</u></string>
+
+    <!-- generalalertDialog  -->
+    <string name="text_negativebutton">Cancel</string>
+    <string name="text_positivebutton">Ok</string>
+
 </resources>

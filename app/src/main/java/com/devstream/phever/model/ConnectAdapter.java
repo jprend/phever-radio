@@ -1,8 +1,17 @@
 package com.devstream.phever.model;
-
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +23,16 @@ import android.widget.Toast;
 
 import com.devstream.phever.activities.ConnectActivity;
 import com.devstream.phever.activities.R;
+import com.devstream.phever.utilities.GeneralAlertDialog;
+
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Created by Chris on 31/05/2015.
  */
-public class ConnectAdapter extends BaseAdapter {
+public class ConnectAdapter extends BaseAdapter implements GeneralAlertDialog.NoticeDialogListener {
+    private String url;
     private final Context context;
     private final String[] connectLabelText;
     private final int [] connectImageId;
@@ -33,18 +47,15 @@ public class ConnectAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return connectLabelText.length;
+    public void onDialogPositiveClick(DialogFragment dialog, int ok_option) {
+        //user pressed ok button
+        //to do stuff if required
     }
 
     @Override
-    public Object getItem(int position) {
-        return position;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+    public void onDialogNegativeClick(DialogFragment dialog, int cancel_option) {
+        //user pressed cancel button
+        //to to stuff if required
     }
 
     public class Holder
@@ -53,6 +64,21 @@ public class ConnectAdapter extends BaseAdapter {
         ImageView img;
     }
 
+
+    @Override
+    public int getCount() {
+        return connectLabelText.length;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -69,46 +95,32 @@ public class ConnectAdapter extends BaseAdapter {
                 //Toast.makeText(context, "You Clicked " + connectLabelText[position], Toast.LENGTH_LONG).show();
                 switch (position) {
                     case 0:
-                        String url1 =  "https://www.facebook.com/phevermusic";
-                        Intent intent1 = new Intent(Intent.ACTION_VIEW);
-                        intent1.setData(Uri.parse(url1));
-                        context.startActivity(intent1);
+                        url = "https://www.facebook.com/phevermusic";
+                        new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to i.execute(url);//calls asyncTask class to try connect to internet
                         break;
                     case 1:
-                        String url2 =  "http://twitter.com/PHEVER_Events";
-                        Intent intent2 = new Intent(Intent.ACTION_VIEW);
-                        intent2.setData(Uri.parse(url2));
-                        context.startActivity(intent2);
+                        url =  "https://twitter.com/search?q=PHEVER_Events";
+                        new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to i.execute(url);//calls asyncTask class to try connect to internet
                         break;
                     case 2:
-                        String url3 = "https://www.youtube.com/PHEVERIRL";
-                        Intent intent3 = new Intent(Intent.ACTION_VIEW);
-                        intent3.setData(Uri.parse(url3));
-                        context.startActivity(intent3);
+                        url = "https://www.youtube.com/PHEVERIRL";
+                        new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to i.execute(url);//calls asyncTask class to try connect to internet
                         break;
                     case 3:
-                        String url4 = "http://www.house-mixes.com/profile/phever-radio";
-                        Intent intent4 = new Intent(Intent.ACTION_VIEW);
-                        intent4.setData(Uri.parse(url4));
-                        context.startActivity(intent4);
+                        url = "http://www.house-mixes.com/profile/phever-radio";
+                        new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to i.execute(url);//calls asyncTask class to try connect to internet
                         break;
                     case 4:
-                        String url5 = "https://soundcloud.com/pheverie";
-                        Intent intent5 = new Intent(Intent.ACTION_VIEW);
-                        intent5.setData(Uri.parse(url5));
-                        context.startActivity(intent5);
+                        url = "https://soundcloud.com/pheverie";
+                        new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to i
                         break;
                     case 5:
-                        String url6 = "https://www.mixcloud.com/PHEVER_Radio";
-                        Intent intent6 = new Intent(Intent.ACTION_VIEW);
-                        intent6.setData(Uri.parse(url6));
-                        context.startActivity(intent6);
+                        url = "https://www.mixcloud.com/PHEVER_Radio";
+                        new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to internet
                         break;
                     case 6:
-                        String url7 = "http://www.facebook.com/PHEVERacademy";
-                        Intent intent7 = new Intent(Intent.ACTION_VIEW);
-                        intent7.setData(Uri.parse(url7));
-                        context.startActivity(intent7);
+                        url = "http://www.facebook.com/PHEVERacademy";
+                        new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to internet
                         break;
                 }//close switch
 
@@ -119,60 +131,76 @@ public class ConnectAdapter extends BaseAdapter {
         return rowView;
     }
 
+    //async task to check internet and server connectivity and advise user if no connect
+    //NOTE THIS ASYNC TASK CLASS IS NOT SUITABLE FOR RETURNING DATA - IS ONLY FOR CONNECT TO A URL OUTSIDE THE APP
+    private class HandleUrlConnect_ConnectAdapter extends AsyncTask<String, Void, Boolean> {
+        ProgressDialog progressUrlConnect;
+        String alertMessage;
+        int connectStatus = 0;// a 0 indicates no internet connect - a 1 indicates no server connect
+        //start a progress dialog advises user that something is happening
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressUrlConnect = ProgressDialog.show(context, "Connecting to Internet", "Please Wait ...", true);
+        }//close method onpreexecute
+
+        @Override
+        protected Boolean doInBackground(String... urls) {
+            //first check there is a connection to intenet (is turned on and in range)
+            ConnectivityManager connMgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkinfo = connMgr.getActiveNetworkInfo();
+            if(networkinfo != null && networkinfo.isConnected()){ //yes internet turned on and in range
+                Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
+                try{
+                    //second check connection to server
+                    URL myUrl = new URL(urls[0]);//paras [0] is the url passed into the async task
+                    Log.d("url used is: ", myUrl.toString());
+                    URLConnection connection = myUrl.openConnection();
+                    connection.setConnectTimeout(500 * 8); //4 seconds
+                    connection.connect();
+                    return true; //connect made
+                }catch(Exception e){ //if connection to server or file cannot be made
+                    connectStatus = 1; //server connect issue
+                    return false;
+                }
+            }//close if
+            connectStatus = 0; //internet connect issue
+            return false;
+        }//close method doinbackground
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            progressUrlConnect.dismiss();//close progress dialog if still open
+            if(result){ //if connection to url is successfull
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url)); //url here it the url passed in at the asynctask call
+                context.startActivity(i);
+            }else {  //if connecction not successfull
+                if(connectStatus == 0){ //no internet connection (is turned off or out of range)
+                   alertMessage = "No internet connect - check is turned on or out of range";
+                }else { //yes internet but no connect to server cannot get web file or data
+                   alertMessage = "No server connect - may be down try again later";
+                }//close second if
+                final AlertDialog.Builder statusAlert = new AlertDialog.Builder(context);
+                statusAlert.setCancelable(false);
+                statusAlert.setTitle("Connect Result");
+                statusAlert.setMessage(alertMessage);
+                statusAlert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //when clicked just dismiss dialog
+                    }
+                });
+                AlertDialog alert = statusAlert.create();
+                alert.show();
+
+            }//close first if
+
+        }//close method onpost
+
+    }//close class handleurlconnect  (async task)
+
 }//close class connect adapter
 
-/*
-{"Visit our Facebook Link","Visit our Twitter Link","Visit our YouTube Link","Visit our House-Mixes Link",
-  "Visit our SoundCloud Link","Visit our MixCloud Link","DJ & music production academy"};
-
-  {R.drawable.facebook_icon, R.drawable.twitter_icon, R.drawable.utube_icon, R.drawable.housemixes_icon,
-   R.drawable.soundcloud_icon, R.drawable.mixcloud_icon, R.drawable.djacademy_icon };
-*/
-
-/*cire if class with list adapter
-public class ConnectAdapter extends ArrayAdapter<String> {
-    private final Context context;
-    private final String[] connectLabelText;
-
-    public ConnectAdapter (Context context, String[] textValues) {
-        super(context, R.layout.activity_connect, textValues);
-        this.context = context;
-        this.connectLabelText = textValues;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View rowView = inflater.inflate(R.layout.activity_connect, parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.label);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.logo);
-        textView.setText(connectLabelText[position]);
-
-        // Change icon based on name
-        String s = connectLabelText[position];
-
-       // System.out.println(s);
-
-        if (s.equals("Visit our Facebook Link")) {
-            imageView.setImageResource(R.drawable.facebook_icon);
-        } else if (s.equals("Visit our Twitter Link")) {
-            imageView.setImageResource(R.drawable.twitter_icon);
-        } else if (s.equals("Visit our YouTube Link")) {
-            imageView.setImageResource(R.drawable.utube_icon);
-        } else if (s.equals("Visit our House-Mixes Link")) {
-            imageView.setImageResource(R.drawable.housemixes_icon);
-        } else if (s.equals("Visit our SoundCloud Link")) {
-            imageView.setImageResource(R.drawable.soundcloud_icon);
-        } else if (s.equals("Visit our MixCloud Link")) {
-            imageView.setImageResource(R.drawable.mixcloud_icon);
-        } else {
-            imageView.setImageResource(R.drawable.djacademy_icon);
-        }
-
-        return rowView;
-    }
-
-
- */

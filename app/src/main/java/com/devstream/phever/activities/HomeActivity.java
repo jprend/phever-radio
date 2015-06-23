@@ -3,6 +3,9 @@ package com.devstream.phever.activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +13,10 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.SpannableString;
@@ -30,11 +36,15 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.devstream.phever.utilities.ColorTool;
+import com.devstream.phever.utilities.GeneralAlertDialog;
 import com.devstream.phever.utilities.SoundwaveAnimateThread;
+
+import java.net.URL;
+import java.net.URLConnection;
 
 import static android.media.AudioManager.*;
 
-public class HomeActivity extends Activity implements View.OnClickListener,  View.OnTouchListener, OnAudioFocusChangeListener {
+public class HomeActivity extends Activity implements View.OnClickListener,  View.OnTouchListener, OnAudioFocusChangeListener, GeneralAlertDialog.NoticeDialogListener {
     private final static String HOME_BACKGROUND_COLOR = "com.devstream.phever.activities.homeBackgroundColor"; //shared prefs file for home layount background color
     private final static String BACKGROUND_COLOR = "com.devstream.phever.activities.homeBackgroundColor.backgroundColor"; //key for background color
     private PopupMenu popupMenuColorSettings;
@@ -55,7 +65,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
     private final static int FIFTEEN = 15;
     private final static int SIXTEEN = 16;
     private final static int SEVENTEEN = 17;
-
+    private String url;
 	private ImageView soundwaveAnimate, playRadio, pauseRadio, soundwaveRotate; //frame animate
     private SoundwaveAnimateThread swAnim;
 
@@ -297,16 +307,12 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                 popupMenuColorSettings.show();
                 break;
             case R.id.phever_weblink:
-                String url1 =  "http://phever.ie";
-                Intent intent1 = new Intent(Intent.ACTION_VIEW);
-                intent1.setData(Uri.parse(url1));
-                startActivity(intent1);
+                GeneralAlertDialog myAlert1 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This Action tries to connect to the internet", true, true, 1);
+                myAlert1.show(getFragmentManager(), "phever_link"); // the tab name is for referencing this instance if required
                 break;
             case R.id.mail_list_link:
-                String url2 = "https://docs.google.com/forms/d/1op3yEBANTh7_QDTMDW-bygsiLwH1uQgsSAJiffznssU/viewform";
-                Intent intent2 = new Intent(Intent.ACTION_VIEW);
-                intent2.setData(Uri.parse(url2));
-                startActivity(intent2);
+                GeneralAlertDialog myAlert2 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This Action tries to connect to the internet", true, true, 2);
+                myAlert2.show(getFragmentManager(), "email_link"); // the tab name is for referencing this instance if required
                 break;
         }//close switch
 
@@ -359,6 +365,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor,
 					tolerance)) {
 				// CONNNECT toast("Contacts (Green)");
+                GeneralAlertDialog myAlert4 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "Each of the list items on next screen connect to the internet", true, true, 4);
+                myAlert4.show(getFragmentManager(), "connect_action"); // the tab name is for referencing this instance if required
                 /*
                 //check if streamService is running ie. returns true if is and false if not
                 //Boolean radioPlaying = isServiceRunning(StreamService.class);
@@ -372,8 +380,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                    // playPauseButton.setVisibility(View.INVISIBLE);
                // }
                 */
-				intent = new Intent(this, ConnectActivity.class);
-				startActivity(intent);
 			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor,
 					tolerance)) {
 				// EVENTS toast("Events (Magenta)");
@@ -386,11 +392,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 			} else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor,
 					tolerance)) {
 				// TV toast("TV (indigo)");
-                Uri uri  = Uri.parse("http://livestream.com/accounts/10782842/TV");
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-				//intent = new Intent(this, TvActivity.class);
-				//startActivity(intent);
+                GeneralAlertDialog myAlert3 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This Action tries to connect to the internet", true, true, 3);
+                myAlert3.show(getFragmentManager(), "tv_link"); // the tab name is for referencing this instance if required
+
 			} else if (ct.closeMatch(Color.rgb(255, 255, 255), touchColor,
 					tolerance)) {
 				//Radio
@@ -596,8 +600,109 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
         }
         return false;
     }
-
     //isServiceRunning(myService.class); // this is how you would call on the check service class running method -note you pass the class name not the instance
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, int ok_option) {
+        // User touched the dialog's positive button
+        switch(ok_option){
+            case 0:
+               // Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
+                break;
+            case 1:
+                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
+                url =  "http://phever.ie";
+                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+                break;
+            case 2:
+                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
+                url = "https://docs.google.com/forms/d/1op3yEBANTh7_QDTMDW-bygsiLwH1uQgsSAJiffznssU/viewform";
+                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+                break;
+            case 3:
+                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
+                url = "http://livestream.com/accounts/10782842/TV";
+                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+                break;
+            case 4:
+                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
+                Intent intent4 = new Intent(HomeActivity.this, ConnectActivity.class);
+                startActivity(intent4);
+                break;
+            case 5:
+                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
+                url = null;
+                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+            break;
+
+        }//close switch
+
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog, int cancel_option) {
+        // User touched the dialog's negative  button
+       // Toast.makeText(HomeActivity.this, "User touched cancel and option is  " + cancel_option, Toast.LENGTH_LONG).show();
+    }
+
+    //async task to check internet and server connectivity and advise user if no connect
+    //NOTE THIS ASYNC TASK CLASS IS NOT SUITABLE FOR RETURNING DATA - IS ONLY FOR CONNECT TO A URL OUTSIDE THE APP
+    private class HandleUrlConnect extends AsyncTask<String, Void, Boolean> {
+        ProgressDialog progressUrlConnect;
+        AlertDialog alert;
+        int connectStatus = 0;// a 0 indicates no internet connect - a 1 indicates no server connect
+        //start a progress dialog advises user that something is happening
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressUrlConnect = ProgressDialog.show(HomeActivity.this, "Connecting to Internet", "Please Wait ...", true);
+        }//close method onpreexecute
+
+        @Override
+        protected Boolean doInBackground(String... urls) {
+            //first check there is a connection to intenet (is turned on and in range)
+            ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkinfo = connMgr.getActiveNetworkInfo();
+            if(networkinfo != null && networkinfo.isConnected()){ //yes internet turned on and in range
+                Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
+                try{
+                    //second check connection to server
+                    URL myUrl = new URL(urls[0]);//paras [0] is the url passed into the async task
+                    Log.d("url used is: ", myUrl.toString());
+                    URLConnection connection = myUrl.openConnection();
+                    connection.setConnectTimeout(500 * 8); //4 seconds
+                    connection.connect();
+                    return true; //connect made
+                }catch(Exception e){ //if connection to server or file cannot be made
+                    connectStatus = 1; //server connect issue
+                    return false;
+                }
+            }//close if
+            connectStatus = 0; //internet connect issue
+            return false;
+        }//close method doinbackground
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            progressUrlConnect.dismiss();//close progress dialog if still open
+            if(result){ //if connection to url is successfull
+                   Intent i = new Intent(Intent.ACTION_VIEW);
+                   i.setData(Uri.parse(url)); //url here it the url passed in at the asynctask call
+                   startActivity(i);
+            }else {  //if connecction not successfull
+                if(connectStatus == 0){ //no internet connection (is turned off or out of range)
+                    GeneralAlertDialog myAlert = GeneralAlertDialog.newInstance("Cannot Connect to Intenet", "Please check internet turned on or in range", false, true, 0);
+                    myAlert.show(getFragmentManager(), "no internet connect");
+                }else { //yes internet but no connect to server cannot get web file or data
+                    GeneralAlertDialog myAlert = GeneralAlertDialog.newInstance("Cannot Connect to Server", "Server may be down try again later", false, true, 0);
+                    myAlert.show(getFragmentManager(), "no server connect");
+                }//close second if
+            }//close first if
+
+        }//close method onpost
+
+    }//close class handleurlconnect  (async task)
 }// close class homeactivity
 

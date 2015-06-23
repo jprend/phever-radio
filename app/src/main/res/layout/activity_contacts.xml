@@ -21,7 +21,7 @@
 			style="@style/Widget.FacebookLikeButton"
 			app:pageUrl="https://www.facebook.com/phevermusic"
 			app:pageTitle="Phever Radio Station"
-			app:pageText="This is Phever"
+			app:pageText="The Sound of the Irish Underground"
 			app:pagePicture="@drawable/ic_launcher"
 			/>
 		<com.shamanland.facebook.likebutton.FacebookLikeBox

@@ -11,9 +11,9 @@
         android:id="@+id/change_background_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginTop="@dimen/margin_sevendp"
+        android:layout_marginBottom="@dimen/margin_sevendp"
+        android:layout_marginLeft="@dimen/margin_sevendp"
         android:src="@drawable/settings_icon"
         />
 
@@ -21,6 +21,7 @@
         android:id="@+id/phever_weblink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_sevendp"
         android:layout_weight="1"
         android:text="@string/footer_text"
         android:textColor="@color/color_white"
@@ -32,9 +33,9 @@
         android:id="@+id/mail_list_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginTop="@dimen/margin_sevendp"
+        android:layout_marginBottom="@dimen/margin_sevendp"
+        android:layout_marginRight="@dimen/margin_sevendp"
         android:src="@drawable/subscribe_icon"
         />
     
