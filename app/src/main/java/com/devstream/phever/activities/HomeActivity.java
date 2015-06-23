@@ -368,7 +368,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 			// process selected options from user
 			if (ct.closeMatch(Color.rgb(255, 238, 56), touchColor, tolerance)) {
 				// RADIO toast("Radio (yellow)");
-				listenToRadio();
+                GeneralAlertDialog myAlert5 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This action makes use of the internet", true, true, 5);
+                myAlert5.show(getFragmentManager(), "radio_link"); // the tab name is for referencing this instance if required
+				//listenToRadio();
 			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor,
 					tolerance)) {
 				// CONNNECT toast("Contacts (Green)");
@@ -390,11 +392,15 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor,
 					tolerance)) {
 				// EVENTS toast("Events (Magenta)");
-				intent = new Intent(this, EventsActivity.class);
-				startActivity(intent);
+                GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This action makes use of the internet", true, true, 7);
+                myAlert7.show(getFragmentManager(), "events_action"); // the tab name is for referencing this instance if required
+				//intent = new Intent(this, EventsActivity.class);
+				//startActivity(intent);
 			} else if (ct.closeMatch(Color.rgb(255, 48, 86), touchColor,
 					tolerance)) {
-				// DJ SCHEDULE toast("Dj Schedule (Red)");				
+				// DJ SCHEDULE toast("Dj Schedule (Red)");
+                GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "Each of the list items on the popup menu connect to the internet", false, true, 6);
+                myAlert6.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
 				showPopup(v);
 			} else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor,
 					tolerance)) {
@@ -684,9 +690,17 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                 break;
             case 5:
                 //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
-                url = null;
-                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+                listenToRadio();
             break;
+            case 6:
+                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
+                //showPopup(v); //cannot get this to work due to the needed param View v - this cannot be passed in throug alert dialog
+                break;
+            case 7:
+                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
+                intent = new Intent(this, EventsActivity.class);
+                startActivity(intent);
+                break;
 
         }//close switch
 
