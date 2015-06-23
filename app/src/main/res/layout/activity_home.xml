@@ -49,8 +49,8 @@
     <!-- radio related image buttons note uses a selector see drawable ic_play_pause -->
     <ToggleButton
         android:id="@+id/playPauseButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/ic_play_pause"

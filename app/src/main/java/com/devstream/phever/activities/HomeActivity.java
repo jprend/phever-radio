@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -28,6 +29,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -44,7 +46,9 @@ import java.net.URLConnection;
 
 import static android.media.AudioManager.*;
 
-public class HomeActivity extends Activity implements View.OnClickListener,  View.OnTouchListener, OnAudioFocusChangeListener, GeneralAlertDialog.NoticeDialogListener {
+
+public class HomeActivity extends Activity implements View.OnClickListener,  View.OnTouchListener, GeneralAlertDialog.NoticeDialogListener {
+
     private final static String HOME_BACKGROUND_COLOR = "com.devstream.phever.activities.homeBackgroundColor"; //shared prefs file for home layount background color
     private final static String BACKGROUND_COLOR = "com.devstream.phever.activities.homeBackgroundColor.backgroundColor"; //key for background color
     private PopupMenu popupMenuColorSettings;
@@ -81,6 +85,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
     SharedPreferences.Editor edit; //set up instance of shared preferences so as to set preferences key/value pairs
 	AudioManager audioManager;
 	ComponentName RemoteControlReceiver;
+    Drawable    soundwaveImage;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +117,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 
         //set up the sound wave animation
         soundwaveRotate  = (ImageView) findViewById(R.id.soundwave_img_animate); // soundwave image
+        soundwaveImage = soundwaveRotate.getDrawable();
         swAnim = new SoundwaveAnimateThread(soundwaveRotate);  //soundwave thread class
 
         //footer change home view background color
@@ -518,6 +525,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                     //pause();
                     stopService(streamService);
                     setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
+                    swAnim.stop();
+                    soundwaveRotate.setImageDrawable(soundwaveImage);
+
 				} else { // Unchecked - Play icon visible
                     ///start();
                     startService(streamService);
@@ -536,30 +546,41 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 		// start the radio - thats why we are here
 
 		//******************************************************************
-		final OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
+		OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
+            @Override
 			public void onAudioFocusChange(int focusChange) {
 				if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {
-					// Pause playback
+                    // Pause playback
+                    stopService(streamService);
+                    setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
+                    swAnim.stop();
+                    soundwaveRotate.setImageDrawable(soundwaveImage);
+
 				} else if (focusChange == AUDIOFOCUS_GAIN) {
 					// Resume playback
-				} else if (focusChange == AUDIOFOCUS_LOSS) {
-					//AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
-					//AudioManager.abandonAudioFocus(afChangeListener);
-					// Stop playback
+                    if (!isPlaying) startService(streamService);
+				} else if  (focusChange == AUDIOFOCUS_LOSS) {
+                        //AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
+                        //AudioManager.abandonAudioFocus(afChangeListener);
+                        // Stop playback
+                        stopService(streamService);
+                        setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
+                        swAnim.stop();
+                        soundwaveRotate.setImageDrawable(soundwaveImage);
 
-				} else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-					// Lower the volume
-				} else if (focusChange == AUDIOFOCUS_GAIN) {
-					// Raise it back to normal
-				}
+
+                } else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                        // Lower the volume jp
+                    audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_LOWER, FLAG_SHOW_UI);
+
+                } else if (focusChange == AUDIOFOCUS_GAIN) {
+                        // Raise it back to normal jp
+					audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_RAISE, FLAG_SHOW_UI);
+                }
 			}
 		};
 		// Request audio focus for playback
-		int result = audioManager.requestAudioFocus(afChangeListener,
-				// Use the music stream.
-				STREAM_MUSIC,
-				// Request permanent focus.
-				AUDIOFOCUS_GAIN);
+		int result = audioManager.requestAudioFocus(afChangeListener,STREAM_MUSIC,AUDIOFOCUS_GAIN);
 
 		if (result == AUDIOFOCUS_REQUEST_GRANTED) {
 			// Start listening for button presses
@@ -573,6 +594,41 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 		//startService(streamService);
 
 	}
+    /*
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+        if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {
+            // Pause playback
+            stopService(streamService);
+            setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
+            swAnim.stop();
+            soundwaveRotate.setImageDrawable(soundwaveImage);
+
+        } else if (focusChange == AUDIOFOCUS_GAIN) {
+            // Resume playback
+            if (!isPlaying) startService(streamService);
+        } else if  (focusChange == AUDIOFOCUS_LOSS) {
+            //AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
+            //AudioManager.abandonAudioFocus(afChangeListener);
+            // Stop playback
+            stopService(streamService);
+            setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
+            swAnim.stop();
+            soundwaveRotate.setImageDrawable(soundwaveImage);
+
+
+        } else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+            // Lower the volume jp
+            audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_LOWER, FLAG_SHOW_UI);
+
+        } else if (focusChange == AUDIOFOCUS_GAIN) {
+            // Raise it back to normal jp
+            audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_RAISE, FLAG_SHOW_UI);
+        }
+    }
+    */
+
+
 
     //note the boolean isPlaying get set to true in the service start method and set to false in the service destroy method
 	public void getPrefs() {
@@ -584,10 +640,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 		}
 	}
 
-    @Override
-    public void onAudioFocusChange(int focusChange) {
-
-    }
 
     //used to check if a service class is running an instance returns true if yes and false if not
     //note is more accurate than using preferences since onDestroy does not get called in every situation eg. suddenly turn off phone
@@ -600,6 +652,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
         }
         return false;
     }
+
     //isServiceRunning(myService.class); // this is how you would call on the check service class running method -note you pass the class name not the instance
 
     @Override

@@ -3,44 +3,82 @@
     android:id="@+id/LinearLayoutRowEvent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="4dp"
     android:layout_gravity="center_vertical"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="4dp">
 
 
-            <TextView
-                android:id="@+id/tvEdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#166CED"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="8dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY" />
 
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#D64530"/>
 
-            <TextView
-                android:id="@+id/tvLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#D64530"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/tvEdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#166CED" />
 
-            <TextView
-                android:id="@+id/tvHeadline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#009A57"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#D64530" />
 
-            <TextView
-                android:id="@+id/tvHeadlineDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#009A57"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#D64530" />
+
+    <TextView
+        android:id="@+id/tvHeadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#009A57" />
+
+    <TextView
+        android:id="@+id/tvHeadlineDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#009A57" />
+
+
+    <TextView
+        android:id="@+id/tvSupportActs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#D64530" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#D64530" />
+
+    <TextView
+        android:id="@+id/tvPurchase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#009A57" />
+
+    <TextView
+        android:id="@+id/tvTerms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#009A57" />
 
 </LinearLayout>
