@@ -2,12 +2,10 @@ package com.devstream.phever.activities;
 
 import java.io.IOException;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,7 +24,6 @@ import android.app.ProgressDialog;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -64,7 +61,7 @@ public class EventsActivity extends Activity {
         ListView listview = (ListView) findViewById(R.id.list);
         adapter = new EventAdapter(getApplicationContext(), eventList);
         //adapter = new EventAdapter(this, R.layout.row_event, eventList);
-        Log.d("jp01", "eventList size 2 =" + eventList.size());
+        //Log.d("jp01", "eventList size 2 =" + eventList.size());
 
         listview.setAdapter(adapter);
     }
@@ -89,12 +86,12 @@ public class EventsActivity extends Activity {
                 HttpResponse response = httpclient.execute(httppost);
                 StatusLine stat = response.getStatusLine();
                 int status = stat.getStatusCode();
-                Log.d("jp01", "status =" + status);
+                //Log.d("jp01", "status =" + status);
 
                 if (status == 200) {
                     HttpEntity entity = response.getEntity();
                     String data = EntityUtils.toString(entity);
-                    Log.d("jp01", "data =" + data);
+                    //Log.d("jp01", "data =" + data);
 
                     JSONArray jarray = new JSONArray(data);
                     /*
@@ -114,7 +111,7 @@ public class EventsActivity extends Activity {
                         String edate = object.optString("edate");
                         //SimpleDateFormat sdf = new SimpleDateFormat("d'%s' MMM, yyyy");
                         //String myDate = String.format(sdf.format(date), Util.dateSuffix(date));
-                        anyEvent.setEdate(dateConvert(edate));
+                        anyEvent.setEdate(edate);
                         anyEvent.setName(object.optString("name"));
                         anyEvent.setLocation(object.optString("location"));
                         anyEvent.setHeadline(object.optString("headline"));
@@ -125,16 +122,17 @@ public class EventsActivity extends Activity {
                         anyEvent.setTerms(object.optString("terms"));
                         anyEvent.setHeadlineDesc(object.optString("image_url"));
                         eventList.add(anyEvent);
-                        Log.d("jp01", i + "event name ="  + anyEvent.getName());
-                        //Sorting
-                        Collections.sort(eventList, new Comparator<Event>() {
-                            @Override
-                            public int compare(Event Event1, Event Event2) {
-                                //Ascending
-                                return Event1.getEdate().compareTo(Event2.getEdate());
-                            }
-                        });
+                        //Log.d("jp01", i + "event name ="  + anyEvent.getName());
+
                     }
+                    //Sorting
+                    Collections.sort(eventList, new Comparator<Event>() {
+                        @Override
+                        public int compare(Event Event1, Event Event2) {
+                            //Ascending
+                            return Event1.getEdate().compareTo(Event2.getEdate());
+                        }
+                    });
                     return true;
                 }
             } catch (ParseException e1) {
@@ -151,7 +149,7 @@ public class EventsActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean result) {
             //dialog.cancel();
-            Log.d("jp01", "eventList size 4 =" + eventList.size());
+            //Log.d("jp01", "eventList size 4 =" + eventList.size());
             dialog.dismiss();
             adapter.notifyDataSetChanged();
             if (!result)
@@ -160,21 +158,4 @@ public class EventsActivity extends Activity {
 
     }
 
-
-
-    public String dateConvert(String D){
-
-        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yyyy");
-        Date date = null;
-        try {
-            date = format1.parse(D);
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
-        String dateString = format2.format(date);
-        dateString = dateString.replace("-", " ");
-        System.out.println(dateString);
-        return ((dateString));
-    }
 }
