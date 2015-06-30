@@ -70,7 +70,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
     private final static int SIXTEEN = 16;
     private final static int SEVENTEEN = 17;
     private String url;
-	private ImageView soundwaveAnimate, playRadio, pauseRadio, soundwaveRotate; //frame animate
+    private ImageView soundwaveRotate;
     private SoundwaveAnimateThread swAnim;
 
 	private Intent intent;
@@ -81,10 +81,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 	boolean isPlaying;
 	boolean radio = false;
 	Intent streamService;
-	SharedPreferences prefs;  //create instance of shared preferences so as to get and set any preferences
+    SharedPreferences prefs, prefs2;  //create instance of shared preferences so as to get and set any preferences
     SharedPreferences.Editor edit; //set up instance of shared preferences so as to set preferences key/value pairs
 	AudioManager audioManager;
-	ComponentName RemoteControlReceiver;
     Drawable    soundwaveImage;
 
 
@@ -368,34 +367,25 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 			// process selected options from user
 			if (ct.closeMatch(Color.rgb(255, 238, 56), touchColor, tolerance)) {
 				// RADIO toast("Radio (yellow)");
-                GeneralAlertDialog myAlert5 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This action makes use of the internet", true, true, 5);
-                myAlert5.show(getFragmentManager(), "radio_link"); // the tab name is for referencing this instance if required
-				//listenToRadio();
-			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor,
+                getIsPlaying();
+                if (!isPlaying) {
+                    GeneralAlertDialog myAlert5 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This action makes use of the internet", true, true, 5);
+
+                    myAlert5.show(getFragmentManager(), "radio_link"); // the tab name is for referencing this instance if required
+                }
+                //listenToRadio();
+            } else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor,
 					tolerance)) {
 				// CONNNECT toast("Contacts (Green)");
                 GeneralAlertDialog myAlert4 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "Each of the list items on next screen connect to the internet", true, true, 4);
                 myAlert4.show(getFragmentManager(), "connect_action"); // the tab name is for referencing this instance if required
-                /*
-                //check if streamService is running ie. returns true if is and false if not
-                //Boolean radioPlaying = isServiceRunning(StreamService.class);
-                //if service running then radio is running so turn it off
-               // if(radioPlaying){
-                    //Toast.makeText(HomeActivity.this, "service status is " + radioPlaying, Toast.LENGTH_SHORT).show();
-                    //listenToRadio();
-                    //stopService(streamService);//stop the service which in turn stops the radio which runs in the service
-                    //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
-                    //playPauseButton = (ToggleButton) findViewById(R.id.playPauseButton);
-                   // playPauseButton.setVisibility(View.INVISIBLE);
-               // }
-                */
+
 			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor,
 					tolerance)) {
 				// EVENTS toast("Events (Magenta)");
                 GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This action makes use of the internet", true, true, 7);
                 myAlert7.show(getFragmentManager(), "events_action"); // the tab name is for referencing this instance if required
-				//intent = new Intent(this, EventsActivity.class);
-				//startActivity(intent);
+
 			} else if (ct.closeMatch(Color.rgb(255, 48, 86), touchColor,
 					tolerance)) {
 				// DJ SCHEDULE toast("Dj Schedule (Red)");
@@ -516,35 +506,21 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 
 	public void listenToRadio() {
 		radio = true;
-		isPlaying = false;
+        //isPlaying = false;
         swAnim.run(); 			//start soundwave animation
 
 		playPauseButton = (ToggleButton) findViewById(R.id.playPauseButton);
+        // if already playing set up the pause button
+        /*
+        if (isPlaying)  {
+            playPauseButton.setChecked(true);
+        }
+        */
+
         playPauseButton.setVisibility(View.VISIBLE);
-
-
-		playPauseButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Perform action on clicks
-				if (playPauseButton.isChecked()) { // Checked - Pause icon visible
-                    //pause();
-                    stopService(streamService);
-                    setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-                    swAnim.stop();
-                    soundwaveRotate.setImageDrawable(soundwaveImage);
-
-				} else { // Unchecked - Play icon visible
-                    ///start();
-                    startService(streamService);
-                }
-			}
-		});
-
-
-		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		getPrefs();
-		// control media volume
+        //prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        //getIsPlaying();
+        // control media volume
 		this.setVolumeControlStream(STREAM_MUSIC);
 		streamService = new Intent(HomeActivity.this, StreamService.class);
 
@@ -557,94 +533,91 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
 			public void onAudioFocusChange(int focusChange) {
 				if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {
                     // Pause playback
+                    Log.i("radio", "AUDIOFOCUS_LOSS 2");
                     stopService(streamService);
                     setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
                     swAnim.stop();
                     soundwaveRotate.setImageDrawable(soundwaveImage);
 
-				} else if (focusChange == AUDIOFOCUS_GAIN) {
-					// Resume playback
-                    if (!isPlaying) startService(streamService);
-				} else if  (focusChange == AUDIOFOCUS_LOSS) {
+                } else {
+                    if (focusChange == AUDIOFOCUS_GAIN) {
+                        // Resume playback
+                        getIsPlaying();
+                        if (isPlaying) {
+                            Log.i("isplaying", "1");
+                        } else {
+                            Log.i("isplaying", "2");
+                        }
+
+                        if (!isPlaying) startService(streamService);
+                    } else if (focusChange == AUDIOFOCUS_LOSS) {
                         //AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
                         //AudioManager.abandonAudioFocus(afChangeListener);
                         // Stop playback
+                        Log.i("radio", "AUDIOFOCUS_LOSS 3");
                         stopService(streamService);
                         setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
                         swAnim.stop();
                         soundwaveRotate.setImageDrawable(soundwaveImage);
-
-
-                } else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                    } else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
                         // Lower the volume jp
-                    audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_LOWER, FLAG_SHOW_UI);
+                        audioManager.adjustStreamVolume(STREAM_MUSIC, ADJUST_LOWER, FLAG_SHOW_UI);
 
-                } else if (focusChange == AUDIOFOCUS_GAIN) {
+                    } else if (focusChange == AUDIOFOCUS_GAIN) {
                         // Raise it back to normal jp
-					audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_RAISE, FLAG_SHOW_UI);
+                        audioManager.adjustStreamVolume(STREAM_MUSIC, ADJUST_RAISE, FLAG_SHOW_UI);
+                    }
                 }
 			}
 		};
-		// Request audio focus for playback
+        //******************************************************************
+        // Request audio focus for playback
 		int result = audioManager.requestAudioFocus(afChangeListener,STREAM_MUSIC,AUDIOFOCUS_GAIN);
 
 		if (result == AUDIOFOCUS_REQUEST_GRANTED) {
-			// Start listening for button presses
-			//AudioManager.registerMediaButtonEventReceiver(RemoteControlReceiver);
-			//AudioManager.setMediaButtonReceiver(RemoteControlReceiver);
 			startService(streamService);
-			// Start playback.
+            swAnim.run();
+            // Start playback.
 		}
 
-		//******************************************************************
-		//startService(streamService);
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Perform action on clicks
+                if (playPauseButton.isChecked()) { // Checked - Pause icon visible
+                    //pause();
+                    stopService(streamService);
+                    setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
+                    swAnim.stop();
+                    soundwaveRotate.setImageDrawable(soundwaveImage);
 
-	}
-    /*
-    @Override
-    public void onAudioFocusChange(int focusChange) {
-        if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {
-            // Pause playback
-            stopService(streamService);
-            setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-            swAnim.stop();
-            soundwaveRotate.setImageDrawable(soundwaveImage);
-
-        } else if (focusChange == AUDIOFOCUS_GAIN) {
-            // Resume playback
-            if (!isPlaying) startService(streamService);
-        } else if  (focusChange == AUDIOFOCUS_LOSS) {
-            //AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
-            //AudioManager.abandonAudioFocus(afChangeListener);
-            // Stop playback
-            stopService(streamService);
-            setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-            swAnim.stop();
-            soundwaveRotate.setImageDrawable(soundwaveImage);
+                } else { // Unchecked - Play icon visible
+                    ///start();
+                    startService(streamService);
+                    swAnim.run();
+                }
+            }
+        });
 
 
-        } else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-            // Lower the volume jp
-            audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_LOWER, FLAG_SHOW_UI);
-
-        } else if (focusChange == AUDIOFOCUS_GAIN) {
-            // Raise it back to normal jp
-            audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_RAISE, FLAG_SHOW_UI);
-        }
     }
-    */
-
-
 
     //note the boolean isPlaying get set to true in the service start method and set to false in the service destroy method
-	public void getPrefs() {
-		isPlaying = prefs.getBoolean("isPlaying", false); // get status of radio on or off
-		if (isPlaying){ //if on
-           //stopService(streamService);//stop the service which in turn stops the radio which runs in the service
-           //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
-           // Toast.makeText(HomeActivity.this, "isPlaying = " + isPlaying, Toast.LENGTH_LONG).show();
-		}
-	}
+    public void getIsPlaying() {
+        //prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        //prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Context pContext = getApplicationContext();
+        prefs2 = pContext.getSharedPreferences("radioPrefs", MODE_MULTI_PROCESS);
+        isPlaying = prefs2.getBoolean("isPlaying", false); // get status of radio on or off
+
+        isPlaying = isPlaying && isServiceRunning(StreamService.class) && playPauseButton.isChecked();
+
+        if (isPlaying) {
+            Log.i("isPlaying", "3");
+        } else {
+            Log.i("isPlaying", "4");
+        }
+    }
 
 
     //used to check if a service class is running an instance returns true if yes and false if not
@@ -690,7 +663,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,  Vie
                 break;
             case 5:
                 //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
-                listenToRadio();
+                getIsPlaying();
+                //if (isServiceRunning(streamService.class))  listenToRadio();
+                if (!isPlaying) listenToRadio();
             break;
             case 6:
                 //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
