@@ -32,6 +32,14 @@ import java.net.URLConnection;
  * Created by Chris on 31/05/2015.
  */
 public class ConnectAdapter extends BaseAdapter implements GeneralAlertDialog.NoticeDialogListener {
+    private final static String pheverFacebookUrl = "https://www.facebook.com/phevermusic"; // phever facebook link
+    private final static String pheverTwitterUrl = "https://twitter.com/search?q=PHEVER_Events"; //phever twitter link
+    private final static String pheverYoutubeUrl = "https://www.youtube.com/PHEVERIRL";  // phever youtube link
+    private final static String housemixesUrl = "http://www.house-mixes.com/profile/phever-radio"; //phever house mixes link
+    private final static String soundCloudUrl =  "https://soundcloud.com/pheverie"; //phever soundcloud link
+    private final static String mixCloudUrl = "https://www.mixcloud.com/PHEVER_Radio"; // phever mixcloud link
+    private final static String pheverAcademyUrl = "http://www.facebook.com/PHEVERacademy"; //phever dj music academy link
+
     private String url;
     private final Context context;
     private final String[] connectLabelText;
@@ -95,38 +103,37 @@ public class ConnectAdapter extends BaseAdapter implements GeneralAlertDialog.No
                 //Toast.makeText(context, "You Clicked " + connectLabelText[position], Toast.LENGTH_LONG).show();
                 switch (position) {
                     case 0:
-                        url = "https://www.facebook.com/phevermusic";
+                        url = pheverFacebookUrl;
                         new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to i.execute(url);//calls asyncTask class to try connect to internet
                         break;
                     case 1:
-                        url =  "https://twitter.com/search?q=PHEVER_Events";
+                        url =  pheverTwitterUrl;
                         new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to i.execute(url);//calls asyncTask class to try connect to internet
                         break;
                     case 2:
-                        url = "https://www.youtube.com/PHEVERIRL";
+                        url = pheverYoutubeUrl;
                         new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to i.execute(url);//calls asyncTask class to try connect to internet
                         break;
                     case 3:
-                        url = "http://www.house-mixes.com/profile/phever-radio";
+                        url = housemixesUrl;
                         new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to i.execute(url);//calls asyncTask class to try connect to internet
                         break;
                     case 4:
-                        url = "https://soundcloud.com/pheverie";
+                        url = soundCloudUrl;
                         new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to i
                         break;
                     case 5:
-                        url = "https://www.mixcloud.com/PHEVER_Radio";
+                        url = mixCloudUrl;
                         new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to internet
                         break;
                     case 6:
-                        url = "http://www.facebook.com/PHEVERacademy";
+                        url = pheverAcademyUrl;
                         new HandleUrlConnect_ConnectAdapter().execute(url);//calls asyncTask class to try connect to internet
                         break;
                 }//close switch
 
             }
         });
-
 
         return rowView;
     }

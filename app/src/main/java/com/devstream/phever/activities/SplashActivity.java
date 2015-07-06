@@ -48,8 +48,9 @@ public class SplashActivity extends Activity {
 		});
 
 		/*  //if using a thread but as not clashing with any ohter activity no need
-		 * imgSplash = (ImageView) findViewById(R.id.img_splash); SplashAnimateThread
-		 * rotator = new SplashAnimateThread(imgSplash); rotator.run();
+		 * imgSplash = (ImageView) findViewById(R.id.img_splash);
+		 * SplashAnimateThread rotator = new SplashAnimateThread(imgSplash);
+		 * rotator.run();
 		 */
 
 	}
