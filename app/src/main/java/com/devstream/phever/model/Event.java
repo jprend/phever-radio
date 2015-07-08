@@ -7,6 +7,7 @@ import org.w3c.dom.Text;
  */
 public class Event {
     private String  edate;
+    private String edateSort;
     private String  etime;
     private String  name;
     private String  location;
@@ -24,6 +25,14 @@ public class Event {
 
     public void setEdate(String edate) {
         this.edate = edate;
+    }
+
+    public String getEdateSort() {
+        return edateSort;
+    }
+
+    public void setEdateSort(String edateSort) {
+        this.edateSort = edateSort;
     }
 
     public String getEtime() {
