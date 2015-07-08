@@ -11,8 +11,9 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_marginLeft="35dp"
-        android:layout_marginRight="55dp"
+        android:layout_marginRight="80dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:src="@drawable/facebook_icon"
         />
 
