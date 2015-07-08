@@ -38,14 +38,13 @@ public class StreamService extends Service {
 		Log.d(TAG, "onCreate");
 
 		// Init the SharedPreferences and Editor
-		//prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		Context context = getApplicationContext();
-		prefs = context.getSharedPreferences("radioPrefs", MODE_MULTI_PROCESS);
+		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		editor = prefs.edit();
 
 		// Set up the buffering notification
 		notificationManager = (NotificationManager) getApplicationContext()
 				.getSystemService(NOTIFICATION_SERVICE);
+		Context context = getApplicationContext();
 
 		String notifTitle = context.getResources().getString(R.string.service_stream);
 		String notifMessage = context.getResources().getString(R.string.buffering);
@@ -94,7 +93,6 @@ public class StreamService extends Service {
                 mp.start();  //or mp.stop();
             }
         });
-
 		// Set the isPlaying preference to true
 		editor.putBoolean("isPlaying", true);
 		editor.commit();
