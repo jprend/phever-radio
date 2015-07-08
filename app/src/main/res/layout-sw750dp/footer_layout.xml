@@ -9,11 +9,11 @@
 
     <ImageView
         android:id="@+id/change_background_color"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="@dimen/margin_sevendp"
-        android:layout_marginBottom="@dimen/margin_sevendp"
-        android:layout_marginLeft="@dimen/margin_sevendp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="50dp"
         android:src="@drawable/settings_icon"
         />
 
@@ -21,21 +21,22 @@
         android:id="@+id/phever_weblink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_sevendp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_weight="1"
         android:text="@string/footer_text"
         android:textColor="@color/color_white"
-        android:textSize="@dimen/footer_textsize"
+        android:textSize="56sp"
         android:gravity="center"
         />
 
     <ImageView
         android:id="@+id/mail_list_link"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="@dimen/margin_sevendp"
-        android:layout_marginBottom="@dimen/margin_sevendp"
-        android:layout_marginRight="@dimen/margin_sevendp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="50dp"
         android:src="@drawable/subscribe_icon"
         />
     

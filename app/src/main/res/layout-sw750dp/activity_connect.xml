@@ -8,9 +8,9 @@
     <com.shamanland.facebook.likebutton.FacebookLikePlugin
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingLeft="100dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="20dp"
+        android:paddingLeft="300dp"
+        android:paddingBottom="20dp"
         android:background="#ffffff"
         android:orientation="horizontal"
         >

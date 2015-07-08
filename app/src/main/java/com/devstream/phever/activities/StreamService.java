@@ -10,16 +10,22 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class StreamService extends Service {
+    private final static String PHEVER_URLS = "com.devstream.phever.activities.phever_urls";
+    private final static String PHEVER_RADIO_URL = "com.devstream.phever.activities.phever_radio_url";
 	private static final String TAG = "StreamService";
+    private String url = "";
 	MediaPlayer mp;
 	boolean isPlaying;
 	SharedPreferences prefs;
 	SharedPreferences.Editor editor;
+    SharedPreferences urlPrefs;
+    SharedPreferences.Editor editUrlPrefs;
 	Notification n;
 	NotificationManager notificationManager;
 	// Change this int to some number specifically for this app
@@ -27,7 +33,6 @@ public class StreamService extends Service {
 
 	@Override
 	public IBinder onBind(Intent arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -66,7 +71,9 @@ public class StreamService extends Service {
 		// It's very important that you put the IP/URL of your ShoutCast stream here
 		// Otherwise you'll get Webcom Radio
 		//String url = "http://176.31.115.196:8214/";
-		String url = "http://89.101.1.140:8003/";
+
+        urlPrefs = getSharedPreferences(PHEVER_URLS, Context.MODE_PRIVATE);
+		url = urlPrefs.getString(PHEVER_RADIO_URL, null); //"http://89.101.1.140:8003/";
 		mp = new MediaPlayer();
 		mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		try {
@@ -82,6 +89,7 @@ public class StreamService extends Service {
 			Log.e(TAG, "IOException");
 		}
 	}
+
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -115,7 +123,7 @@ public class StreamService extends Service {
 		startForeground(notifId, n);
 	}
 
-	@Override
+    @Override
 	public void onDestroy() {
 		Log.d(TAG, "onDestroy");
 		//mp.stop();

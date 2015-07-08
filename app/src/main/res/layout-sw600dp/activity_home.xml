@@ -19,8 +19,8 @@
     <ImageView
         android:id="@+id/img_home"
         android:visibility="visible"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="440dp"
+        android:layout_height="440dp"
         android:layout_centerInParent="true"
         android:src="@drawable/img_home"
         />
@@ -28,8 +28,8 @@
     <!-- invisible mask image -->
      <ImageView
         android:id="@+id/img_mask"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="440dp"
+        android:layout_height="440dp"
         android:visibility="invisible"
         android:layout_centerInParent="true"
         android:src="@drawable/color_mask_home"
@@ -38,21 +38,20 @@
     <ImageView
         android:visibility="invisible"
         android:id="@+id/soundwave_img_animate"
-        android:layout_width="70dp"
-        android:layout_height="32dp"
+        android:layout_width="150dp"
+        android:layout_height="58dp"
         android:src="@drawable/soundwave_animate"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="140dp"
         android:layout_alignBottom="@+id/img_home"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_centerHorizontal="true" />
 
     <!-- radio related image buttons note uses a selector see drawable ic_play_pause -->
     <ToggleButton
         android:id="@+id/playPauseButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="25dp"
         android:onClick="handleToggleButton"
         android:background="@drawable/ic_play_pause"
         android:textOn=""
