@@ -2,7 +2,9 @@ package com.devstream.phever.model;
 
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -143,7 +145,7 @@ public class EventAdapter extends BaseAdapter {
             ViewHolder viewHolder = (ViewHolder) convertView.getTag();
             eventImageView = viewHolder.eventImageView;
             eventImageUrl = viewHolder.eventImageUrl;
-            Log.i("jp01", "s1 " + eventImageUrl);
+            //Log.i("jp01", "s1 " + eventImageUrl);
 
             edate = viewHolder.edate;
             name = viewHolder.name;
@@ -158,7 +160,7 @@ public class EventAdapter extends BaseAdapter {
         Event tEvent = getItem(position);
 
         String imageFileName = tEvent.getImageUrl();
-        Log.i("jp01", "s2 " + imageFileName);
+        //Log.i("jp01", "s2 " + imageFileName);
         if (imageFileName == null) {
             imageFileName = defaultIMAGE;
         }
@@ -167,11 +169,11 @@ public class EventAdapter extends BaseAdapter {
         }
 
         eventImageUrl = IMAGEPATH + imageFileName;
-        Log.i("jp01", "s3 " + eventImageUrl);
+        //Log.i("jp01", "s3 " + eventImageUrl);
 
         imageLoader.DisplayImage(eventImageUrl, eventImageView);
 
-        edate.setText(tEvent.getEdate());
+        edate.setText(dateConvert(tEvent.getEdate()));
         name.setText(tEvent.getName());
         location.setText(tEvent.getLocation());
         headline.setText(tEvent.getHeadline());
@@ -197,5 +199,22 @@ public class EventAdapter extends BaseAdapter {
     @Override
     public boolean isEnabled(int position) {
         return false;
+    }
+
+
+    public String dateConvert(String D) {
+
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yyyy");
+        Date date = null;
+        try {
+            date = format1.parse(D);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        String dateString = format2.format(date);
+        dateString = dateString.replace("-", " ");
+        System.out.println(dateString);
+        return ((dateString));
     }
 }
