@@ -180,15 +180,15 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                 popupMenuColorSettings.getMenu().add(Menu.NONE, SIX, Menu.NONE, "Pink");
                 popupMenuColorSettings.getMenu().add(Menu.NONE, SEVEN, Menu.NONE, "Purple");
                 popupMenuColorSettings.getMenu().add(Menu.NONE, EIGHT, Menu.NONE, "Yellow");
-                popupMenuColorSettings.getMenu().add(Menu.NONE, NINE, Menu.NONE, "Image 1");
-                popupMenuColorSettings.getMenu().add(Menu.NONE, TEN, Menu.NONE, "Image 2");
-                popupMenuColorSettings.getMenu().add(Menu.NONE, ELEVEN, Menu.NONE, "Image 3");
-                popupMenuColorSettings.getMenu().add(Menu.NONE, TWELVE, Menu.NONE, "Image 4");
-                popupMenuColorSettings.getMenu().add(Menu.NONE, THIRTEEN, Menu.NONE, "Image 5");
-                popupMenuColorSettings.getMenu().add(Menu.NONE, FOURTEEN, Menu.NONE, "Image 6");
-                popupMenuColorSettings.getMenu().add(Menu.NONE, FIFTEEN, Menu.NONE, "Image 7");
-                popupMenuColorSettings.getMenu().add(Menu.NONE, SIXTEEN, Menu.NONE, "Image 8");
-                popupMenuColorSettings.getMenu().add(Menu.NONE, SEVENTEEN, Menu.NONE, "Image 9");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, NINE, Menu.NONE, "Sparkle");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, TEN, Menu.NONE, "Fire Sky");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, ELEVEN, Menu.NONE, "Color Cube");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, TWELVE, Menu.NONE, "Color Gradient");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, THIRTEEN, Menu.NONE, "Color Squares");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, FOURTEEN, Menu.NONE, "Color Rain");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, FIFTEEN, Menu.NONE, "Marbles");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, SIXTEEN, Menu.NONE, "Music Note");
+                popupMenuColorSettings.getMenu().add(Menu.NONE, SEVENTEEN, Menu.NONE, "Blue Rain");
                 popupMenuColorSettings.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
                       @Override
                       public boolean onMenuItemClick(MenuItem item) {
@@ -336,11 +336,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                 popupMenuColorSettings.show();
                 break;
             case R.id.phever_weblink:
-                GeneralAlertDialog myAlert1 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This Action tries to connect to the internet", true, true, 1);
+                GeneralAlertDialog myAlert1 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 1);
                 myAlert1.show(getFragmentManager(), "phever_link"); // the tab name is for referencing this instance if required
                 break;
             case R.id.mail_list_link:
-                GeneralAlertDialog myAlert2 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This Action tries to connect to the internet", true, true, 2);
+                GeneralAlertDialog myAlert2 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 2);
                 myAlert2.show(getFragmentManager(), "email_link"); // the tab name is for referencing this instance if required
                 break;
         }//close switch
@@ -390,19 +390,19 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 			// process selected options from user
 			if (ct.closeMatch(Color.rgb(255, 238, 56), touchColor, tolerance)) {
 				// RADIO toast("Radio (yellow)");
-                GeneralAlertDialog myAlert5 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This action makes use of the internet", true, true, 5);
+                GeneralAlertDialog myAlert5 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 5);
                 myAlert5.show(getFragmentManager(), "radio_link"); // the tab name is for referencing this instance if required
 				//listenToRadio();
 			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor,
 					tolerance)) {
 				// CONNNECT toast("Contacts (Green)");
-                GeneralAlertDialog myAlert4 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "Each of the list items on next screen connect to the internet", true, true, 4);
+                GeneralAlertDialog myAlert4 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 4);
                 myAlert4.show(getFragmentManager(), "connect_action"); // the tab name is for referencing this instance if required
 
 			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor,
 					tolerance)) {
 				// EVENTS toast("Events (Magenta)");
-                GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This action makes use of the internet", true, true, 7);
+                GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 7);
                 myAlert7.show(getFragmentManager(), "events_action"); // the tab name is for referencing this instance if required
 				//intent = new Intent(this, EventsActivity.class);
 				//startActivity(intent);
@@ -410,13 +410,13 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 					tolerance)) {
 				// DJ SCHEDULE toast("Dj Schedule (Red)");
                // GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "Each of the list items on the popup menu connect to the internet", false, true, 6);
-                GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Select DJ Schedule - Advise of Internet Connect", null, true, false, 6);
+                GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Select DJ Schedule" + "\n" + "- Connect to Internet?", null, true, false, 6);
                 myAlert6.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
                 //showPopup(v);
 			} else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor,
 					tolerance)) {
 				// TV toast("TV (indigo)");
-                GeneralAlertDialog myAlert3 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "This Action tries to connect to the internet", true, true, 3);
+                GeneralAlertDialog myAlert3 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 3);
                 myAlert3.show(getFragmentManager(), "tv_link"); // the tab name is for referencing this instance if required
 
 			} else if (ct.closeMatch(Color.rgb(255, 255, 255), touchColor,
@@ -867,7 +867,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                 }
             }else {  //if connecction not successfull
                 if(connectStatus == 0){ //no internet connection (is turned off or out of range)
-                    GeneralAlertDialog myAlert = GeneralAlertDialog.newInstance("Cannot Connect to Intenet", "Please check internet turned on or in range", false, true, 0);
+                    GeneralAlertDialog myAlert = GeneralAlertDialog.newInstance("Cannot Connect to Intenet", "Check internet turned on / in range", false, true, 0);
                     myAlert.show(getFragmentManager(), "no internet connect");
                 }else { //yes internet but no connect to server cannot get web file or data
                     GeneralAlertDialog myAlert = GeneralAlertDialog.newInstance("Cannot Connect to Server", "Server may be down try again later", false, true, 0);
