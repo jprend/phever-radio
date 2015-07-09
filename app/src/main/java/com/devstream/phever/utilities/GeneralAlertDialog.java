@@ -17,6 +17,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.devstream.phever.activities.ConnectActivity;
+import com.devstream.phever.activities.DjScheduleActivity;
 import com.devstream.phever.activities.HomeActivity;
 import com.devstream.phever.activities.R;//makes this utility class visible in all activity classes
 
@@ -93,7 +94,21 @@ public class GeneralAlertDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setCancelable(false);//will not close dialog if  clicking anywhere around it (true does close it)
         builder.setTitle(title);
-        builder.setMessage(message);
+
+        if((message != null) && (!message.isEmpty())){
+            builder.setMessage(message);
+        } else {
+            builder.setItems(R.array.days_array, new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //int day = which;
+                    //Toast.makeText(getActivity(), "selected item is " + which, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getActivity(), DjScheduleActivity.class);
+                    intent.putExtra("day", which);
+                    startActivity(intent);
+                }
+            });
+        }
 
          if(cancel) {
             builder.setNegativeButton(R.string.text_negativebutton, new DialogInterface.OnClickListener() {

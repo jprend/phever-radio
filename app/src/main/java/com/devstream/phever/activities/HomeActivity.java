@@ -409,9 +409,10 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 			} else if (ct.closeMatch(Color.rgb(255, 48, 86), touchColor,
 					tolerance)) {
 				// DJ SCHEDULE toast("Dj Schedule (Red)");
-                GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "Each of the list items on the popup menu connect to the internet", false, true, 6);
+               // GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "Each of the list items on the popup menu connect to the internet", false, true, 6);
+                GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Select DJ Schedule - Advise of Internet Connect", null, true, false, 6);
                 myAlert6.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
-                showPopup(v);
+                //showPopup(v);
 			} else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor,
 					tolerance)) {
 				// TV toast("TV (indigo)");
