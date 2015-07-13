@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
@@ -30,6 +32,8 @@ import android.view.MotionEvent;
 
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -336,12 +340,14 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                 popupMenuColorSettings.show();
                 break;
             case R.id.phever_weblink:
-                GeneralAlertDialog myAlert1 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 1);
-                myAlert1.show(getFragmentManager(), "phever_link"); // the tab name is for referencing this instance if required
+                internetConnectAlertDialog(1);
+                //GeneralAlertDialog myAlert1 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 1);
+                //myAlert1.show(getFragmentManager(), "phever_link"); // the tab name is for referencing this instance if required
                 break;
             case R.id.mail_list_link:
-                GeneralAlertDialog myAlert2 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 2);
-                myAlert2.show(getFragmentManager(), "email_link"); // the tab name is for referencing this instance if required
+                internetConnectAlertDialog(2);
+                //GeneralAlertDialog myAlert2 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 2);
+                //myAlert2.show(getFragmentManager(), "email_link"); // the tab name is for referencing this instance if required
                 break;
         }//close switch
 
@@ -390,34 +396,37 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 			// process selected options from user
 			if (ct.closeMatch(Color.rgb(255, 238, 56), touchColor, tolerance)) {
 				// RADIO toast("Radio (yellow)");
-                GeneralAlertDialog myAlert5 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 5);
-                myAlert5.show(getFragmentManager(), "radio_link"); // the tab name is for referencing this instance if required
+                internetConnectAlertDialog(5);
+                //GeneralAlertDialog myAlert5 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 5);
+               // myAlert5.show(getFragmentManager(), "radio_link"); // the tab name is for referencing this instance if required
 				//listenToRadio();
 			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor,
 					tolerance)) {
 				// CONNNECT toast("Contacts (Green)");
-                GeneralAlertDialog myAlert4 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 4);
-                myAlert4.show(getFragmentManager(), "connect_action"); // the tab name is for referencing this instance if required
+                internetConnectAlertDialog(4);
+                //GeneralAlertDialog myAlert4 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 4);
+                //myAlert4.show(getFragmentManager(), "connect_action"); // the tab name is for referencing this instance if required
 
 			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor,
 					tolerance)) {
 				// EVENTS toast("Events (Magenta)");
-                GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 7);
-                myAlert7.show(getFragmentManager(), "events_action"); // the tab name is for referencing this instance if required
+                internetConnectAlertDialog(6);
+                //GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 6);
+                //myAlert6.show(getFragmentManager(), "events_action"); // the tab name is for referencing this instance if required
 				//intent = new Intent(this, EventsActivity.class);
 				//startActivity(intent);
 			} else if (ct.closeMatch(Color.rgb(255, 48, 86), touchColor,
 					tolerance)) {
 				// DJ SCHEDULE toast("Dj Schedule (Red)");
-               // GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Advise of Internet Connect", "Each of the list items on the popup menu connect to the internet", false, true, 6);
-                GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Select DJ Schedule" + "\n" + "- Connect to Internet?", null, true, false, 6);
-                myAlert6.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
-                //showPopup(v);
+                //this is processed entirely within the class GeneralAlertDialog where message == null, is a list of days
+                GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Advisory - DJ Schedule Requires Internet", null, true, false, 7);
+                myAlert7.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
 			} else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor,
 					tolerance)) {
 				// TV toast("TV (indigo)");
-                GeneralAlertDialog myAlert3 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 3);
-                myAlert3.show(getFragmentManager(), "tv_link"); // the tab name is for referencing this instance if required
+                internetConnectAlertDialog(3);
+               // GeneralAlertDialog myAlert3 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 3);
+               // myAlert3.show(getFragmentManager(), "tv_link"); // the tab name is for referencing this instance if required
 
 			} else if (ct.closeMatch(Color.rgb(255, 255, 255), touchColor,
 					tolerance)) {
@@ -905,6 +914,111 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 
             }
         }
+
+
+    //this method creates a dialog that  advises user that they are about to use the internet
+    //it processes their response cancel = dismiss - ok = process the relevant switch code
+    //note need to have the modifier -  'final'
+    public void internetConnectAlertDialog(final int action){
+        final Dialog adviseOfInternetConnectDialog = new Dialog(this);
+        adviseOfInternetConnectDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        adviseOfInternetConnectDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        adviseOfInternetConnectDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        adviseOfInternetConnectDialog.setContentView(R.layout.layout_dialog_alert_internetuse);
+
+        adviseOfInternetConnectDialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adviseOfInternetConnectDialog.dismiss();
+            }
+        });
+
+        adviseOfInternetConnectDialog.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean radioPlaying = false;
+                switch(action) {
+                    case 0:
+
+                        break;
+                    case 1:
+                        //goes to www.phever.ie
+                        adviseOfInternetConnectDialog.dismiss();
+                        url = pheverWebsiteUrlConnect;
+                        new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+                        break;
+                    case 2:
+                        //goes phever google database store user email
+                        adviseOfInternetConnectDialog.dismiss();
+                        url = pheverEmailUrlConnect;
+                        new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+
+                        break;
+                    case 3:
+                        //goes to phever TV
+                        adviseOfInternetConnectDialog.dismiss();
+                        //check if streamService is running ie. returns true if is and false if not
+                        radioPlaying = isServiceRunning(StreamService.class);
+                        //if service running then radio is running so turn it off
+                        if(radioPlaying){
+                            stopService(streamService);//stop the service which in turn stops the radio which runs in the service
+                            //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
+                            playPauseButton.setVisibility(View.INVISIBLE);
+                            swAnim.stop();
+                            soundwaveRotate.setVisibility(View.INVISIBLE);
+                            soundwaveRotate.setImageDrawable(soundwaveImage);
+                        }
+                        url = pheverTvUrlConnect;
+                        new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+                        break;
+                    case 4:
+                        //goes to phever connect
+                        adviseOfInternetConnectDialog.dismiss();
+                        //check if streamService is running ie. returns true if is and false if not
+                        radioPlaying = isServiceRunning(StreamService.class);
+                        //if service running then radio is running so turn it off
+                        if(radioPlaying){
+                            stopService(streamService);//stop the service which in turn stops the radio which runs in the service
+                            //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
+                            playPauseButton.setVisibility(View.INVISIBLE);
+                            swAnim.stop();
+                            soundwaveRotate.setVisibility(View.INVISIBLE);
+                            soundwaveRotate.setImageDrawable(soundwaveImage);
+                        }
+                        Intent intent4 = new Intent(HomeActivity.this, ConnectActivity.class);
+                        startActivity(intent4);
+                        break;
+                    case 5:
+                        // goes to phever radio
+                        adviseOfInternetConnectDialog.dismiss();
+                        radioPlaying = isServiceRunning(StreamService.class);
+                        if(radioPlaying){
+                            playPauseButton.setChecked(false);
+                            playPauseButton.setVisibility(View.VISIBLE);
+                            soundwaveRotate.setVisibility(View.VISIBLE);
+                            swAnim.run();
+                        } else {
+                            url = pheverRadioUrlconnect;
+                            new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+                        }
+                        break;
+                    case 6:
+                        //goes to phever Events
+                        adviseOfInternetConnectDialog.dismiss();
+                        Intent intent6 = new Intent(HomeActivity.this, EventsActivity.class);
+                        startActivity(intent6);
+                        break;
+                    case 7:
+                            //not used yet
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        adviseOfInternetConnectDialog.show();
+    }
 
 }// close class homeactivity
 
