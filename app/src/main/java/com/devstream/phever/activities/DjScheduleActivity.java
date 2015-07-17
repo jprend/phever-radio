@@ -28,6 +28,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devstream.phever.model.Slot;
@@ -55,6 +56,8 @@ public class DjScheduleActivity extends Activity implements GeneralAlertDialog.N
             weekRoster.add(i, new ArrayList<Slot>());
         }
 
+        TextView daySelected = (TextView) findViewById(R.id.tvDay);
+        daySelected.setText(dayNames[index]);
 
         SlotSingleton instance = SlotSingleton.getInstance();
         if (instance.getUpdated()) {

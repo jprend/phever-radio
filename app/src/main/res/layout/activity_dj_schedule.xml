@@ -7,6 +7,14 @@
     android:background="#FFFFFF"
     tools:context=".MainActivity" >
 
+    <TextView
+        android:id="@+id/tvDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="#D64530"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <ListView
         android:id="@+id/list"
         android:layout_width="805dp"
