@@ -41,6 +41,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.devstream.phever.model.EventSingleton;
+import com.devstream.phever.model.SlotSingleton;
 import com.devstream.phever.utilities.ColorTool;
 import com.devstream.phever.utilities.GeneralAlertDialog;
 import com.devstream.phever.utilities.SoundwaveAnimateThread;
@@ -410,18 +412,25 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor,
 					tolerance)) {
 				// EVENTS toast("Events (Magenta)");
-                internetConnectAlertDialog(6);
-                //GeneralAlertDialog myAlert6 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 6);
-                //myAlert6.show(getFragmentManager(), "events_action"); // the tab name is for referencing this instance if required
-				//intent = new Intent(this, EventsActivity.class);
-				//startActivity(intent);
+                if (EventSingleton.getInstance().getUpdated()) {
+                    Intent intent6 = new Intent(HomeActivity.this, EventsActivity.class);
+                    startActivity(intent6);
+                } else {
+                    internetConnectAlertDialog(6);
+                }
+
 			} else if (ct.closeMatch(Color.rgb(255, 48, 86), touchColor,
 					tolerance)) {
 				// DJ SCHEDULE toast("Dj Schedule (Red)");
                 //this is processed entirely within the class GeneralAlertDialog where message == null, is a list of days
-                GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Advisory - DJ Schedule Requires Internet", null, true, false, 7);
-                myAlert7.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
-			} else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor,
+                if(SlotSingleton.getInstance().getUpdated()){
+                    GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("DJ Schedule", null, true, false, 7);
+                    myAlert7.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
+                }else {
+                    GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Advisory - DJ Schedule Requires Internet", null, true, false, 7);
+                    myAlert7.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
+                }
+            } else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor,
 					tolerance)) {
 				// TV toast("TV (indigo)");
                 internetConnectAlertDialog(3);
@@ -827,13 +836,12 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
     //NOTE THIS ASYNC TASK CLASS IS NOT SUITABLE FOR RETURNING DATA - IS ONLY FOR CONNECT TO A URL OUTSIDE THE APP
     private class HandleUrlConnect extends AsyncTask<String, Void, Boolean> {
         ProgressDialog progressUrlConnect;
-        AlertDialog alert;
         int connectStatus = 0;// a 0 indicates no internet connect - a 1 indicates no server connect
         //start a progress dialog advises user that something is happening
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressUrlConnect = ProgressDialog.show(HomeActivity.this, "Connecting to Internet", "Please Wait ...", true);
+            progressUrlConnect = ProgressDialog.show(HomeActivity.this, "Connecting to server", "Loading... please wait!", true);
         }//close method onpreexecute
 
         @Override

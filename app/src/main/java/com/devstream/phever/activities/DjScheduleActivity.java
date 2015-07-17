@@ -17,19 +17,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.devstream.phever.model.Slot;
 import com.devstream.phever.model.SlotAdapter;
 import com.devstream.phever.model.SlotSingleton;
+import com.devstream.phever.utilities.GeneralAlertDialog;
 
-public class DjScheduleActivity extends Activity {
+public class DjScheduleActivity extends Activity implements GeneralAlertDialog.NoticeDialogListener {
     final String rosterUrl = "http://phever.ie/db/slots.php";
     final int NUMDAYS = 7;
     final int NUMSLOTS = 12;
@@ -56,8 +62,6 @@ public class DjScheduleActivity extends Activity {
         }
         else {
             new getSlots().execute(rosterUrl);
-            instance.updateLocal(this);
-            instance.setWeekRoster(weekRoster);
         }
 
         ListView listview = (ListView)findViewById(R.id.list);
@@ -67,20 +71,41 @@ public class DjScheduleActivity extends Activity {
         listview.setAdapter(adapter);
     }
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, int ok_option) {
+        switch(ok_option){
+            case 0:
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog, int cancel_option) {
+
+    }
+
     class getSlots extends AsyncTask<String, Void, Boolean > {
         ProgressDialog dialog;
+        int connectStatus = 0;// a 0 indicates no internet connect - a 1 indicates no server connect
+        //start a progress dialog advises user that something is happening
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             dialog = new ProgressDialog(DjScheduleActivity.this);
-            dialog.setMessage("Loading, please wait");
-            dialog.setTitle("Connecting server");
+            dialog.setMessage("Loading ... please wait!");
+            dialog.setTitle("Connecting to server");
             dialog.show();
             dialog.setCancelable(false);
         }
 
         @Override
         protected Boolean doInBackground(String... urls) {
+            //first check there is a connection to intenet (is turned on and in range)
+            ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkinfo = connMgr.getActiveNetworkInfo();
+            if(networkinfo != null && networkinfo.isConnected()){ //yes internet turned on and in range
+                Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
             try {
                 HttpGet httppost = new HttpGet(urls[0]);
                 HttpClient httpclient = new DefaultHttpClient();
@@ -127,26 +152,36 @@ public class DjScheduleActivity extends Activity {
                             }
                         });
 
-                    return true;
+                    SlotSingleton.getInstance().updateLocal(DjScheduleActivity.this);
+                    SlotSingleton.getInstance().setWeekRoster(weekRoster);
+                    return true; //connection made
                 }
 
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+            }catch(Exception e){ //if connection to server or file cannot be made
+                connectStatus = 1; //server connect issue
+                return false;
             }
+            }//close if
+            connectStatus = 0; //internet connect issue
             return false;
-        }
+        }//close method doinbackground
 
         protected void onPostExecute(Boolean result) {
-            //dialog.cancel();
-            dialog.dismiss();
+            dialog.dismiss();//dialog.cancel();
             adapter.notifyDataSetChanged();
-            if(!result)
-                Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
-        }
+
+            if(!result) { //no connection
+                if(connectStatus == 0){ //no internet connection (is turned off or out of range)
+                    GeneralAlertDialog myAlert = GeneralAlertDialog.newInstance("Cannot Connect to Intenet", "Check internet turned on / in range", false, true, 0);
+                    myAlert.show(getFragmentManager(), "no internet connect");
+                }else { //yes internet but no connect to server cannot get web file or data
+                    GeneralAlertDialog myAlert = GeneralAlertDialog.newInstance("Cannot Connect to Server", "Server may be down try again later", false, true, 0);
+                    myAlert.show(getFragmentManager(), "no server connect");
+                }//close second if
+            }//close first if
+
+        }//close method onPostExecute
+
         private int getDayIndex(String sday) {
             int j = 0;
             for (int i = 0; i < dayNames.length; i++) {
@@ -166,6 +201,7 @@ public class DjScheduleActivity extends Activity {
 			return -1;
 		}
 		*/
-    }
+    }//close class get slots
 
-}
+}//close class DJScheduleActivity
+

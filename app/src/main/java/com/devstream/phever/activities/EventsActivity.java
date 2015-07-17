@@ -19,19 +19,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.devstream.phever.model.Event;
 import com.devstream.phever.model.EventAdapter;
 import com.devstream.phever.model.EventSingleton;
+import com.devstream.phever.utilities.GeneralAlertDialog;
 
-public class EventsActivity extends Activity {
+public class EventsActivity extends Activity implements GeneralAlertDialog.NoticeDialogListener {
     final String eventsUrl = "http://phever.ie/db/events.php";
     ArrayList<Event> eventList;
     EventAdapter adapter;
@@ -50,8 +56,6 @@ public class EventsActivity extends Activity {
             eventList = instance.getEvents();
         } else {
             new getEvents().execute(eventsUrl);
-            instance.updateLocal(this);
-            instance.setEvents(eventList);
         }
 
         //new getEvents().execute(eventsUrl);
@@ -66,20 +70,42 @@ public class EventsActivity extends Activity {
         listview.setAdapter(adapter);
     }
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, int ok_option) {
+        switch(ok_option){
+            case 0:
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog, int cancel_option) {
+
+    }
+
     class getEvents extends AsyncTask<String, Void, Boolean> {
         ProgressDialog dialog;
+        int connectStatus = 0;// a 0 indicates no internet connect - a 1 indicates no server connect
+        //start a progress dialog advises user that something is happening
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             dialog = new ProgressDialog(EventsActivity.this);
-            dialog.setMessage("Loading, please wait");
-            dialog.setTitle("Connecting server");
+            dialog.setMessage("Loading... please wait!");
+            dialog.setTitle("Connecting to server");
             dialog.show();
             dialog.setCancelable(false);
         }
 
         @Override
         protected Boolean doInBackground(String... urls) {
+            //first check there is a connection to intenet (is turned on and in range)
+            ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkinfo = connMgr.getActiveNetworkInfo();
+            if(networkinfo != null && networkinfo.isConnected()){ //yes internet turned on and in range
+                Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
             try {
                 HttpGet httppost = new HttpGet(urls[0]);
                 HttpClient httpclient = new DefaultHttpClient();
@@ -133,29 +159,38 @@ public class EventsActivity extends Activity {
                             return Event1.getEdate().compareTo(Event2.getEdate());
                         }
                     });
+
+                    EventSingleton.getInstance().updateLocal(EventsActivity.this);
+                    EventSingleton.getInstance().setEvents(eventList);
                     return true;
                 }
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
+            }catch(Exception e){ //if connection to server or file cannot be made
+                connectStatus = 1; //server connect issue
+                return false;
             }
+            }//close if
+            connectStatus = 0; //internet connect issue
             return false;
-        }
+        }//close method doinbackground
+
         @Override
         protected void onPostExecute(Boolean result) {
-            //dialog.cancel();
             //Log.d("jp01", "eventList size 4 =" + eventList.size());
-            dialog.dismiss();
+            dialog.dismiss();//dialog.cancel();
             adapter.notifyDataSetChanged();
-            if (!result)
-                Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
-        }
 
-    }
+            if(!result) { //no connection
+                if(connectStatus == 0){ //no internet connection (is turned off or out of range)
+                    GeneralAlertDialog myAlert = GeneralAlertDialog.newInstance("Cannot Connect to Intenet", "Check internet turned on / in range", false, true, 0);
+                    myAlert.show(getFragmentManager(), "no internet connect");
+                }else { //yes internet but no connect to server cannot get web file or data
+                    GeneralAlertDialog myAlert = GeneralAlertDialog.newInstance("Cannot Connect to Server", "Server may be down try again later", false, true, 0);
+                    myAlert.show(getFragmentManager(), "no server connect");
+                }//close second if
+            }//close first if
 
-}
+        }//close method onPostExecute
+
+    }//close class getEvntsh adync task
+
+}//close class EventsActivity
