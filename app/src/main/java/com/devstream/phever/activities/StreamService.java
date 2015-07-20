@@ -40,7 +40,7 @@ public class StreamService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.d(TAG, "onCreate");
+		//Log.d(TAG, "onCreate");
 
 		// Init the SharedPreferences and Editor
 		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -82,11 +82,14 @@ public class StreamService extends Service {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			Log.e(TAG, "SecurityException");
+			//Log.e(TAG, "SecurityException");
+			e.printStackTrace();
 		} catch (IllegalStateException e) {
-			Log.e(TAG, "IllegalStateException");
+			//Log.e(TAG, "IllegalStateException");
+			e.printStackTrace();
 		} catch (IOException e) {
-			Log.e(TAG, "IOException");
+			//Log.e(TAG, "IOException");
+			e.printStackTrace();
 		}
 	}
 
@@ -94,7 +97,7 @@ public class StreamService extends Service {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onStart(Intent intent, int startId) {
-		Log.d(TAG, "onStart");
+		//Log.d(TAG, "onStart");
 		//mp.start();
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             public void onPrepared(MediaPlayer player){
@@ -125,7 +128,7 @@ public class StreamService extends Service {
 
     @Override
 	public void onDestroy() {
-		Log.d(TAG, "onDestroy");
+		//Log.d(TAG, "onDestroy");
 		//mp.stop();
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             public void onPrepared(MediaPlayer player){

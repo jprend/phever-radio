@@ -1,6 +1,6 @@
 package com.devstream.phever.activities;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,7 +13,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -23,13 +22,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.ParseException;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.devstream.phever.model.Slot;
 import com.devstream.phever.model.SlotAdapter;
@@ -39,7 +37,6 @@ import com.devstream.phever.utilities.GeneralAlertDialog;
 public class DjScheduleActivity extends Activity implements GeneralAlertDialog.NoticeDialogListener {
     final String rosterUrl = "http://phever.ie/db/slots.php";
     final int NUMDAYS = 7;
-    final int NUMSLOTS = 12;
     String[] dayNames = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     ArrayList<ArrayList<Slot>> weekRoster = new ArrayList<ArrayList<Slot>>();
     SlotAdapter adapter;
@@ -108,7 +105,7 @@ public class DjScheduleActivity extends Activity implements GeneralAlertDialog.N
             ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkinfo = connMgr.getActiveNetworkInfo();
             if(networkinfo != null && networkinfo.isConnected()){ //yes internet turned on and in range
-                Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
+                //Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
             try {
                 HttpGet httppost = new HttpGet(urls[0]);
                 HttpClient httpclient = new DefaultHttpClient();

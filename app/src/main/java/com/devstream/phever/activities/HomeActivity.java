@@ -523,15 +523,15 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 		ImageView img = (ImageView) findViewById(hotspotId);
 
 		if (img == null) {
-			Log.d("ImageAreasActivity", "Hot spot image not found");
-			return 0;
-		} else {
+            //Log.d("ImageAreasActivity", "Hot spot image not found");
+            return 0;
+        } else {
 			img.setDrawingCacheEnabled(true);
 			Bitmap hotspots = Bitmap.createBitmap(img.getDrawingCache());
 			if (hotspots == null) {
-				Log.d("ImageAreasActivity", "Hot spot bitmap was not created");
-				return 0;
-			} else {
+                //Log.d("ImageAreasActivity", "Hot spot bitmap was not created");
+                return 0;
+            } else {
 				img.setDrawingCacheEnabled(false);
 				return hotspots.getPixel(x, y);
 			}
@@ -546,31 +546,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 	public void listenToRadio() {
 		radio = true;
 		isPlaying = false;
-        //swAnim.run(); 			//start soundwave animation
-        /*
-		playPauseButton = (ToggleButton) findViewById(R.id.playPauseButton);
-        playPauseButton.setVisibility(View.VISIBLE);
-
-
-		playPauseButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Perform action on clicks
-				if (playPauseButton.isChecked()) { // Checked - Pause icon visible
-                    //pause();
-                    stopService(streamService);
-                    setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-                    swAnim.stop();
-                    soundwaveRotate.setImageDrawable(soundwaveImage);
-
-				} else { // Unchecked - Play icon visible
-                    ///start();
-                    startService(streamService);
-                    swAnim.run();
-                }
-			}
-		});
-        */
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		getPrefs();
@@ -584,9 +559,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 
 		audioManager =  (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-		// start the radio - thats why we are here
 
-		//******************************************************************
 		OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
             @Override
 			public void onAudioFocusChange(int focusChange) {
@@ -623,53 +596,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 		// Request audio focus for playback
 		int result = audioManager.requestAudioFocus(afChangeListener,STREAM_MUSIC,AUDIOFOCUS_GAIN);
 
-		if (result == AUDIOFOCUS_REQUEST_GRANTED) {
-			// Start listening for button presses
-			//AudioManager.registerMediaButtonEventReceiver(RemoteControlReceiver);
-			//AudioManager.setMediaButtonReceiver(RemoteControlReceiver);
-			//startService(streamService);
-			// Start playback.
-		}
 
-		//******************************************************************
-		//startService(streamService);
 
 	} //close method listenToRadio
-
-    /*
-    @Override
-    public void onAudioFocusChange(int focusChange) {
-        if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {
-            // Pause playback
-            stopService(streamService);
-            setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-            swAnim.stop();
-            soundwaveRotate.setImageDrawable(soundwaveImage);
-
-        } else if (focusChange == AUDIOFOCUS_GAIN) {
-            // Resume playback
-            if (!isPlaying) startService(streamService);
-        } else if  (focusChange == AUDIOFOCUS_LOSS) {
-            //AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
-            //AudioManager.abandonAudioFocus(afChangeListener);
-            // Stop playback
-            stopService(streamService);
-            setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-            swAnim.stop();
-            soundwaveRotate.setImageDrawable(soundwaveImage);
-
-
-        } else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-            // Lower the volume jp
-            audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_LOWER, FLAG_SHOW_UI);
-
-        } else if (focusChange == AUDIOFOCUS_GAIN) {
-            // Raise it back to normal jp
-            audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_RAISE, FLAG_SHOW_UI);
-        }
-    }
-    */
-
 
 
     //note the boolean isPlaying get set to true in the service start method and set to false in the service destroy method
@@ -850,11 +779,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
             ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkinfo = connMgr.getActiveNetworkInfo();
             if(networkinfo != null && networkinfo.isConnected()){ //yes internet turned on and in range
-                Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
+                //Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
                 try{
                     //second check connection to server
                     URL myUrl = new URL(urls[0]);//paras [0] is the url passed into the async task
-                    Log.d("url used is: ", myUrl.toString());
+                    //Log.d("url used is: ", myUrl.toString());
                     URLConnection connection = myUrl.openConnection();
                     connection.setConnectTimeout(500 * 8); //4 seconds
                     connection.connect();
