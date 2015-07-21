@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,7 +103,7 @@ public class SlotAdapter extends BaseAdapter {
             ViewHolder viewHolder = (ViewHolder) convertView.getTag();
             djImageView = viewHolder.djImageView;
             djImageUrl = viewHolder.djImageUrl;
-            Log.i("Image","Loader " + djImageUrl);
+            //Log.i("Image","Loader " + djImageUrl);
 
 
 
@@ -116,13 +115,13 @@ public class SlotAdapter extends BaseAdapter {
         Slot tSlot = getItem(position);
 
         String imageFileName = tSlot.getDjImage();
-        Log.i("Image","Blank " + imageFileName);
+        //Log.i("Image","Blank " + imageFileName);
         if (imageFileName.equals("") || imageFileName.equals(null) || imageFileName.equals("null")  )   {
             imageFileName = defaultIMAGE;
         }
 
         djImageUrl = IMAGEPATH + imageFileName;
-        Log.i("Image","Blank " + djImageUrl);
+        //Log.i("Image","Blank " + djImageUrl);
 
         imageLoader.DisplayImage(djImageUrl, djImageView);
 

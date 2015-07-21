@@ -10,10 +10,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -157,7 +158,7 @@ public class ConnectAdapter extends BaseAdapter implements GeneralAlertDialog.No
                 try{
                     //second check connection to server
                     URL myUrl = new URL(urls[0]);//paras [0] is the url passed into the async task
-                    Log.d("url used is: ", myUrl.toString());
+                    //Log.d("url used is: ", myUrl.toString());
                     URLConnection connection = myUrl.openConnection();
                     connection.setConnectTimeout(500 * 8); //4 seconds
                     connection.connect();

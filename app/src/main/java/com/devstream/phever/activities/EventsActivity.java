@@ -105,7 +105,7 @@ public class EventsActivity extends Activity implements GeneralAlertDialog.Notic
             ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkinfo = connMgr.getActiveNetworkInfo();
             if(networkinfo != null && networkinfo.isConnected()){ //yes internet turned on and in range
-                Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
+                //Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
             try {
                 HttpGet httppost = new HttpGet(urls[0]);
                 HttpClient httpclient = new DefaultHttpClient();

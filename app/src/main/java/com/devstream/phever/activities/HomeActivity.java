@@ -18,6 +18,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.Menu;
@@ -151,6 +152,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 
 	}//close method onCreate
 
+    //DISABLES BACK BUTTON ON HOME SCREEN
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
@@ -442,6 +444,61 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 		}
 	}// close method gethotspotcolour
 
+	public void listenToRadio() {
+		radio = true;
+		isPlaying = false;
+
+		prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		getPrefs();
+		// control media volume
+		this.setVolumeControlStream(STREAM_MUSIC);
+        //final Intent streamService = new Intent(StreamService.class.getName());//this three lines replace next single commented out line
+        //streamService.putExtra("URL", url);
+        //this.startService(streamService);
+		streamService = new Intent(HomeActivity.this, StreamService.class);
+        streamService.putExtra("URL",  url);
+
+		audioManager =  (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+
+		OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
+            @Override
+			public void onAudioFocusChange(int focusChange) {
+				if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {
+                    // Pause playback
+                    stopService(streamService);
+                    setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
+                    swAnim.stop();
+                    soundwaveRotate.setImageDrawable(soundwaveImage);
+
+				} else if (focusChange == AUDIOFOCUS_GAIN) {
+					// Resume playback
+                    if (!isPlaying) startService(streamService);
+				} else if  (focusChange == AUDIOFOCUS_LOSS) {
+                        //AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
+                        //AudioManager.abandonAudioFocus(afChangeListener);
+                        // Stop playback
+                        stopService(streamService);
+                        setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
+                        swAnim.stop();
+                        soundwaveRotate.setImageDrawable(soundwaveImage);
+
+
+                } else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                        // Lower the volume jp
+                    audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_LOWER, FLAG_SHOW_UI);
+
+                } else if (focusChange == AUDIOFOCUS_GAIN) {
+                        // Raise it back to normal jp
+					audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_RAISE, FLAG_SHOW_UI);
+                }
+			}
+		};
+		// Request audio focus for playback
+		int result = audioManager.requestAudioFocus(afChangeListener,STREAM_MUSIC,AUDIOFOCUS_GAIN);
+
+	} //close method listenToRadio
+
     //note the boolean isPlaying get set to true in the service start method and set to false in the service destroy method
     //this method gets the stored share preferences boolean which indicates radio playing = true or radio not playing = false
     //to use this method the shared preferences class and the editor reader have been instantiated above
@@ -538,7 +595,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                 try{
                     //second check connection to server
                     URL myUrl = new URL(urls[0]);//paras [0] is the url passed into the async task
-                    Log.d("url used is: ", myUrl.toString());
+                    //Log.d("url used is: ", myUrl.toString());
                     URLConnection connection = myUrl.openConnection();
                     connection.setConnectTimeout(500 * 8); //4 seconds
                     connection.connect();

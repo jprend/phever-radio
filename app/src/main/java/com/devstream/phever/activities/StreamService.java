@@ -34,7 +34,6 @@ public class StreamService extends Service {
     public IBinder onBind(Intent arg0) {
         return null;
     }
-
     @SuppressWarnings("deprecation")
     @Override
     public void onCreate() {
@@ -85,6 +84,7 @@ public class StreamService extends Service {
     @SuppressWarnings("deprecation")
     @Override
     public void onStart(Intent intent, int startId) {
+
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             public void onPrepared(MediaPlayer player){
                 mp.start();
@@ -114,6 +114,7 @@ public class StreamService extends Service {
 
     @Override
     public void onDestroy() {
+
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             public void onPrepared(MediaPlayer player){
                 mp.stop();
