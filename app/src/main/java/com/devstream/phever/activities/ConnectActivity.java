@@ -1,14 +1,9 @@
 package com.devstream.phever.activities;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.TableRow;
 
 import com.devstream.phever.model.ConnectAdapter;
 
@@ -31,7 +26,6 @@ public class ConnectActivity extends Activity {
 
         connectLv=(ListView) findViewById(R.id.connect_listview);
         connectLv.setAdapter(new ConnectAdapter(this, CONNECT_LABELS, CONNECT_IMAGES));
-
 
     }
 

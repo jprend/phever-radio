@@ -1,6 +1,5 @@
 package com.devstream.phever.model;
-import android.app.Activity;
-import android.app.FragmentManager;
+
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
@@ -15,11 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.devstream.phever.activities.ConnectActivity;
 import com.devstream.phever.activities.R;
@@ -157,7 +154,6 @@ public class ConnectAdapter extends BaseAdapter implements GeneralAlertDialog.No
             ConnectivityManager connMgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkinfo = connMgr.getActiveNetworkInfo();
             if(networkinfo != null && networkinfo.isConnected()){ //yes internet turned on and in range
-                Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
                 try{
                     //second check connection to server
                     URL myUrl = new URL(urls[0]);//paras [0] is the url passed into the async task

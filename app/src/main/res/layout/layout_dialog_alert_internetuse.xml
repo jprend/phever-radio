@@ -8,9 +8,9 @@
 
     <ImageView
         android:id="@+id/dialog_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_width="@dimen/dialog_image_width"
+        android:layout_height="@dimen/dialog_image_height"
+        android:layout_margin="@dimen/dialog_image_margin"
         android:contentDescription="progress dialog image animation"
         android:src="@drawable/phever_launcher"
         />
@@ -19,13 +19,13 @@
         android:id="@+id/dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginTop="@dimen/dialog_title_margintop"
+        android:layout_marginLeft="@dimen/dialog_title_marginleft"
+        android:layout_marginRight="@dimen/dialog_title_marginright"
         android:layout_toRightOf="@+id/dialog_image"
         android:text="Requires Internet"
-        android:textSize="18sp"
-        android:textColor="#ff0000"
+        android:textSize="@dimen/dialog_title_textsize"
+        android:textColor="@color/dialog_title_textcolor"
         android:visibility="visible"
         />
 
@@ -33,13 +33,13 @@
         android:id="@+id/dialog_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/dialog_message_margintop"
+        android:layout_marginBottom="@dimen/dialog_message_marginbottom"
         android:layout_below="@+id/dialog_image"
         android:layout_centerHorizontal="true"
         android:text="Connect to Internet?"
-        android:textSize="18dp"
-        android:textColor="#0000ff"
+        android:textSize="@dimen/dialog_message_textsize"
+        android:textColor="@color/dialog_message_textcolor"
         />
 
     <LinearLayout
@@ -52,28 +52,30 @@
 
         <Button
             android:id="@+id/btn_cancel"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginRight="@dimen/btn_cancel_marginright"
+            android:layout_marginBottom="@dimen/btn_cancel_marginbottom"
             android:layout_below="@+id/dialog_message"
             android:text="  Cancel  "
-            android:textColor="#ffffff"
+            android:textSize="@dimen/btn_cancel_textsize"
+            android:textColor="@color/btn_cancel_textcolor"
             android:background="@drawable/rounded_background1"
             />
 
         <Button
             android:id="@+id/btn_ok"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="@dimen/btn_ok_marginleft"
+            android:layout_marginBottom="@dimen/btn_ok_marginbottom"
             android:layout_below="@+id/dialog_message"
             android:layout_toRightOf="@+id/btn_cancel"
             android:text="    OK    "
-            android:textColor="#ffffff"
+            android:textSize="@dimen/btn_ok_textsize"
+            android:textColor="@color/btn_ok_textcolor"
             android:background="@drawable/rounded_background1"
             />
 

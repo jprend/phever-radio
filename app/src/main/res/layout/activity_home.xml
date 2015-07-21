@@ -35,6 +35,7 @@
         android:src="@drawable/color_mask_home"
         />
 
+    <!-- the soundwave image to animate -->
     <ImageView
         android:visibility="invisible"
         android:id="@+id/soundwave_img_animate"

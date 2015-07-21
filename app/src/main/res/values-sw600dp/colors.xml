@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dialog_title_textcolor">#ff0000</color>
+    <color name="dialog_message_textcolor">#0000ff</color>
+    <color name="btn_cancel_textcolor">#ffffff</color>
+    <color name="btn_ok_textcolor">#ffffff</color>
+</resources>

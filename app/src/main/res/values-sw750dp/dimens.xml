@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- layout for dialog for alert internet use -->
+    <dimen name="dialog_image_margin">10dp</dimen>
+    <dimen name="dialog_image_width">72dp</dimen>
+    <dimen name="dialog_image_height">72dp</dimen>
+
+    <dimen name="dialog_title_margintop">30dp</dimen>
+    <dimen name="dialog_title_marginleft">10dp</dimen>
+    <dimen name="dialog_title_marginright">30dp</dimen>
+    <dimen name="dialog_title_textsize">40sp</dimen>
+
+    <dimen name="dialog_message_margintop">15dp</dimen>
+    <dimen name="dialog_message_marginbottom">25dp</dimen>
+    <dimen name="dialog_message_textsize">40sp</dimen>
+
+    <dimen name="btn_cancel_marginright">20dp</dimen>
+    <dimen name="btn_cancel_marginbottom">20dp</dimen>
+    <dimen name="btn_cancel_textsize">40dp</dimen>
+
+    <dimen name="btn_ok_marginleft">20dp</dimen>
+    <dimen name="btn_ok_marginbottom">20dp</dimen>
+    <dimen name="btn_ok_textsize">40dp</dimen>
+</resources>

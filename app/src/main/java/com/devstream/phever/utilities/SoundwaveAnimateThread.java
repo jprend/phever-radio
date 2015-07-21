@@ -1,8 +1,6 @@
 package com.devstream.phever.utilities;
 
 import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 

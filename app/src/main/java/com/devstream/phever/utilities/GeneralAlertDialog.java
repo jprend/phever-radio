@@ -4,21 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.devstream.phever.activities.ConnectActivity;
 import com.devstream.phever.activities.DjScheduleActivity;
-import com.devstream.phever.activities.HomeActivity;
 import com.devstream.phever.activities.R;//makes this utility class visible in all activity classes
 
 import java.net.URL;
@@ -35,7 +24,7 @@ import java.net.URLConnection;
 
   parameters are in order:-
   string title = any text
-  string  message = any text
+  string  message = any text if set to 'null' then no message but a list and a list listener
   boolean negative button (cancel) = true for show - false for not show
   boolean positive button (ok) = true for show - false for not show
   int switch block in positive button = can be any int  of choice (here 0 is default just closes dialog)
@@ -132,6 +121,6 @@ public class GeneralAlertDialog extends DialogFragment {
 
         Dialog dialog = builder.create(); // must go here after setup
         return dialog;
-    }
+    }//close method onCreate
 
 }//close class GeneralAlertDialog

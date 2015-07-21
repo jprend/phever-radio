@@ -4,8 +4,8 @@
     <string name="app_name">Phever</string>
     <string name="hello_world">Hello world!</string>
     <color name="white">#FFFFFF</color>
-        
-        
+
+
     <!-- Home Activity -->
     <string name="title_activity_home">HomeActivity</string>
     <string name="imageView1">PHever Disc Options</string>
@@ -20,10 +20,10 @@
     <string name="now_playing">PHever radio is now playing</string>
     <string name="buffering">Buffering…</string>
 
-    
+
     <string name="title_activity_dj_schedule">DjScheduleActivity</string>
     <string name="title_activity_tv">TvActivity</string>
-    
+
     <string name="title_activity_contacts">Contacts</string>
     <string name="title_activity_events">Events</string>
 

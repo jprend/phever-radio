@@ -19,7 +19,6 @@ public class SplashActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 
-		
 		splashRotate = (ImageView)findViewById(R.id.splash_img_rotate);
 		r = new RotateAnimation(0.0f, 5400.0f, Animation.RELATIVE_TO_SELF, 0.5f,Animation.RELATIVE_TO_SELF, 0.5f);
 		r.setInterpolator(new LinearInterpolator());
@@ -31,7 +30,7 @@ public class SplashActivity extends Activity {
 
 			@Override
 			public void onAnimationStart(Animation animation) {
-				// TODO
+				// to do
 			}
 
 			@Override
@@ -43,7 +42,7 @@ public class SplashActivity extends Activity {
 
 			@Override
 			public void onAnimationRepeat(Animation animation) {
-				// TODO
+				// to do
 			}
 		});
 

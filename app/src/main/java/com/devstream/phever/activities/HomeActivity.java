@@ -1,13 +1,10 @@
 package com.devstream.phever.activities;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,11 +18,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -34,7 +29,6 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -86,9 +80,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
     private SoundwaveAnimateThread swAnim;
 
 	private Intent intent;
-
 	ToggleButton playPauseButton;
-
+    AudioManager audioManager;
+    Drawable    soundwaveImage;
 	static Context context;
 	boolean isPlaying;//the boolean which indicates radio playing or not which gets saved in shared preferences - its set in the service
 	boolean radio = false;
@@ -100,18 +94,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 
 
 
-	AudioManager audioManager;
-	ComponentName RemoteControlReceiver;
-    Drawable    soundwaveImage;
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		context = this;
-
-        streamService = new Intent(this, StreamService.class);
 
         //sets the  user chosen home layout background color in shared preferences
         int defaultColor = getResources().getColor(R.color.color_white);//very first time default is white
@@ -161,17 +148,17 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
         //footer database link
         ImageView subscribe = (ImageView)findViewById(R.id.mail_list_link);
         subscribe.setOnClickListener(this);
-		
-		/*
-		//frame animate 
-		soundwaveAnimate = (ImageView)findViewById(R.id.imageAnimation);
-		// Setting animation_list.xml as the background of the image view
-		soundwaveAnimate.setBackgroundResource(R.drawable.frame_animation_soundwave);
-		SoundwaveAnimateThread frameAnim = new SoundwaveAnimateThread(soundwaveAnimate);
-		frameAnim.run();
-		*/
-		
+
 	}//close method onCreate
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        //solution in version 1 - disables backbutton can only exit app with home button
+        //issue was when back button pressed leaves app and a running service (playing radio) ends up in a catch
+        //of a disconnected instance of service that is difficult to stop when one goes back into the app
+        //this solves issue of having two instances of service (system not sure which to terminate)
+    }
 
     @Override
     public void onClick(View v) {
@@ -343,19 +330,13 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                 break;
             case R.id.phever_weblink:
                 internetConnectAlertDialog(1);
-                //GeneralAlertDialog myAlert1 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 1);
-                //myAlert1.show(getFragmentManager(), "phever_link"); // the tab name is for referencing this instance if required
                 break;
             case R.id.mail_list_link:
                 internetConnectAlertDialog(2);
-                //GeneralAlertDialog myAlert2 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 2);
-                //myAlert2.show(getFragmentManager(), "email_link"); // the tab name is for referencing this instance if required
                 break;
         }//close switch
 
     }// close onclick method
-
-
 
 	// Respond to the user touching the screen
 	@Override
@@ -376,8 +357,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 
 		case MotionEvent.ACTION_UP:
 			// On the UP of press we do the action.
-			// The hidden image (img_mask) has different coloured hotspots on
-			// it.
+			// The hidden image (img_mask) has different coloured hotspots on it.
 			// The colors are red, green, indigo, yellow, white, orange, magents
 			// Use img_mask to determine which region the user touched.
 			int touchColor = getHotspotColor(R.id.img_mask, evX, evY);
@@ -391,38 +371,25 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 			// varying pixel density.
 			// by trial and error do not use black 0,0,0 as is the same as
 			// transparent ie. zero colour.
-			ColorTool ct = new ColorTool(); // instantiate class colortool and
-											// use its method closematch
+			ColorTool ct = new ColorTool(); // instantiate class colortool and use its method closematch
 			int tolerance = 25;
-
 			// process selected options from user
 			if (ct.closeMatch(Color.rgb(255, 238, 56), touchColor, tolerance)) {
-				// RADIO toast("Radio (yellow)");
+				// RADIO yellow
                 internetConnectAlertDialog(5);
-                //GeneralAlertDialog myAlert5 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 5);
-               // myAlert5.show(getFragmentManager(), "radio_link"); // the tab name is for referencing this instance if required
-				//listenToRadio();
-			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor,
-					tolerance)) {
-				// CONNNECT toast("Contacts (Green)");
+ 			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor, tolerance)) {
+				// CONNNECT  Green
                 internetConnectAlertDialog(4);
-                //GeneralAlertDialog myAlert4 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 4);
-                //myAlert4.show(getFragmentManager(), "connect_action"); // the tab name is for referencing this instance if required
-
-			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor,
-					tolerance)) {
-				// EVENTS toast("Events (Magenta)");
+			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor, tolerance)) {
+				// EVENTS   Magenta
                 if (EventSingleton.getInstance().getUpdated()) {
                     Intent intent6 = new Intent(HomeActivity.this, EventsActivity.class);
                     startActivity(intent6);
                 } else {
                     internetConnectAlertDialog(6);
                 }
-
-			} else if (ct.closeMatch(Color.rgb(255, 48, 86), touchColor,
-					tolerance)) {
-				// DJ SCHEDULE toast("Dj Schedule (Red)");
-                //this is processed entirely within the class GeneralAlertDialog where message == null, is a list of days
+			} else if (ct.closeMatch(Color.rgb(255, 48, 86), touchColor, tolerance)) {
+				// DJ SCHEDULE   Red
                 if(SlotSingleton.getInstance().getUpdated()){
                     GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("DJ Schedule", null, true, false, 7);
                     myAlert7.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
@@ -430,34 +397,22 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                     GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Advisory - DJ Schedule Requires Internet", null, true, false, 7);
                     myAlert7.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
                 }
-            } else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor,
-					tolerance)) {
-				// TV toast("TV (indigo)");
+            } else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor, tolerance)) {
+				// TV  indigo
                 internetConnectAlertDialog(3);
-               // GeneralAlertDialog myAlert3 = GeneralAlertDialog.newInstance("Requires Internet", "Connect to Internet?", true, true, 3);
-               // myAlert3.show(getFragmentManager(), "tv_link"); // the tab name is for referencing this instance if required
-
-			} else if (ct.closeMatch(Color.rgb(255, 255, 255), touchColor,
-					tolerance)) {
-				//Radio
-				//toast("V- (White)");
+ 			} else if (ct.closeMatch(Color.rgb(255, 255, 255), touchColor, tolerance)) {
+				//Radio volume V-  White
 				if (radio) {
 				    // Its visible
-					audioManager.adjustStreamVolume(STREAM_MUSIC,
-							ADJUST_LOWER, FLAG_SHOW_UI);
+					audioManager.adjustStreamVolume(STREAM_MUSIC, ADJUST_LOWER, FLAG_SHOW_UI);
 				} else {
 				    // Either gone or invisible
 				}
-
-		
-			} else if (ct.closeMatch(Color.rgb(255, 196, 58), touchColor,
-					tolerance)) {
-				//toast("V+ (orange)");
-
+			} else if (ct.closeMatch(Color.rgb(255, 196, 58), touchColor, tolerance)) {
+				//Radio volume V+ orange
 				if (radio) {
 				    // Its visible
-					audioManager.adjustStreamVolume(STREAM_MUSIC,
-							ADJUST_RAISE, FLAG_SHOW_UI);
+					audioManager.adjustStreamVolume(STREAM_MUSIC, ADJUST_RAISE, FLAG_SHOW_UI);
 				} else {
 				    // Either gone or invisible
 				}
@@ -470,66 +425,15 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 		return true;
 	}// close method onTouch
 
-    public void showPopup(View v) {
-        PopupMenu popup = new PopupMenu(this, v);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.day_menu, popup.getMenu());
-        //popup.setOnMenuItemClickListener(this); //note major prob with 'this' since added extra popup menus
-        // Handle item selection on the dj days popup
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int day = 0;
-                switch (item.getItemId()) {
-                    case R.id.monday:
-                        day = 0;
-                        break;
-                    case R.id.tuesday:
-                        day = 1;
-                        break;
-                    case R.id.wednesday:
-                        day = 2;
-                        break;
-                    case R.id.thursday:
-                        day = 3;
-                        break;
-                    case R.id.friday:
-                        day = 4;
-                        break;
-                    case R.id.saturday:
-                        day = 5;
-                        break;
-                    case R.id.sunday:
-                        day = 6;
-                        break;
-                }//close switch
-
-                Intent intent = new Intent(HomeActivity.this, DjScheduleActivity.class);
-                intent.putExtra("day", day);
-                startActivity(intent);
-                return true;
-            }
-        });
-
-        popup.show();
-    }
-    /* api level 14            Inflating the Popup using xml file
-		popup.getMenuInflater().inflate(R.menu.day_menu,popup.getMenu());            */
-	
-	
 	// get the x y co-ordinates of finger press on actual image
 	public int getHotspotColor(int hotspotId, int x, int y) {
 		ImageView img = (ImageView) findViewById(hotspotId);
-
 		if (img == null) {
-			Log.d("ImageAreasActivity", "Hot spot image not found");
 			return 0;
 		} else {
 			img.setDrawingCacheEnabled(true);
 			Bitmap hotspots = Bitmap.createBitmap(img.getDrawingCache());
 			if (hotspots == null) {
-				Log.d("ImageAreasActivity", "Hot spot bitmap was not created");
 				return 0;
 			} else {
 				img.setDrawingCacheEnabled(false);
@@ -538,152 +442,12 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 		}
 	}// close method gethotspotcolour
 
-	public void toast(String msg) {
-		//jp this.getApplicationContext()  ???
-		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-	} // end toast
-
-	public void listenToRadio() {
-		radio = true;
-		isPlaying = false;
-        //swAnim.run(); 			//start soundwave animation
-        /*
-		playPauseButton = (ToggleButton) findViewById(R.id.playPauseButton);
-        playPauseButton.setVisibility(View.VISIBLE);
-
-
-		playPauseButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// Perform action on clicks
-				if (playPauseButton.isChecked()) { // Checked - Pause icon visible
-                    //pause();
-                    stopService(streamService);
-                    setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-                    swAnim.stop();
-                    soundwaveRotate.setImageDrawable(soundwaveImage);
-
-				} else { // Unchecked - Play icon visible
-                    ///start();
-                    startService(streamService);
-                    swAnim.run();
-                }
-			}
-		});
-        */
-
-		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		getPrefs();
-		// control media volume
-		this.setVolumeControlStream(STREAM_MUSIC);
-        //final Intent streamService = new Intent(StreamService.class.getName());//this three lines replace next single commented out line
-        //streamService.putExtra("URL", url);
-        //this.startService(streamService);
-		streamService = new Intent(HomeActivity.this, StreamService.class);
-        streamService.putExtra("URL",  url);
-
-		audioManager =  (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
-		// start the radio - thats why we are here
-
-		//******************************************************************
-		OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
-            @Override
-			public void onAudioFocusChange(int focusChange) {
-				if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {
-                    // Pause playback
-                    stopService(streamService);
-                    setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-                    swAnim.stop();
-                    soundwaveRotate.setImageDrawable(soundwaveImage);
-
-				} else if (focusChange == AUDIOFOCUS_GAIN) {
-					// Resume playback
-                    if (!isPlaying) startService(streamService);
-				} else if  (focusChange == AUDIOFOCUS_LOSS) {
-                        //AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
-                        //AudioManager.abandonAudioFocus(afChangeListener);
-                        // Stop playback
-                        stopService(streamService);
-                        setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-                        swAnim.stop();
-                        soundwaveRotate.setImageDrawable(soundwaveImage);
-
-
-                } else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-                        // Lower the volume jp
-                    audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_LOWER, FLAG_SHOW_UI);
-
-                } else if (focusChange == AUDIOFOCUS_GAIN) {
-                        // Raise it back to normal jp
-					audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_RAISE, FLAG_SHOW_UI);
-                }
-			}
-		};
-		// Request audio focus for playback
-		int result = audioManager.requestAudioFocus(afChangeListener,STREAM_MUSIC,AUDIOFOCUS_GAIN);
-
-		if (result == AUDIOFOCUS_REQUEST_GRANTED) {
-			// Start listening for button presses
-			//AudioManager.registerMediaButtonEventReceiver(RemoteControlReceiver);
-			//AudioManager.setMediaButtonReceiver(RemoteControlReceiver);
-			//startService(streamService);
-			// Start playback.
-		}
-
-		//******************************************************************
-		//startService(streamService);
-
-	} //close method listenToRadio
-
-    /*
-    @Override
-    public void onAudioFocusChange(int focusChange) {
-        if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {
-            // Pause playback
-            stopService(streamService);
-            setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-            swAnim.stop();
-            soundwaveRotate.setImageDrawable(soundwaveImage);
-
-        } else if (focusChange == AUDIOFOCUS_GAIN) {
-            // Resume playback
-            if (!isPlaying) startService(streamService);
-        } else if  (focusChange == AUDIOFOCUS_LOSS) {
-            //AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
-            //AudioManager.abandonAudioFocus(afChangeListener);
-            // Stop playback
-            stopService(streamService);
-            setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-            swAnim.stop();
-            soundwaveRotate.setImageDrawable(soundwaveImage);
-
-
-        } else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-            // Lower the volume jp
-            audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_LOWER, FLAG_SHOW_UI);
-
-        } else if (focusChange == AUDIOFOCUS_GAIN) {
-            // Raise it back to normal jp
-            audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_RAISE, FLAG_SHOW_UI);
-        }
-    }
-    */
-
-
-
     //note the boolean isPlaying get set to true in the service start method and set to false in the service destroy method
     //this method gets the stored share preferences boolean which indicates radio playing = true or radio not playing = false
-    //to uese this method the shared preferences class and the editor reader have been instantiated above
+    //to use this method the shared preferences class and the editor reader have been instantiated above
 	public void getPrefs() {
 		isPlaying = prefs.getBoolean("isPlaying", false); // get status of radio on or off
-		if (isPlaying){ //if on
-           //stopService(streamService);//stop the service which in turn stops the radio which runs in the service
-           //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
-            Toast.makeText(HomeActivity.this, "isPlaying = " + isPlaying, Toast.LENGTH_LONG).show();
-		}
 	}
-
 
     //used to check if a service class is running an instance returns true if yes and false if not
     //note is more accurate than using preferences since onDestroy does not get called in every situation eg. suddenly turn off phone
@@ -698,8 +462,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
         return false;
     }
 
-
-
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, int ok_option) {
         View v;
@@ -709,85 +471,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
             case 0:
                // Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
                 break;
-            case 1:
-                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
-                //phever.ie weblink
-                url = pheverWebsiteUrlConnect;
-                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+            default:
+                    //not used
                 break;
-            case 2:
-                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
-                //email database
-                url = pheverEmailUrlConnect;
-                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
-                break;
-            case 3:
-                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
-                //tv
-                //check if streamService is running ie. returns true if is and false if not
-                radioPlaying = isServiceRunning(StreamService.class);
-                //if service running then radio is running so turn it off
-                if(radioPlaying){
-                    //Toast.makeText(HomeActivity.this, "service status is " + radioPlaying, Toast.LENGTH_SHORT).show();
-                    //streamService = new Intent(HomeActivity.this, StreamService.class);
-                    stopService(streamService);//stop the service which in turn stops the radio which runs in the service
-                    //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
-                    playPauseButton.setVisibility(View.INVISIBLE);
-                    swAnim.stop();
-                    soundwaveRotate.setVisibility(View.INVISIBLE);
-                    soundwaveRotate.setImageDrawable(soundwaveImage);
-                   // audioManager.abandonAudioFocus(this);
-                }
-                url = pheverTvUrlConnect;
-                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
-                break;
-            case 4:
-                //connect
-                //check if streamService is running ie. returns true if is and false if not
-                radioPlaying = isServiceRunning(StreamService.class);
-                //if service running then radio is running so turn it off
-                if(radioPlaying){
-                    //Toast.makeText(HomeActivity.this, "service status is " + radioPlaying, Toast.LENGTH_SHORT).show();
-                    //streamService = new Intent(HomeActivity.this, StreamService.class);
-                    stopService(streamService);//stop the service which in turn stops the radio which runs in the service
-                    //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
-                    playPauseButton.setVisibility(View.INVISIBLE);
-                    swAnim.stop();
-                    soundwaveRotate.setVisibility(View.INVISIBLE);
-                    soundwaveRotate.setImageDrawable(soundwaveImage);
-                    //audioManager.abandonAudioFocus(this);
-                }
-                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
-                Intent intent4 = new Intent(HomeActivity.this, ConnectActivity.class);
-                startActivity(intent4);
-                break;
-            case 5:
-                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
-                //radio
-                radioPlaying = isServiceRunning(StreamService.class);
-                if(radioPlaying){
-                    //streamService = new Intent(HomeActivity.this, StreamService.class);
-                    playPauseButton.setChecked(false);
-                    playPauseButton.setVisibility(View.VISIBLE);
-                    soundwaveRotate.setVisibility(View.VISIBLE);
-                    swAnim.run();
-                } else {
-                    url = pheverRadioUrlconnect;
-                    new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
-                }
-            break;
-            case 6:
-                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
-                //Dj Schedule
-                //showPopup(v); //cannot get this to work due to the needed param View v - this cannot be passed in through alert dialog
-                break;
-            case 7:
-                //Toast.makeText(HomeActivity.this, "User touched ok and option is " + ok_option, Toast.LENGTH_LONG).show();
-                //Events
-                intent = new Intent(this, EventsActivity.class);
-                startActivity(intent);
-                break;
-
         }//close switch
 
     }
@@ -806,7 +492,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
         if(focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {  //some app seeks temporary audio focus
             //stop service
             stopService(streamService);
-            //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
             swAnim.stop();
             soundwaveRotate.setVisibility(View.INVISIBLE);
             soundwaveRotate.setImageDrawable(soundwaveImage);
@@ -850,7 +535,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
             ConnectivityManager connMgr = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkinfo = connMgr.getActiveNetworkInfo();
             if(networkinfo != null && networkinfo.isConnected()){ //yes internet turned on and in range
-                Log.d("NETWORK_INFO", String.valueOf(networkinfo.isConnected()));
                 try{
                     //second check connection to server
                     URL myUrl = new URL(urls[0]);//paras [0] is the url passed into the async task
@@ -871,7 +555,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-
             progressUrlConnect.dismiss();//close progress dialog if still open
             if(result){ //if connection to url is successfull
                 if(url.equalsIgnoreCase(pheverRadioUrlconnect)){
@@ -900,16 +583,15 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
         public void handleToggleButton(View v) {
             // Perform action on clicks
             if (playPauseButton.isChecked()) { // Checked - Pause icon visible
-                //pause();
+                //pause button
                 stopService(streamService);
-                //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
                 swAnim.stop();
                 soundwaveRotate.setVisibility(View.INVISIBLE);
                 soundwaveRotate.setImageDrawable(soundwaveImage);
-               // audioManager.abandonAudioFocus(this);
-
             } else { // Unchecked - Play icon visible
+                //play button
                 //register audio manager and request audio focus ie. use of device speakers
+                streamService = new Intent(this, StreamService.class);
                 audioManager =  (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 int result = audioManager.requestAudioFocus(HomeActivity.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
                 if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){  //if granted audio focus start service
@@ -919,10 +601,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                 }else {  //if not granted audio focus advise user to try again later
                     Toast.makeText(HomeActivity.this, "Other app has Audio Speakers - Try again later", Toast.LENGTH_LONG).show();
                 }
-
             }
         }
-
 
     //this method creates a dialog that  advises user that they are about to use the internet
     //it processes their response cancel = dismiss - ok = process the relevant switch code
@@ -1017,7 +697,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                         startActivity(intent6);
                         break;
                     case 7:
-                            //not used yet
+                            //not used
                         break;
                     default:
                         break;
