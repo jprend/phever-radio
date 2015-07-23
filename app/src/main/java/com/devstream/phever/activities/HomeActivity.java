@@ -152,6 +152,13 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 
 	}//close method onCreate
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(streamService);
+        streamService = null;
+    }
+
     //DISABLES BACK BUTTON ON HOME SCREEN
     @Override
     public void onBackPressed() {
