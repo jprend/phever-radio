@@ -101,6 +101,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 		setContentView(R.layout.activity_home);
 		context = this;
 
+        streamService = new Intent(this, StreamService.class);
+
         //sets the  user chosen home layout background color in shared preferences
         int defaultColor = getResources().getColor(R.color.color_white);//very first time default is white
         prefs = getSharedPreferences(HOME_BACKGROUND_COLOR, MODE_PRIVATE ); // get the required shared prefs file
@@ -151,13 +153,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
         subscribe.setOnClickListener(this);
 
 	}//close method onCreate
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        stopService(streamService);
-        streamService = null;
-    }
 
     //DISABLES BACK BUTTON ON HOME SCREEN
     @Override
@@ -655,7 +650,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
             } else { // Unchecked - Play icon visible
                 //play button
                 //register audio manager and request audio focus ie. use of device speakers
-                streamService = new Intent(this, StreamService.class);
+
                 audioManager =  (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 int result = audioManager.requestAudioFocus(HomeActivity.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
                 if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){  //if granted audio focus start service
