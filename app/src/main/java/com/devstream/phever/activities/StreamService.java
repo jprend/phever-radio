@@ -15,12 +15,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class StreamService extends Service {
-    private final static String PHEVER_URLS = "com.devstream.phever.activities.phever_urls";
-    private final static String PHEVER_RADIO_URL = "com.devstream.phever.activities.phever_radio_url";
+    private final static String PHEVER_URLS = "phever_urls";
+    private final static String PHEVER_RADIO_URL = "phever_radio_url";
     private static final String TAG = "StreamService";
     private String url = "";
     MediaPlayer mp;
-    boolean isPlaying;
+    //boolean isPlaying;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     SharedPreferences urlPrefs;
@@ -39,12 +39,15 @@ public class StreamService extends Service {
     public void onCreate() {
         super.onCreate();
         // Init the SharedPreferences and Editor
-        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        editor = prefs.edit();
+
+        Context context = getApplicationContext();
+        //prefs = context.getSharedPreferences("radioPrefs", MODE_MULTI_PROCESS);
+        //editor = prefs.edit();
+
+
 
         // Set up the buffering notification
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        Context context = getApplicationContext();
 
         String notifTitle = context.getResources().getString(R.string.service_stream);
         String notifMessage = context.getResources().getString(R.string.buffering);
@@ -91,8 +94,8 @@ public class StreamService extends Service {
             }
         });
         // Set the isPlaying preference to true
-        editor.putBoolean("isPlaying", true);
-        editor.commit();
+        //editor.putBoolean("isPlaying", true);
+        //editor.commit();
 
         Context context = getApplicationContext();
         String notifTitle = context.getResources().getString(R.string.service_stream);
@@ -116,15 +119,15 @@ public class StreamService extends Service {
     public void onDestroy() {
 
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            public void onPrepared(MediaPlayer player){
+            public void onPrepared(MediaPlayer player) {
                 mp.stop();
             }
         });
         mp.release();
         mp = null;
 
-        editor.putBoolean("isPlaying", false);
-        editor.commit();
+        //editor.putBoolean("isPlaying", false);
+        //editor.commit();
         notificationManager.cancel(notifId);
         stopForeground(true);
     }

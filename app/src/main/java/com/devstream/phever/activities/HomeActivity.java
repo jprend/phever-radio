@@ -54,10 +54,10 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
     private final static String pheverTvUrlConnect = "http://livestream.com/accounts/10782842/TV"; //url to connect phever tv
     private final static String pheverEmailUrlConnect = "https://docs.google.com/forms/d/1op3yEBANTh7_QDTMDW-bygsiLwH1uQgsSAJiffznssU/viewform"; //url to connect phever google email database
     private final static String pheverWebsiteUrlConnect = "http://phever.ie"; // url to connect to phever website
-    private final static String PHEVER_URLS = "com.devstream.phever.activities.phever_urls";
-    private final static String PHEVER_RADIO_URL = "com.devstream.phever.activities.phever_radio_url";
-    private final static String HOME_BACKGROUND_COLOR = "com.devstream.phever.activities.homeBackgroundColor"; //shared prefs file for home layount background color
-    private final static String BACKGROUND_COLOR = "com.devstream.phever.activities.homeBackgroundColor.backgroundColor"; //key for background color
+    private final static String PHEVER_URLS = "phever_urls";
+    private final static String PHEVER_RADIO_URL = "phever_radio_url";
+    private final static String HOME_BACKGROUND_COLOR = "homeBackgroundColor"; //shared prefs file for home layount background color
+    private final static String BACKGROUND_COLOR = "homeBackgroundColor.backgroundColor"; //key for background color
     private PopupMenu popupMenuColorSettings;
     private final static int ONE = 1;
     private final static int TWO = 2;
@@ -85,10 +85,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
     AudioManager audioManager;
     Drawable    soundwaveImage;
 	static Context context;
-	boolean isPlaying;//the boolean which indicates radio playing or not which gets saved in shared preferences - its set in the service
-	boolean radio = false;
-	Intent streamService;
-	SharedPreferences prefs;  //create instance of shared preference for boolean isPlaying which is set by service
+    //boolean isPlaying;      the boolean which indicates radio playing or not which gets saved in shared preferences - its set in the service
+    boolean radioPlaying = false;
+    boolean radio = false;
+    Intent streamService;
+    SharedPreferences prefs, prefsRadio;  //create instance of shared preference for boolean isPlaying which is set by service
     SharedPreferences.Editor edit; //set preferences key/value for  boolean isPlaying
     SharedPreferences urlPrefs; // create instance of shared preferences for radio url so can be accessed by service
     SharedPreferences.Editor editUrlPrefs; // set preferences key/value for radio url  which ca be accessed by service
@@ -380,9 +381,12 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 			// process selected options from user
 			if (ct.closeMatch(Color.rgb(255, 238, 56), touchColor, tolerance)) {
 				// RADIO yellow
-                internetConnectAlertDialog(5);
- 			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor, tolerance)) {
-				// CONNNECT  Green
+                // If radio is playing or play button is visible then do not be alerting about requires internet
+                radioPlaying = isServiceRunning(StreamService.class);
+                if ((!radioPlaying) && (!playPauseButton.isChecked()))
+                    internetConnectAlertDialog(5);
+            } else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor, tolerance)) {
+                // CONNNECT  Green
                 internetConnectAlertDialog(4);
 			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor, tolerance)) {
 				// EVENTS   Magenta
@@ -446,68 +450,23 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 		}
 	}// close method gethotspotcolour
 
-	public void listenToRadio() {
-		radio = true;
-		isPlaying = false;
 
-		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		getPrefs();
-		// control media volume
-		this.setVolumeControlStream(STREAM_MUSIC);
-        //final Intent streamService = new Intent(StreamService.class.getName());//this three lines replace next single commented out line
-        //streamService.putExtra("URL", url);
-        //this.startService(streamService);
-		streamService = new Intent(HomeActivity.this, StreamService.class);
-        streamService.putExtra("URL",  url);
+    /*
 
-		audioManager =  (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    note the boolean isPlaying get set to true in the service start method and set to false in the service destroy method
+    this method gets the stored share preferences boolean which indicates radio playing = true or radio not playing = false
+    to use this method the shared preferences class and the editor reader have been instantiated above
 
-
-		OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
-            @Override
-			public void onAudioFocusChange(int focusChange) {
-				if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT) {
-                    // Pause playback
-                    stopService(streamService);
-                    setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-                    swAnim.stop();
-                    soundwaveRotate.setImageDrawable(soundwaveImage);
-
-				} else if (focusChange == AUDIOFOCUS_GAIN) {
-					// Resume playback
-                    if (!isPlaying) startService(streamService);
-				} else if  (focusChange == AUDIOFOCUS_LOSS) {
-                        //AudioManager.unregisterMediaButtonEventReceiver(RemoteControlReceiver);
-                        //AudioManager.abandonAudioFocus(afChangeListener);
-                        // Stop playback
-                        stopService(streamService);
-                        setVolumeControlStream(USE_DEFAULT_STREAM_TYPE);
-                        swAnim.stop();
-                        soundwaveRotate.setImageDrawable(soundwaveImage);
-
-
-                } else if (focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-                        // Lower the volume jp
-                    audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_LOWER, FLAG_SHOW_UI);
-
-                } else if (focusChange == AUDIOFOCUS_GAIN) {
-                        // Raise it back to normal jp
-					audioManager.adjustStreamVolume(STREAM_MUSIC,ADJUST_RAISE, FLAG_SHOW_UI);
-                }
-			}
-		};
-		// Request audio focus for playback
-		int result = audioManager.requestAudioFocus(afChangeListener,STREAM_MUSIC,AUDIOFOCUS_GAIN);
-
-	} //close method listenToRadio
-
-    //note the boolean isPlaying get set to true in the service start method and set to false in the service destroy method
-    //this method gets the stored share preferences boolean which indicates radio playing = true or radio not playing = false
-    //to use this method the shared preferences class and the editor reader have been instantiated above
 	public void getPrefs() {
-		isPlaying = prefs.getBoolean("isPlaying", false); // get status of radio on or off
-	}
 
+        Context pContext = getApplicationContext();
+        prefsRadio = pContext.getSharedPreferences("radioPrefs", MODE_MULTI_PROCESS);
+        isPlaying = prefsRadio.getBoolean("isPlaying", false); // get status of radio on or off
+
+        //isPlaying = isPlaying && isServiceRunning(StreamService.class) && playPauseButton.isChecked();
+
+	}
+    */
     //used to check if a service class is running an instance returns true if yes and false if not
     //note is more accurate than using preferences since onDestroy does not get called in every situation eg. suddenly turn off phone
     //isServiceRunning(myService.class); // this is how you would call on the check service class running method -note you pass the class name not the instance
@@ -524,7 +483,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, int ok_option) {
         View v;
-        Boolean radioPlaying = false;
         // User touched the dialog's positive button
         switch(ok_option){
             case 0:
@@ -557,8 +515,10 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
             playPauseButton.setChecked(true);
             audioManager.abandonAudioFocus(this);
         } else if(focusChange == AUDIOFOCUS_GAIN) {     //audio focus given back to this app
+            radioPlaying = isServiceRunning(StreamService.class);
+            //if service running then radio is running so turn it off
+            if (!radioPlaying) {
             //start service
-            if (!isPlaying){
                 startService(streamService);
                 soundwaveRotate.setVisibility(View.VISIBLE);
                 swAnim.run();
@@ -683,7 +643,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
         adviseOfInternetConnectDialog.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean radioPlaying = false;
                 switch(action) {
                     case 0:
 
