@@ -23,7 +23,6 @@
             android:noHistory="true" >
         </activity>
 
-
         <service
             android:name=".StreamService"
             android:icon="@drawable/phever_launcher"
