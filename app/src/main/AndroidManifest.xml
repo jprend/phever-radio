@@ -68,14 +68,8 @@
        <activity
             android:name="com.shamanland.facebook.likebutton.FacebookLikeActivity"
             android:label="facebook"
-            android:theme="@style/AppBaseTheme"
-            />
-
+           android:theme="@style/AppBaseTheme" />
 
     </application>
-    <receiver android:name=".RemoteControlReceiver">
-        <intent-filter>
-            <action android:name="android.intent.action.MEDIA_BUTTON" />
-        </intent-filter>
-    </receiver>
+
 </manifest>
