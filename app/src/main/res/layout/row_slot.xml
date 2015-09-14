@@ -11,14 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <!--    android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-             android:src="@drawable/ic_launcher"-->
+        <!--    text size large 22sp 18sp small 14sp -->
         <ImageView
             android:id="@+id/ivImage"
             android:layout_margin="8dp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
              />
@@ -33,13 +31,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#166CED"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
                 android:id="@+id/tvGenre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="#D64530"/>
 
             <TextView
@@ -47,14 +45,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#D64530"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
                 android:id="@+id/tvShowTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#009A57"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
