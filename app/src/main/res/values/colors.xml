@@ -11,8 +11,8 @@
     <color name="color_yellow">#ffff00</color>
 
     <!-- layout for dialog for alert internet use -->
-    <color name="dialog_title_textcolor">#ff0000</color>
-    <color name="dialog_message_textcolor">#0000ff</color>
+    <color name="dialog_title_textcolor">#000000</color>
+    <color name="dialog_message_textcolor">#000000</color>
     <color name="btn_cancel_textcolor">#ffffff</color>
     <color name="btn_ok_textcolor">#ffffff</color>
     

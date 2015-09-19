@@ -30,6 +30,9 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -39,6 +42,7 @@ import android.widget.ToggleButton;
 import com.devstream.phever.model.EventSingleton;
 import com.devstream.phever.model.SlotSingleton;
 import com.devstream.phever.utilities.ColorTool;
+import com.devstream.phever.utilities.CustomToast;
 import com.devstream.phever.utilities.GeneralAlertDialog;
 import com.devstream.phever.utilities.SoundwaveAnimateThread;
 import com.devstream.phever.utilities.SplashAnimateThread;
@@ -50,7 +54,7 @@ import static android.media.AudioManager.*;
 
 
 public class HomeActivity extends Activity implements View.OnClickListener,  OnTouchListener, GeneralAlertDialog.NoticeDialogListener, OnAudioFocusChangeListener {
-    private final static String pheverRadioUrlconnect =  "http://89.101.1.140:8003/"; //url to connect to radio streaming server
+    private final static String pheverRadioUrlconnect =  "http://5.149.168.234:8000"; //http://89.101.1.140:8003/"; //url to connect to radio streaming server
     private final static String pheverTvUrlConnect = "http://livestream.com/accounts/10782842/TV"; //url to connect phever tv
     private final static String pheverEmailUrlConnect = "https://docs.google.com/forms/d/1op3yEBANTh7_QDTMDW-bygsiLwH1uQgsSAJiffznssU/viewform"; //url to connect phever google email database
     private final static String pheverWebsiteUrlConnect = "http://phever.ie"; // url to connect to phever website
@@ -79,6 +83,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
     private String url;
 	private ImageView soundwaveAnimate, playRadio, pauseRadio, soundwaveRotate;
     private SoundwaveAnimateThread swAnim;
+    private boolean radioPlaying;
 
 	private Intent intent;
 	ToggleButton playPauseButton;
@@ -125,11 +130,38 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
         editUrlPrefs.putString(PHEVER_RADIO_URL, pheverRadioUrlconnect);
         editUrlPrefs.commit();
 
-        //do a rotation of home image then set ontouch listener to the visible home image
+        //do a rotation of home image
 		ImageView iv = (ImageView) findViewById(R.id.img_home);
-        SplashAnimateThread rotator = new SplashAnimateThread(iv);
-        rotator.run();
-		if (iv != null) {
+        //SplashAnimateThread rotator = new SplashAnimateThread(iv);
+        // rotator.run();
+        RotateAnimation r = new RotateAnimation(0.0f, 5400.0f, Animation.RELATIVE_TO_SELF, 0.5f,Animation.RELATIVE_TO_SELF, 0.5f);
+        r.setInterpolator(new LinearInterpolator());
+        r.setDuration(1500);
+        r.setRepeatCount(0);
+        iv.startAnimation(r);
+        r.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                //Toast.makeText(HomeActivity.this, "This App needs to use Data", Toast.LENGTH_SHORT).show();
+                CustomToast ct = new CustomToast(HomeActivity.this, "This App requires data connection");
+
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+
+                //check home image is there if yes add a touch listener
+        if (iv != null) {
 			iv.setOnTouchListener(this);
 		}
 
@@ -137,6 +169,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
         soundwaveRotate  = (ImageView) findViewById(R.id.soundwave_img_animate); // soundwave image
         soundwaveImage = soundwaveRotate.getDrawable();
         swAnim = new SoundwaveAnimateThread(soundwaveRotate);  //soundwave thread class
+
 
         //footer change home view background color
         findViewById(R.id.change_background_color).setOnClickListener(this);
@@ -333,10 +366,14 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                 popupMenuColorSettings.show();
                 break;
             case R.id.phever_weblink:
-                internetConnectAlertDialog(1);
+                //internetConnectAlertDialog(1);
+                url = pheverWebsiteUrlConnect;
+                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
                 break;
             case R.id.mail_list_link:
-                internetConnectAlertDialog(2);
+                //internetConnectAlertDialog(2);
+                url = pheverEmailUrlConnect;
+                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
                 break;
         }//close switch
 
@@ -380,30 +417,66 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
 			// process selected options from user
 			if (ct.closeMatch(Color.rgb(255, 238, 56), touchColor, tolerance)) {
 				// RADIO yellow
-                internetConnectAlertDialog(5);
+                radioPlaying = isServiceRunning(StreamService.class);
+                if(radioPlaying){
+                    playPauseButton.setChecked(false);
+                    playPauseButton.setVisibility(View.VISIBLE);
+                    soundwaveRotate.setVisibility(View.VISIBLE);
+                    swAnim.run();
+                } else {
+                    url = pheverRadioUrlconnect;
+                    new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
+                }
  			} else if (ct.closeMatch(Color.rgb(67, 255, 61), touchColor, tolerance)) {
 				// CONNNECT  Green
-                internetConnectAlertDialog(4);
+                //internetConnectAlertDialog(4);
+                //check if streamService is running ie. returns true if is and false if not
+                radioPlaying = isServiceRunning(StreamService.class);
+                //if service running then radio is running so turn it off
+                if(radioPlaying){
+                    stopService(streamService);//stop the service which in turn stops the radio which runs in the service
+                    //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
+                    playPauseButton.setVisibility(View.INVISIBLE);
+                    swAnim.stop();
+                    soundwaveRotate.setVisibility(View.INVISIBLE);
+                    soundwaveRotate.setImageDrawable(soundwaveImage);
+                }
+                Intent intent4 = new Intent(HomeActivity.this, ConnectActivity.class);
+                startActivity(intent4);
 			} else if (ct.closeMatch(Color.rgb(255, 71, 239), touchColor, tolerance)) {
 				// EVENTS   Magenta
                 if (EventSingleton.getInstance().getUpdated()) {
                     Intent intent6 = new Intent(HomeActivity.this, EventsActivity.class);
                     startActivity(intent6);
                 } else {
-                    internetConnectAlertDialog(6);
+                    Intent intent6 = new Intent(HomeActivity.this, EventsActivity.class);
+                    startActivity(intent6);
                 }
 			} else if (ct.closeMatch(Color.rgb(255, 48, 86), touchColor, tolerance)) {
 				// DJ SCHEDULE   Red
-                if(SlotSingleton.getInstance().getUpdated()){
+                //if(SlotSingleton.getInstance().getUpdated()){
                     GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("DJ Schedule", null, true, false, 7);
                     myAlert7.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
-                }else {
-                    GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Advisory - DJ Schedule Requires Internet", null, true, false, 7);
-                    myAlert7.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
-                }
+                //}else {
+                 //   GeneralAlertDialog myAlert7 = GeneralAlertDialog.newInstance("Advisory - DJ Schedule Requires Internet", null, true, false, 7);
+                 //   myAlert7.show(getFragmentManager(), "djschedule_action"); // the tab name is for referencing this instance if required
+                //}
             } else if (ct.closeMatch(Color.rgb(176, 58, 255), touchColor, tolerance)) {
 				// TV  indigo
-                internetConnectAlertDialog(3);
+                //internetConnectAlertDialog(3);
+                //check if streamService is running ie. returns true if is and false if not
+                radioPlaying = isServiceRunning(StreamService.class);
+                //if service running then radio is running so turn it off
+                if(radioPlaying){
+                    stopService(streamService);//stop the service which in turn stops the radio which runs in the service
+                    //setVolumeControlStream(USE_DEFAULT_STREAM_TYPE); // free up focus to other resource
+                    playPauseButton.setVisibility(View.INVISIBLE);
+                    swAnim.stop();
+                    soundwaveRotate.setVisibility(View.INVISIBLE);
+                    soundwaveRotate.setImageDrawable(soundwaveImage);
+                }
+                url = pheverTvUrlConnect;
+                new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
  			} else if (ct.closeMatch(Color.rgb(255, 255, 255), touchColor, tolerance)) {
 				//Radio volume V-  White
 				if (radio) {
@@ -699,7 +772,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,  OnT
                         adviseOfInternetConnectDialog.dismiss();
                         url = pheverEmailUrlConnect;
                         new HandleUrlConnect().execute(url);//calls asyncTask class to try connect to internet
-
                         break;
                     case 3:
                         //goes to phever TV

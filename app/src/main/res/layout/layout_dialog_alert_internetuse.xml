@@ -23,7 +23,7 @@
         android:layout_marginLeft="@dimen/dialog_title_marginleft"
         android:layout_marginRight="@dimen/dialog_title_marginright"
         android:layout_toRightOf="@+id/dialog_image"
-        android:text="Requires Internet"
+        android:text="This App requires"
         android:textSize="@dimen/dialog_title_textsize"
         android:textColor="@color/dialog_title_textcolor"
         android:visibility="visible"
@@ -37,7 +37,7 @@
         android:layout_marginBottom="@dimen/dialog_message_marginbottom"
         android:layout_below="@+id/dialog_image"
         android:layout_centerHorizontal="true"
-        android:text="Connect to Internet?"
+        android:text="data connection!"
         android:textSize="@dimen/dialog_message_textsize"
         android:textColor="@color/dialog_message_textcolor"
         />
@@ -50,6 +50,7 @@
         android:layout_below="@+id/dialog_message"
         >
 
+        <!--
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
@@ -63,6 +64,7 @@
             android:textColor="@color/btn_cancel_textcolor"
             android:background="@drawable/rounded_background1"
             />
+            -->
 
         <Button
             android:id="@+id/btn_ok"

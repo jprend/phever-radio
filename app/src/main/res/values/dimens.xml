@@ -17,15 +17,15 @@
     <dimen name="dialog_title_margintop">30dp</dimen>
     <dimen name="dialog_title_marginleft">5dp</dimen>
     <dimen name="dialog_title_marginright">15dp</dimen>
-    <dimen name="dialog_title_textsize">18sp</dimen>
+    <dimen name="dialog_title_textsize">14sp</dimen>
 
-    <dimen name="dialog_message_margintop">10dp</dimen>
-    <dimen name="dialog_message_marginbottom">15dp</dimen>
-    <dimen name="dialog_message_textsize">18sp</dimen>
+    <dimen name="dialog_message_margintop">5dp</dimen>
+    <dimen name="dialog_message_marginbottom">10dp</dimen>
+    <dimen name="dialog_message_textsize">14sp</dimen>
 
     <dimen name="btn_cancel_marginright">10dp</dimen>
     <dimen name="btn_cancel_marginbottom">10dp</dimen>
-    <dimen name="btn_cancel_textsize">18dp</dimen>
+    <dimen name="btn_cancel_textsize">14dp</dimen>
 
     <dimen name="btn_ok_marginleft">10dp</dimen>
     <dimen name="btn_ok_marginbottom">10dp</dimen>
