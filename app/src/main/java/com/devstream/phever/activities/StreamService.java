@@ -69,14 +69,21 @@ public class StreamService extends Service {
         try {
             mp.setDataSource(url);
             mp.prepare();
+        } catch (Exception e) {
+            e.printStackTrace();
+            /*
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
+
         } catch (SecurityException e) {
-            Log.e(TAG, "SecurityException");
+            e.printStackTrace();
+            //Log.e(TAG, "SecurityException");
         } catch (IllegalStateException e) {
-            Log.e(TAG, "IllegalStateException");
+            e.printStackTrace();
+            //Log.e(TAG, "IllegalStateException");
         } catch (IOException e) {
-            Log.e(TAG, "IOException");
+            e.printStackTrace();
+            //Log.e(TAG, "IOException");  */
         }
     }//close method onCreate
 
